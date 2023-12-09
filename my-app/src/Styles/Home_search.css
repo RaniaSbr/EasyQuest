@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@700&family=Nunito+Sans:ital,wght@1,600&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,100&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+.homesearch {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  align-content: center;
+  justify-items: center;
+  row-gap: 25px;
+  background-color: var(--darkgrey);
+  height: 100vh;
+}
+:root {
+  --darkgrey: #222831;
+  --grey: #393e46;
+  --blue: #00adb5;
+  --lightgrey: #d3d7e3;
+  --textcolor: #d3d7e3;
+}
+.logo-search {
+  height: 150px;
+}
+.nom-search {
+  width: 300px;
+}
+.bar-search {
+  position: relative;
+}
+.bar-search input {
+  background-color: transparent;
+  width: fit-content;
+  padding: 15px 200px;
+  border-radius: 30px;
+  border-color: white;
+}
+.bar-search input[type="search"] {
+  padding-right: 30px;
+  background-color: transparent;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Ajustez la valeur en fonction de la position souhaitée */
+  transform: translateY(-50%);
+  width: 20px; /* Ajustez la taille de l'image */
+  height: auto;
+  cursor: pointer;
+}

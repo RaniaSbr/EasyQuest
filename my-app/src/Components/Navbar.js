@@ -1,14 +1,37 @@
 import React from "react";
 import "../Styles/Navbar.css";
+import { NavLink } from "react-router-dom";
 
 function Navbar(params) {
   return (
     <div className="navbar">
       <div className="logo">
-        <img src="./Assets/logo.png" alt="" />
-        <img src="./Assets/nom.png" alt="" />
+        <img className="logo-easy" src="./Assets/logo.png" alt="" />
+        <img className="logo-nom" src="./Assets/nom.png" alt="" />
       </div>
-      <div className="pages"></div>
+      <div className="pages">
+        <ul>
+          <li>
+            <NavLink to="/">Home</NavLink>{" "}
+          </li>
+          <li>
+            {" "}
+            <NavLink to="/Profile">Profile</NavLink>{" "}
+          </li>
+          <li>
+            {" "}
+            <NavLink to="/Favorites">Favorites</NavLink>{" "}
+          </li>
+          <li>
+            {" "}
+            <NavLink to="/Settings">Settings</NavLink>{" "}
+          </li>
+          <li>
+            {" "}
+            <NavLink to="/Profile">Profile</NavLink>{" "}
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

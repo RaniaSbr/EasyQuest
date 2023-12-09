@@ -6,6 +6,48 @@
   --darkgrey: #222831;
   --grey: #393e46;
   --blue: #00adb5;
+  --lightgrey: #d3d7e3;
+  --textcolor: #d3d7e3;
 }
 .navbar {
+  display: flex;
+  align-items: center;
+  height: 70px;
+  width: 100vw;
+  background-color: var(--grey);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 50px;
+}
+.logo-easy {
+  height: 50px;
+}
+.logo-nom {
+  width: 110px;
+  padding: 10px;
+}
+.pages {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pages ul {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  text-decoration: none;
+  list-style: none;
+}
+.pages a,
+.pages li {
+  text-decoration: none;
+  color: var(--textcolor);
+  font-size: 20px;
+}
+.pages a:hover {
+  color: var(--blue);
 }
