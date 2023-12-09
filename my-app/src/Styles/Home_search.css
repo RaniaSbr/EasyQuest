@@ -22,10 +22,10 @@
   --textcolor: #d3d7e3;
 }
 .logo-search {
-  height: 150px;
+  height: 130px;
 }
 .nom-search {
-  width: 300px;
+  width: 250px;
 }
 .bar-search {
   position: relative;
@@ -33,13 +33,17 @@
 .bar-search input {
   background-color: transparent;
   width: fit-content;
-  padding: 15px 200px;
+  padding: 15px 50px;
   border-radius: 30px;
   border-color: white;
+  box-sizing: border-box;
 }
 .bar-search input[type="search"] {
-  padding-right: 30px;
   background-color: transparent;
+  box-sizing: border-box;
+  width: 800px;
+  text-align: center;
+  color: var(--textcolor);
 }
 
 .search-icon {
@@ -47,7 +51,22 @@
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
-  width: 20px;
+  width: 25px;
   height: auto;
   cursor: pointer;
+  margin-right: 20px;
+}
+@media only screen and (max-width: 1024px) {
+  .homesearch {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+  }
+  .bar-search input[type="search"] {
+    background-color: transparent;
+    box-sizing: border-box;
+    width: 400px;
+    text-align: center;
+    color: var(--textcolor);
+  }
 }

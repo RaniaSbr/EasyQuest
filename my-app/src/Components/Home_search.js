@@ -7,7 +7,7 @@ function Home_search(params) {
       <img className="nom-search" src="./Assets/nom.png" alt="" />
       <div className="bar-search">
         <input
-          type="text"
+          type="search"
           placeholder="Rechercher des articles scientifiques ..."
         />
         <img
