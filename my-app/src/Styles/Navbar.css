@@ -1,0 +1,11 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+:root {
+  --darkgrey: #222831;
+  --grey: #393e46;
+  --blue: #00adb5;
+}
+.navbar {
+}
