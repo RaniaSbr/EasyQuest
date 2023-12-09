@@ -12,6 +12,7 @@
   row-gap: 25px;
   background-color: var(--darkgrey);
   height: 100vh;
+  width: 100vw;
 }
 :root {
   --darkgrey: #222831;
@@ -44,9 +45,9 @@
 .search-icon {
   position: absolute;
   top: 50%;
-  right: 10px; /* Ajustez la valeur en fonction de la position souhaitée */
+  right: 10px;
   transform: translateY(-50%);
-  width: 20px; /* Ajustez la taille de l'image */
+  width: 20px;
   height: auto;
   cursor: pointer;
 }

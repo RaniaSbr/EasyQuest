@@ -46,8 +46,67 @@
 .pages li {
   text-decoration: none;
   color: var(--textcolor);
-  font-size: 20px;
+  font-size: 17px;
 }
 .pages a:hover {
   color: var(--blue);
+}
+
+.navbar a.active {
+  color: var(--blue);
+  text-decoration: underline;
+}
+.respo {
+  display: block;
+}
+.respo hr {
+  color: white;
+  width: 25px;
+  margin: 7px;
+  height: 1.57px;
+  background-color: white;
+  border-radius: 5px;
+}
+.respo,
+.respo-list {
+  display: none;
+}
+@media only screen and (max-width: 1024px) {
+  .pages {
+    display: none;
+  }
+
+  .respo {
+    display: block;
+    margin-right: 30px;
+    position: relative;
+  }
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+  }
+  .logo-easy {
+    height: 35px;
+  }
+  .logo-nom {
+    width: 105px;
+  }
+  .respo-list {
+    background-color: var(--grey);
+    position: absolute;
+    display: block;
+  }
+  .respo-list a {
+    text-decoration: none;
+  }
+  .respo-list ul {
+    list-style: none;
+  }
+  .respo-list li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 20px;
+    margin: 20px;
+  }
 }

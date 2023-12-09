@@ -12,7 +12,9 @@ function Navbar(params) {
       <div className="pages">
         <ul>
           <li>
-            <NavLink to="/">Home</NavLink>{" "}
+            <NavLink to="/" activeClassName="active-link">
+              Home
+            </NavLink>{" "}
           </li>
           <li>
             {" "}
