@@ -1,4 +1,7 @@
 .bar-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
 }
 .bar-search input {
@@ -8,6 +11,8 @@
   border-radius: 30px;
   border-color: white;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 .bar-search input[type="search"] {
   box-sizing: border-box;
@@ -17,15 +22,16 @@
 }
 
 .search-icon {
+  z-index: 2;
+  width: 600px;
   position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  width: 25px;
-  height: auto;
-  cursor: pointer;
-  margin-right: 20px;
+  display: flex;
+  justify-content: flex-start;
+  width: 38vw;
+  transform: translateX(-40px);
+  display: flex;
 }
+
 @media only screen and (max-width: 1024px) {
   .bar-search input[type="search"] {
     background-color: transparent;

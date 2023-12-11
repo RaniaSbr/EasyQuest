@@ -19,7 +19,7 @@ function Navbar(params) {
     <div className="navbar">
       <NavLink to="/">
         {" "}
-        <div className="logo">
+        <div className="logo-igl">
           <img className="logo-easy" src="./Assets/logo.png" alt="" />
           <img className="logo-nom" src="./Assets/nom.png" alt="" />
         </div>
