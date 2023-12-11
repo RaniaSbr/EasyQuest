@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import "../Styles/Search_bar.css";
 const Search_bar = ({ backgroundColor }) => {
   return (
@@ -8,7 +9,14 @@ const Search_bar = ({ backgroundColor }) => {
         placeholder="Rechercher des articles scientifiques ..."
         style={{ backgroundColor: backgroundColor }}
       />
-      <img src="./Assets/search.png" alt="Recherche" className="search-icon" />
+      <NavLink to={"/Search_result"}>
+        {" "}
+        <img
+          src="./Assets/search.png"
+          alt="Recherche"
+          className="search-icon"
+        />
+      </NavLink>
     </div>
   );
 };

@@ -13,6 +13,7 @@
 }
 .navbar {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   height: 70px;
   width: 100vw;
@@ -22,7 +23,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 0px;
   margin-left: 50px;
+  position: fixed;
 }
 .logo-easy {
   height: 50px;

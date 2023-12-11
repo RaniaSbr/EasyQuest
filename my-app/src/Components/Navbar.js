@@ -53,24 +53,6 @@ function Navbar(params) {
               Favorites
             </NavLink>{" "}
           </li>
-          <li>
-            {" "}
-            <NavLink
-              to="/Settings"
-              className={location.pathname === "/Settings" ? "active" : ""}
-            >
-              Settings
-            </NavLink>{" "}
-          </li>
-          <li>
-            {" "}
-            <NavLink
-              to="/Profile"
-              className={location.pathname === "/Profile" ? "active" : ""}
-            >
-              Profile
-            </NavLink>{" "}
-          </li>
         </ul>
       </div>
 
