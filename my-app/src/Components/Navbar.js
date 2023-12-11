@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faBars } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar(params) {
-  const [respoListVisible, setRespoListVisible] = useState(true);
+  const [respoListVisible, setRespoListVisible] = useState(false);
   const location = useLocation();
   const respoOff = (event) => {
     setRespoListVisible(false);

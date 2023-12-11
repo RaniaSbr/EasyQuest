@@ -7,7 +7,7 @@
 .homesearch {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  align-content: center;
+  align-content: flex-start;
   justify-items: center;
   row-gap: 25px;
   background-color: var(--darkgrey);
@@ -23,50 +23,18 @@
 }
 .logo-search {
   height: 130px;
+  margin-top: 100px;
 }
 .nom-search {
   width: 250px;
 }
-.bar-search {
-  position: relative;
-}
-.bar-search input {
-  background-color: transparent;
-  width: fit-content;
-  padding: 15px 50px;
-  border-radius: 30px;
-  border-color: white;
-  box-sizing: border-box;
-}
-.bar-search input[type="search"] {
-  background-color: transparent;
-  box-sizing: border-box;
-  width: 800px;
-  text-align: center;
-  color: var(--textcolor);
-}
-
-.search-icon {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  width: 25px;
-  height: auto;
-  cursor: pointer;
-  margin-right: 20px;
-}
 @media only screen and (max-width: 1024px) {
   .homesearch {
     display: grid;
-    align-content: center;
+    align-content: flex-start;
     justify-content: center;
   }
-  .bar-search input[type="search"] {
-    background-color: transparent;
-    box-sizing: border-box;
-    width: 400px;
-    text-align: center;
-    color: var(--textcolor);
+  .logo-search {
+    margin-top: 100px;
   }
 }
