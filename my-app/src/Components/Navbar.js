@@ -66,15 +66,15 @@ function Navbar(params) {
         <div className="respo-list">
           <div className="respo-list2">
             <div className="x">
+              <div className="nom-user">
+                <p>Zaidi Yasmine</p>
+                <hr />
+              </div>
               <button href="" onClick={respoOff}>
                 <FontAwesomeIcon className="icon-x" icon={faX} />{" "}
               </button>
             </div>
 
-            <div className="nom-user">
-              <p>Zaidi Yasmine</p>
-              <hr />
-            </div>
             <ul>
               <li>
                 <NavLink

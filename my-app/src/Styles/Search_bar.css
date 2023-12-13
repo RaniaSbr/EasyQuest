@@ -3,6 +3,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  width: 600px;
 }
 .bar-search input {
   background-color: transparent;
@@ -12,6 +13,8 @@
   border-color: white;
   box-sizing: border-box;
   position: relative;
+  width: 600px;
+
   z-index: 1;
 }
 .bar-search input[type="search"] {
@@ -39,5 +42,9 @@
     width: 400px;
     text-align: center;
     color: var(--textcolor);
+  }
+  .search-icon {
+    width: 400px;
+    margin-left: 120px;
   }
 }
