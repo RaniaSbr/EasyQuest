@@ -1,0 +1,249 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@700&family=Nunito+Sans:ital,wght@1,600&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,100&display=swap");
+
+:root {
+    --darkgrey: #222831;
+    --grey: #393e46;
+    --blue: #00adb5;
+    --lightgrey: #d3d7e3;
+    --textcolor: #d3d7e3;
+  }
+
+body {
+    background-color: var(--darkgrey); 
+}
+
+.grey{
+  height: 525px;
+  width: 1100px;
+  border-radius:20px ;
+  background-color: var(--grey);
+  position: relative;
+  z-index: 1;
+ }
+.white{
+      height: 410px;
+      width: 1100px;
+      z-index: 2;
+      border-radius: 20px;
+      position: absolute;
+      background-color:var(--lightgrey);
+} 
+.GreyWhite{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 350px;
+    width: 100vw;
+}
+.profile{
+  position: absolute;
+  z-index: 3;
+  top: 5;
+} 
+
+
+.profilecompo{ 
+    background-color: var(--darkgrey);
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    align-content: center;
+    justify-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin-top: 80px;  
+}
+
+.user-pic {
+    margin-right: 350px;
+    margin-bottom: 30px;
+}
+ 
+ .profilecompo h1 {
+    font-size: 30px;
+    position: relative;
+    top: 148px; 
+    color: var(--darkgrey);
+    margin-left:150px;
+}
+
+.profilecompo h2 {
+    font-size: 20px;
+    position: relative;
+    top: 143px; 
+    color: var(--blue);
+    margin-left:150px;
+}
+
+.profilecompo hr{
+  background-color: var(--darkgrey);
+  width: 950px;
+}
+
+.ligne{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    width: 950px ;
+    height: 60px;
+    align-content: center;
+    justify-items: center ;
+}
+.ligne label {
+  font-weight: bold;
+  font-size: 25px; 
+  color: var(--grey);
+}
+.ligne input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--grey);
+    margin-left: -310px; 
+}
+.ligne button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 25px;
+  color: var(--blue);
+  cursor: pointer;
+  margin-left: 200px;
+} 
+.ligne-mail label{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-left:65px ;
+}
+.ligne-password label{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-left:65px ;
+}
+.ligne-username label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-left:65px ;
+}
+
+.logout {
+    text-align: center; 
+    margin-top: 29px; 
+    margin-left: 400px;
+}
+.logout button {
+    display: flex;  
+    align-items: center;
+    justify-content: center; 
+    width: 200px;
+    height: 50px;
+    background-color:var(--blue);
+    border: 5px  ; 
+    text-decoration: none;
+    border-radius: 8px;
+}
+.logout button img {
+    margin-right: 10px;
+} 
+.logout button p {
+    font-size: 20px;
+    color: var(--darkgrey);
+    margin-bottom: 50; 
+}
+ 
+@media only screen and (max-width: 1024px) {
+    .grey{
+      height: 550px;
+      width: 500px;
+      border-radius:20px ;
+      background-color: var(--grey);
+      position: relative;
+      z-index: 1;
+     }
+    .white{
+          height: 450px;
+          width: 500px;
+          z-index: 2;
+          border-radius: 20px;
+          position: absolute;
+          background-color:var(--lightgrey);
+    } 
+    .profilecompo{
+      margin-top: 140px; 
+    }
+    .profilecompo hr{
+      width: 400px;
+      margin-left: 270px;
+    }
+
+    .user-pic {
+      margin-right: 350px;
+      margin-bottom: 30px;
+      margin-top: -50px;
+      margin-left: 250px;
+    }
+
+    .profilecompo h1 {
+      font-size: 30px;
+      top: 108px; 
+      margin-left:400px;
+    }
+
+    .profilecompo h2 {
+      font-size: 20px;
+      top: 99px; 
+      margin-left:400px;
+    }
+
+
+    .logout {
+      text-align: center; 
+      margin-top: 45px; 
+      margin-left: 380px;
+    }
+
+    .ligne button {
+      font-size: 20px;
+      margin-left: -430px;
+    } 
+    .ligne label {
+      font-weight: bold;
+      font-size: 18px; 
+      color: var(--grey);
+    }
+
+    .ligne-mail label{
+      margin-left:540px ;
+    }
+    .ligne-password label{
+      margin-right: -43px;
+      margin-left:500px ;
+    }
+    .ligne-username label {
+      margin-left:540px ;
+    }
+
+    .ligne-password button{
+      margin-right: -43px;
+      margin-left: -455px ;
+    }
+
+    .ligne-username input{
+      margin-right: -43px;
+      margin-left: -450px ;
+    }
+    .ligne-mail input{
+      margin-right: -43px;
+      margin-left: -450px ;
+    }
+    .ligne-password input{
+      margin-right: -43px;
+      margin-left: -390px ;
+    }
+
+  }
+ 
+
