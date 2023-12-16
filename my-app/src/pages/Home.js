@@ -5,6 +5,7 @@ function Accueil(params) {
   return (
     <div className="accueil">
       <Navbar></Navbar>
+
       <Home_search></Home_search>
     </div>
   );

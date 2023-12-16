@@ -19,7 +19,7 @@ function Navbar(params) {
     <div className="navbar">
       <NavLink to="/">
         {" "}
-        <div className="logo">
+        <div className="logo-igl">
           <img className="logo-easy" src="./Assets/logo.png" alt="" />
           <img className="logo-nom" src="./Assets/nom.png" alt="" />
         </div>
@@ -53,24 +53,6 @@ function Navbar(params) {
               Favorites
             </NavLink>{" "}
           </li>
-          <li>
-            {" "}
-            <NavLink
-              to="/Settings"
-              className={location.pathname === "/Settings" ? "active" : ""}
-            >
-              Settings
-            </NavLink>{" "}
-          </li>
-          <li>
-            {" "}
-            <NavLink
-              to="/Profile"
-              className={location.pathname === "/Profile" ? "active" : ""}
-            >
-              Profile
-            </NavLink>{" "}
-          </li>
         </ul>
       </div>
 
@@ -84,15 +66,15 @@ function Navbar(params) {
         <div className="respo-list">
           <div className="respo-list2">
             <div className="x">
+              <div className="nom-user">
+                <p>Zaidi Yasmine</p>
+                <hr />
+              </div>
               <button href="" onClick={respoOff}>
                 <FontAwesomeIcon className="icon-x" icon={faX} />{" "}
               </button>
             </div>
 
-            <div className="nom-user">
-              <p>Zaidi Yasmine</p>
-              <hr />
-            </div>
             <ul>
               <li>
                 <NavLink
