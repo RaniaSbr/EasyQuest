@@ -7,12 +7,16 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons"; // Correction ici
 const Search_bar = ({ backgroundColor }) => {
   return (
     <div className="bar-search">
-      <input
-        type="search"
-        placeholder="Rechercher des articles scientifiques ..."
-        style={{ backgroundColor: backgroundColor }}
-        className="search-input"
-      />
+      <div className="bar-input">
+        {" "}
+        <input
+          type="search"
+          placeholder="Rechercher des articles scientifiques ..."
+          style={{ backgroundColor: backgroundColor }}
+          className="search-input"
+        />
+      </div>
+
       <div className="search-icon">
         <NavLink to={"/Search_result"}>
           <FontAwesomeIcon icon={faSearch} /> {/* Correction ici */}

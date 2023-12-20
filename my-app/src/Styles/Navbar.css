@@ -23,8 +23,10 @@
   justify-content: flex-start;
   height: 0px;
   height: 70px;
-  width: 100vw;
   margin-left: 50px;
+  cursor: pointer;
+  position: relative;
+  width: 60vw;
 }
 .logo-easy {
   height: 50px;
@@ -38,9 +40,9 @@
   height: 70px;
   width: 100vw;
   align-items: center;
-  justify-content: center;
-  position: absolute;
+  justify-content: flex-start;
 }
+
 .pages ul {
   display: flex;
   justify-content: space-between;
@@ -98,6 +100,9 @@
   }
   .logo-igl {
     width: 50vw;
+    display: flex;
+    justify-content: center;
+    height: 35px;
   }
   .logo-easy {
     height: 35px;
@@ -121,10 +126,12 @@
     padding-left: 30px;
     background-color: #393e46;
     list-style: none;
-    height: 300px;
+    height: 350px;
     width: 250px;
     border-radius: 25px;
-    display: grid;
+    display: block;
+    gap: 50px;
+    z-index: 1000;
   }
   .respo-list a {
     display: flex;
@@ -153,9 +160,9 @@
   }
   .x {
     display: flex;
-    justify-content: flex-end;
-    margin: 10px;
+    justify-content: center;
     font-size: 30px;
+    width: 100%;
   }
   .x button,
   .respo button {
@@ -163,24 +170,29 @@
     border: none;
   }
   .x button {
-    margin-left: 15px;
+    background-color: transparent;
   }
   .x button:hover,
   .respo button:hover {
     cursor: pointer;
   }
-
+  .xx {
+    height: 25px;
+  }
   .icon-x {
-    height: 30px;
+    height: 50px;
     background-color: transparent;
     border: none;
     margin-right: 10px;
+    width: 90%;
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
   }
   .hr1,
   .hr2 {
     width: 30px;
     height: 3px;
-    background-color: white;
     border: transparent;
     border-radius: 10px;
   }
