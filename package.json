@@ -1,5 +1,5 @@
 {
-  "devDependencies": {
-    "web-vitals": "^3.5.0"
+  "dependencies": {
+    "react-icons": "^4.12.0"
   }
 }

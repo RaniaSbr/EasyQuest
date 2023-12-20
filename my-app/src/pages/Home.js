@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../Components/Navbar.js";
 import Home_search from "../Components/Home_search.js";
+import "../Styles/Home.css";
 function Accueil(params) {
   return (
     <div className="accueil">
