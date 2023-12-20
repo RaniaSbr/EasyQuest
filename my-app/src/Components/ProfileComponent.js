@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../Styles/ProfileComponent.css";
+
 import { NavLink } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 
@@ -81,6 +82,7 @@ function ProfileComponent(params) {
             </button>
           </div>
         </NavLink>
+
       </div>
     </div>
   );
