@@ -17,13 +17,12 @@ function Navbar(params) {
 
   return (
     <div className="navbar">
-      <NavLink to="/">
-        {" "}
-        <div className="logo">
+      <div className="logo-igl">
+        <NavLink to="/">
           <img className="logo-easy" src="./Assets/logo.png" alt="" />
           <img className="logo-nom" src="./Assets/nom.png" alt="" />
-        </div>
-      </NavLink>
+        </NavLink>
+      </div>
 
       <div className="pages">
         <ul>
@@ -65,16 +64,16 @@ function Navbar(params) {
       {respoListVisible && (
         <div className="respo-list">
           <div className="respo-list2">
+            <button href="" onClick={respoOff} className="icon-x">
+              <FontAwesomeIcon icon={faX} className="xx" />{" "}
+            </button>
             <div className="x">
-              <button href="" onClick={respoOff}>
-                <FontAwesomeIcon className="icon-x" icon={faX} />{" "}
-              </button>
+              <div className="nom-user">
+                <p>Zaidi Yasmine</p>
+                <hr />
+              </div>
             </div>
 
-            <div className="nom-user">
-              <p>Zaidi Yasmine</p>
-              <hr />
-            </div>
             <ul>
               <li>
                 <NavLink
