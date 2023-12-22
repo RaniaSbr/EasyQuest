@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-  /*  <Router>
+    <Router>
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/Profile" element={<Profile />}></Route>
@@ -18,8 +18,7 @@ function App() {
         <Route path="/Favorites" element={<Favorites />}></Route>
         <Route path="/Search_result" element={<Search_result />}></Route>
       </Routes>
-    </Router>*/
-    <h1 className="text-red-400 text-4xl">wach sisaber in red ghaya ?</h1>
+    </Router>
   );
 }
 

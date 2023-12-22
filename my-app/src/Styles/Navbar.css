@@ -21,24 +21,18 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  height: 0px;
   height: 70px;
   margin-left: 50px;
   cursor: pointer;
   position: relative;
-  width: 60vw;
-}
-.logo-easy {
-  height: 50px;
+  margin-right: 22%;
 }
 .logo-nom {
-  width: 110px;
-  padding: 10px;
+  padding: 5px;
 }
 .pages {
   display: flex;
   height: 70px;
-  width: 100vw;
   align-items: center;
   justify-content: flex-start;
 }
@@ -96,13 +90,14 @@
   }
   .hamburger {
     height: 30px;
-    width: fit-content;
+    margin-left: 650%;
   }
   .logo-igl {
     width: 50vw;
     display: flex;
     justify-content: center;
     height: 35px;
+    margin: 0;
   }
   .logo-easy {
     height: 35px;

@@ -19,72 +19,7 @@ function ProfileComponent(params) {
   };
 
   return (
-    <div className="profilecompo">
-      <div className="GreyWhite">
-        <div className="grey"></div>
-        <div className="white"></div>
-      </div>
-      <div className="profile">
-        <h1>Zaidi Yasmine</h1>
-        <h2>User</h2>
-        <img className="user-pic" src="./Assets/user.png" alt="" />
-
-        <hr />
-
-        <div className="ligne ligne-username">
-          <label htmlFor="username">User Name </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Enter your user name"
-          />
-          <button onClick={handleEditClick}>Edit</button>
-        </div>
-
-        <hr />
-
-        <div className="ligne ligne-mail">
-          <label htmlFor="UserEmail">Email</label>
-          <input
-            type="email"
-            id="UserEmail"
-            name="UserEmail"
-            placeholder="Enter your email"
-          />
-          <button onClick={handleEditClick}>Edit</button>
-        </div>
-
-        <hr />
-
-        <div className="ligne ligne-password">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter your password"
-          />
-          <button onClick={handleEditClick}>Edit</button>
-        </div>
-
-        <hr />
-        <NavLink to="/">
-          {" "}
-          <div className="logout">
-            <button onClick={handleLogout}>
-              <img
-                className="logout-icon"
-                src="./Assets/logout.png"
-                alt="Logout"
-              />
-              <p>Logout</p>
-            </button>
-          </div>
-        </NavLink>
-
-      </div>
-    </div>
+    <div className="profile-comp relative bg-red-600 w-screen h-3/5"></div>
   );
 }
 
