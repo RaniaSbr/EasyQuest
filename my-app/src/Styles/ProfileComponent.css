@@ -14,6 +14,7 @@ body {
 .profile-co {
   background-color: var(--textcolor);
 }
+
 .profile_Compo {
   background-color: var(--grey);
 }
@@ -27,16 +28,9 @@ body {
   color: var(--blue);
 }
 
-.profile-hr {
-  height: 1px;
-}
-
 .ligne {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  height: 60px;
-  align-content: center;
-  justify-items: center;
 }
 .ligne label {
   font-weight: bold;
@@ -54,24 +48,24 @@ body {
   outline: none;
   background-color: transparent;
   font-weight: bold;
-  font-size: 25px;
   color: var(--blue);
   cursor: pointer;
 }
 .ligne-mail label {
-  width: 100%;
   display: flex;
   align-items: center;
 }
 .ligne-password label {
-  width: 100%;
   display: flex;
   align-items: center;
 }
 .ligne-username label {
-  width: 100%;
   display: flex;
   align-items: center;
+  width: 200px;
+}
+.ligne label {
+  width: 200px;
 }
 
 .logout {
