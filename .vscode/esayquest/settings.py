@@ -80,6 +80,9 @@ WSGI_APPLICATION = 'esayquest.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+#-----------------remarque----------------------
+ 
+#j'ai pas encore changee le type de notre base de donnees ici car j'ai trouver quellques pb , mais pour vos vous peuez change facilement
 
 DATABASES = {
     'default': {
