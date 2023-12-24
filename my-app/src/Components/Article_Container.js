@@ -1,6 +1,8 @@
 import React from 'react'
 import '../Styles/Article_Container.css'
 import Hyphenated from 'react-hyphen';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 const ArticleContainer = ({ articleData }) => {
   const { date, title, authors, institutions, url } = articleData
@@ -11,7 +13,7 @@ const ArticleContainer = ({ articleData }) => {
         <time className='font-Montserrat'>{date}</time>
         <div className='mod-article-dropdown'>
           <span>
-            <img src='./Assets/td.png' alt='Icon' />
+          <FontAwesomeIcon icon={faEllipsis} size='' />
           </span>
           <div className='mod-article-dropdown-content'>
             <div className='mod_article_text'>
@@ -46,8 +48,8 @@ const ArticleContainer = ({ articleData }) => {
       <div className='mt-5 ml-5 font-Montserrat font-bold text-xl'>
         {/* Institutions */}
         {institutions.map((institution, index) => (
-          <div className='font-Montserrat' key={index}>
-            {institution} |
+          <div className='font-Montserrat underline decoration-green' key={index}>
+            {institution}
           </div>
         ))}
       </div>

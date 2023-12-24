@@ -1,9 +1,6 @@
 import React from 'react';
-import ModNV from '../Components/ModNV';
 import ArticleContainer from '../Components/Article_Container';
-import RandomizeText from '../Components/test';
-import MultiLayerParallax from '../Components/multilayered';
-import { Navbar } from 'react-bootstrap';
+import Navbar from '../Components/ModeratorNavBar';
 
 const ModPage = () => {
   const articleData = {
