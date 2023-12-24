@@ -54,19 +54,15 @@
   padding: 12px 12px;
   z-index: 1;
   text-align: center;
-  
-  
+  right: 0; 
+  left: auto; 
 }
+
 
 
 .mod-article-dropdown:hover .mod-article-dropdown-content {
   display: block;
 }
 
-@media (max-width: 810px) {
-  .mod-article-dropdown-content {
-    right: 0; 
-    left: auto; 
-  }
-}
+
 

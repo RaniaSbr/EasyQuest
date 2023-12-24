@@ -19,7 +19,7 @@ function Navbar(params) {
     <div className="navbar">
       <NavLink to="/">
         {" "}
-        <div className="logo">
+        <div className="logo ">
           <img className="logo-easy" src="./Assets/logo.png" alt="" />
           <img className="logo-nom" src="./Assets/nom.png" alt="" />
         </div>
@@ -54,11 +54,11 @@ function Navbar(params) {
       </div>
 
       {respoListVisible && (
-        <div className="respo-list">
+        <div className="respo-list z-10">
           <div className="respo-list2">
             <div className="x">
               <button href="" onClick={respoOff}>
-                <FontAwesomeIcon className="icon-x" icon={faX} />{" "}
+                <FontAwesomeIcon className="icon-x" icon={faX}  />{" "}
               </button>
             </div>
 

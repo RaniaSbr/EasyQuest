@@ -13,7 +13,7 @@ const ArticleContainer = ({ articleData }) => {
         <time className='font-Montserrat'>{date}</time>
         <div className='mod-article-dropdown'>
           <span>
-          <FontAwesomeIcon icon={faEllipsis} size='' />
+          <FontAwesomeIcon icon={faEllipsis} size='2xl' className='z-0' />
           </span>
           <div className='mod-article-dropdown-content'>
             <div className='mod_article_text'>
