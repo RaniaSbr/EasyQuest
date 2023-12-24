@@ -13,7 +13,7 @@ const Search_bar = ({ backgroundColor }) => {
           type="search"
           placeholder="Rechercher des articles scientifiques ..."
           style={{ backgroundColor: backgroundColor }}
-          className="search-input"
+          className="search-input border-2"
         />
       </div>
 

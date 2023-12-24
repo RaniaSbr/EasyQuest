@@ -17,7 +17,6 @@
   border-radius: 30px;
   border-color: white;
   box-sizing: border-box;
-  margin-right: 50px;
 }
 
 .bar-search input[type="search"] {
@@ -31,7 +30,7 @@
   width: 38px;
   height: 38px;
   position: absolute;
-  left: 50px;
+  left: 20px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -39,9 +38,11 @@
   justify-content: center;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (max-width: 600px) {
   .bar-search input[type="search"] {
-    max-width: 600px;
-    margin-left: 40px;
+    max-width: 400px;
+  }
+  .search-icon {
+    left: 50px;
   }
 }

@@ -16,15 +16,17 @@ function Navbar(params) {
   };
 
   return (
-    <div className="navbar">
-      <div className="logo-igl">
+    <div className="navbar ">
+      <div className="logo-igl flex  items-center content-center w-4/5 ml-20">
         <NavLink to="/">
-          <img className="logo-easy" src="./Assets/logo.png" alt="" />
-          <img className="logo-nom" src="./Assets/nom.png" alt="" />
+          <img className="logo-easy h-12  " src="./Assets/logo.png" alt="" />
+        </NavLink>
+        <NavLink to="/">
+          <img className="logo-nom w-36 ml-2" src="./Assets/nom.png" alt="" />
         </NavLink>
       </div>
 
-      <div className="pages">
+      <div className="pages object-none object-center">
         <ul>
           <li>
             <NavLink
