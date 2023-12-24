@@ -1,16 +1,28 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
-    screens: {
-      sm: "640px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1280px",
+    fontSize: {
+      sm: '0.8rem',
+      base: '1rem',
+      xl: '1.25rem',
+      '2xl': '1.563rem',
+      '3xl': '1.953rem',
+      '4xl': '2.441rem',
+      '5xl': '3.052rem',
+      '10xl': '10rem',
     },
     extend: {
-      display: ["group-hover", "responsive", "hover"],
+      colors: {
+        'regal-blue': '#0f172a',
+      },
+      fontFamily:{
+        'Montserrat' : ['Montserrat', 'sans-serif'],
+        GODOFWAR: ["GODOFWAR","sans-serif"]
+      },
     },
   },
   plugins: [],
-};
+}
