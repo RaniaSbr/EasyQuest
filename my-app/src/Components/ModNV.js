@@ -12,7 +12,6 @@ function openNav () {
   document.getElementById('my_nav_link').style.width = '40%'
   document.getElementById('my_nav_link').style.display = 'block'
   document.getElementById('contact_us_mod_nv').style.display = 'block'
-
 }
 
 const ModNV = () => {
@@ -21,7 +20,7 @@ const ModNV = () => {
       <header>
         <img src='./Assets/nom.png' className='w-28' />
         <nav id='my_nav_link' className='nav_links'>
-          <ul  >
+          <ul>
             <li>
               <a className='font-GODOFWAR' href='test'>
                 <FontAwesomeIcon icon={faWrench} className=' pr-2' />
@@ -30,7 +29,6 @@ const ModNV = () => {
             </li>
             <li>
               <a className='font-GODOFWAR' href='test'>
-                {' '}
                 <FontAwesomeIcon icon={faIdCard} className=' pr-2' />
                 PROFILE
               </a>

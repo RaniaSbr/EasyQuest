@@ -3,15 +3,9 @@ import ModNV from '../Components/ModNV';
 import ArticleContainer from '../Components/Article_Container';
 import RandomizeText from '../Components/test';
 import MultiLayerParallax from '../Components/multilayered';
+import Navbar from '../Components/Navbar';
 
-function myFunction() {
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
-}
+
 
 const ModPage = () => {
   const articleData = {
@@ -25,17 +19,8 @@ const ModPage = () => {
 
   return (
     <div className="w-full h-screen  bg-[#06141D] text-white">
-      <ModNV></ModNV>
-      <RandomizeText />
-
-      <div className=" max-w-5xl  text-neutral-300">
-      <p className='font-bold font-Montserrat justify-center text-2xl'>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam quae
-            earum nobis quasi repellat. Amet facere nulla dolorum accusantium
-            sit dolores odio excepturi facilis laboriosam officiis dolorem,
-            nobis reprehenderit molestiae.
-          </p>
-      </div>
+      <Navbar></Navbar>
+      <ArticleContainer articleData={articleData} /> 
     </div>
   );
 };

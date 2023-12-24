@@ -17,10 +17,15 @@ module.exports = {
     extend: {
       colors: {
         'regal-blue': '#0f172a',
+        'GREEN_COLOR' : '#00ADB5',
+        'GREY_COLOR' : '#393E46',
+        'DARK_COLOR' : '#222831',
+        'WHITE_START_WITH_D_COLOR' :'#D3D7E3',
+        'WHITE_START_WITH_E_COLOR' : '#EEEEEE',
+
       },
       fontFamily:{
         'Montserrat' : ['Montserrat', 'sans-serif'],
-        GODOFWAR: ["GODOFWAR","sans-serif"]
       },
     },
   },

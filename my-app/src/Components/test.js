@@ -52,7 +52,9 @@ const RandomizeText = () => {
   }, [intervalId]);
 
   return (
+    <div>
       <h1 onMouseOver={(event) => randomizeText(event)}   className="font-bold text-white  md:text-10xl relative">EASY QUEST</h1>
+    </div>
   );
 };
 

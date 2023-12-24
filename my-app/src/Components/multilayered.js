@@ -19,7 +19,7 @@ const MultiLayerParallax = () => {
     >
       <motion.div 
        style={{ y: textY }}>
-        <RandomizeText />
+        
       </motion.div>
       <motion.div
         className="h-screen absolute inset-0 z-0"

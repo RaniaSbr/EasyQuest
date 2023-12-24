@@ -3,9 +3,11 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
-@font-face {
-    font-family: 'GODOFWAR';
-    src: local('GODOFWAR'), url(./Fonts/Berserker-Regular.woff) format('woff');
-    /* other formats include: 'woff2', 'truetype, 'opentype',
-                              'embedded-opentype', and 'svg' */
+:root {
+    --font-family: 'Montserrat', sans-serif;
+    --green-color: #00ADB5;
+    --grey-color: #393E46;
+    --black-color: #222831;
+    --white-starts-with-D-color: #D3D7E3;
+    --white-starts-with-E-color: #EEEEEE;
   }

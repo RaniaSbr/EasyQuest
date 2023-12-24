@@ -30,11 +30,11 @@ header {
 }
 
 .nav_links li a:hover {
-  color: aqua;
+  color: var(--primary-color);
 }
 
 .mod_nv_button {
-  background-color: aqua;
+  background-color: var(--primary-color);
   padding: 9px 20px; 
   border: none;
   border-radius: 50px;
@@ -43,7 +43,7 @@ header {
 }
 
 button:hover {
-  background-color: rgb(153, 255, 255);
+  background-color: var(--primary-color);
 }
 
 .nav_links .icon {
