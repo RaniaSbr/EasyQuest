@@ -1,85 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital@1&display=swap');
-
-:root {
-  --font-family-primary: 'GODOFWAR', sans-serif;
-  --font-family-secondary: 'Loto', sans-serif;
-  --font-weight: bold;
-  --font-size-title: 32px;
-  --line-height-title: 1.4;
-  --font-size-text: 17px;
-  --line-height-text: 1.2;
-  --background-default-image: linear-gradient(to right top, #424f62, #3c4b5d, #374659, #324254, #2c3e50);
-  --color-text: aliceblue;
-  --color-highlight-primary: #f1e47b;
-  --color-highlight-secondary: #49face;
-  --border-radius-primary: 22px; 
-}
 
 
-
-.mod_container_image {
-  max-width: 50% auto;
-  max-height: auto;
-  object-fit: cover;
-  height: 400px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  margin-left: 7px;
-  margin-right: 20px;
-}
-
-
-.logo-nom {
-  width: 150px;
-  height: 35px;
-  padding: 10px;
-}
-
-.mod_article_container{
-    max-width:60%;
-    background-image: var(--background-default-image);
-    box-shadow: 24px 24px 80px rgba(0,0,0,0.1);
-    border: 1px solid whitesmoke;
-    border-radius: 22px;
-    padding: 15px 15px 15px 15px;
-    box-sizing: border-box;
-    margin: 500px;
-    display: flex;
-    flex-direction: row;
-}
-
-.mod_article_metadata{
-  padding: 15px 15px 15px 15px;
-  box-sizing: border-box;
-  margin-right: 10px;
-  display: flex;
-  flex-direction: column;
-}
-.mod_container_date{
-  display: block;
-  font-size: 400;
-  font-family: var(--font-family-secondary);
-  font-size: var(--font-size-text);
-  line-height: var(--line-height-text);
-  color: var(--color-text);
-
-}
-.image-column {
-  flex-direction: column;
-  max-height: 30%; 
-
-}
-
-.mod_article_title{
-  padding: 15px 15px 15px 15px;
-  font-family: var(--font-family-primary);
-  font-weight: bold;
-  color: var(--color-highlight-secondary);
-  text-decoration: none;
-  font-size: var(--font-size-title);
-  box-decoration-break: clone;
-}
 
 .mod_article_text{
   font-family: var(--font-family-primary);
@@ -94,7 +15,7 @@
   transition: all 0.3s ease 0s;
 }
 .mod_article_text a:hover{
-  color: aqua;
+  color: var(--green-color);
 }
 .mod-article-link-style{
   color: var(--color-highlight-primary);
@@ -142,24 +63,3 @@
   display: block;
 }
 
-
-
-.mod_article_three_dots_style{
-  width: 25px;
-  height: 8px;
-};
-
-
-.sidebar {
-  width: 10px;
-  color: white;
-  border-radius: 22px;
-  height: 120px;
-}
-
-/* Media query for smaller screens */
-@media screen and (max-width: 768px) {
-  .sidebar {
-    width: 100%; /* Take up the full width of the screen */
-  }
-}
