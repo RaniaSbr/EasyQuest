@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@700&family=Nunito+Sans:ital,wght@1,600&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,100&display=swap");
+
+:root {
+  --darkgrey: #222831;
+  --grey: #393e46;
+  --blue: #00adb5;
+  --lightgrey: #d3d7e3;
+  --textcolor: #d3d7e3;
+}
+
+body {
+  background-color: var(--darkgrey);
+}
+.profile-co {
+  background-color: var(--textcolor);
+}
+
+.profile_Compo {
+  background-color: var(--grey);
+}
+.profile h1 {
+  font-size: 30px;
+  color: var(--darkgrey);
+}
+
+.profile h2 {
+  font-size: 20px;
+  color: var(--blue);
+}
+
+.ligne {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.ligne label {
+  font-weight: bold;
+
+  color: var(--grey);
+}
+.ligne input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--grey);
+}
+.ligne button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-weight: bold;
+  color: var(--blue);
+  cursor: pointer;
+}
+.ligne-mail label {
+  display: flex;
+  align-items: center;
+}
+.ligne-password label {
+  display: flex;
+  align-items: center;
+}
+.ligne-username label {
+  display: flex;
+  align-items: center;
+  width: 200px;
+}
+.ligne label {
+  width: 200px;
+}
+
+.logout {
+  text-align: center;
+}
+.logout button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+  background-color: var(--blue);
+  border: 5px;
+  text-decoration: none;
+  border-radius: 8px;
+}
+.logout button img {
+  margin-right: 10px;
+}
+.logout button p {
+  font-size: 20px;
+  color: var(--darkgrey);
+}

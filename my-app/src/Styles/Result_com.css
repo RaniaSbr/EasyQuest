@@ -5,3 +5,7 @@
   --lightgrey: #d3d7e3;
   --textcolor: #d3d7e3;
 }
+.fav-icon {
+  background-color: transparent;
+  border: none;
+}
