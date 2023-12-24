@@ -46,7 +46,7 @@
 .mod-article-dropdown-content {
   display: none;
   position: absolute;
-  background-image: conic-gradient(at 0% 0%, rgb(39, 39, 42), rgb(31, 41, 55), rgb(30, 41, 59));
+  background-color: var(--grey-color);
   min-width: 160px;
   border: 2px solid whitesmoke;
   border-radius: 12px;
@@ -61,5 +61,12 @@
 
 .mod-article-dropdown:hover .mod-article-dropdown-content {
   display: block;
+}
+
+@media (max-width: 810px) {
+  .mod-article-dropdown-content {
+    right: 0; 
+    left: auto; 
+  }
 }
 
