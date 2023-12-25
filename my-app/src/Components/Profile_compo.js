@@ -33,10 +33,10 @@ function Profile_compo(params) {
             <h2>User</h2>
           </div>
         </div>
-        <div className="pro-bottom grid content-center justify-items-center ml-5">
-          <hr className="border-t border-zinc-900 md:w-[550px] w-5/6" />
-          <div className="ligne h-10 flex content-center justify-items-center ligne-username ">
-            <label htmlFor="username " className="text-lg md:text-xl">
+        <div className="pro-bottom grid content-center justify-items-center ">
+          <hr className="border-t border-darkgrey md:w-[550px] w-[90%]" />
+          <div className="ligne h-10 w-5/6 flex items-center justify-center ligne-username ">
+            <label htmlFor="username " className="text-lg md:text-xl ml-2">
               User Name{" "}
             </label>
             <input
@@ -47,15 +47,15 @@ function Profile_compo(params) {
             />
             <button
               onClick={handleEditClick}
-              className="text-lg md:text-xl mr-2"
+              className="text-lg md:text-xl mr-4"
             >
               Edit
             </button>
           </div>
-          <hr className="border-t border-zinc-900 md:w-[550px] w-5/6" />
-          <div className="ligne h-10 grid content-center w-full justify-items-center ligne-username ">
+          <hr className="border-t border-darkgrey md:w-[550px] w-[90%]" />
+          <div className="ligne h-10 w-5/6 flex items-center justify-center ligne-username ">
             {" "}
-            <label className="text-lg md:text-xl" htmlFor="UserEmail">
+            <label htmlFor="username " className="text-lg md:text-xl ml-2">
               Email
             </label>
             <input
@@ -66,15 +66,15 @@ function Profile_compo(params) {
             />
             <button
               onClick={handleEditClick}
-              className="text-lg md:text-xl mr-2"
+              className="text-lg md:text-xl mr-4"
             >
               Edit
             </button>
           </div>
-          <hr className="border-t border-zinc-900 md:w-[550px] w-5/6" />
-          <div className="ligne h-10 grid content-center w-full justify-items-center ligne-username ">
+          <hr className="border-t border-darkgrey md:w-[550px] w-[90%]" />
+          <div className="ligne h-10 w-5/6 flex items-center justify-center ligne-username ">
             {" "}
-            <label className="text-lg md:text-xl" htmlFor="password">
+            <label htmlFor="username " className="text-lg md:text-xl ml-2">
               Password
             </label>
             <input
@@ -85,12 +85,12 @@ function Profile_compo(params) {
             />
             <button
               onClick={handleEditClick}
-              className="text-lg md:text-xl mr-2"
+              className="text-lg md:text-xl mr-4"
             >
               Edit
             </button>
           </div>
-          <hr className="border-t border-zinc-900 md:w-[550px] w-5/6" />
+          <hr className="border-t border-darkgrey md:w-[550px] w-[90%]" />
           <NavLink to="/">
             {" "}
             <div className="logout">

@@ -1,10 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-<<<<<<< HEAD
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+
+    colors: {
+      darkgrey: "#222831",
+      grey: "#393e46",
+      blue: "#00adb5",
+      lightgrey: "#d3d7e3",
+      'regal-blue': '#0f172a',
+      green: '#00ADB5',
+      dark: '#222831',
+      lightStartD: '#D3D7E3',
+      lightStartE: '#EEEEEE',
+    },
     fontSize: {
       sm: '0.8rem',
       base: '1rem',
@@ -15,26 +25,6 @@ module.exports = {
       '5xl': '3.052rem',
       '10xl': '10rem',
     },
-    extend: {
-      colors: {
-        'regal-blue': '#0f172a',
-        'GREEN_COLOR' : '#00ADB5',
-        'GREY_COLOR' : '#393E46',
-        'DARK_COLOR' : '#222831',
-        'WHITE_START_WITH_D_COLOR' :'#D3D7E3',
-        'WHITE_START_WITH_E_COLOR' : '#EEEEEE',
-
-      },
-      fontFamily:{
-        'Montserrat' : ['Montserrat', 'sans-serif'],
-      },
-    },
-  },
-  plugins: [],
-}
-=======
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  theme: {
     screens: {
       sm: "640px",
       md: "768px",
@@ -43,8 +33,10 @@ module.exports = {
     },
     extend: {
       display: ["group-hover", "responsive", "hover"],
+     
     },
   },
   plugins: [],
 };
->>>>>>> origin/MAHRAZABDELRAHMEN
+
+

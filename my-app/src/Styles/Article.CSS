@@ -1,0 +1,14 @@
+/* Result_com.css */
+.favorite-icon {
+    cursor: pointer;
+    padding: 5px;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    color: #c4c8cf; /* Couleur par défaut */
+    transition: color 0.3s ease; /* Animation de transition de la couleur */
+  }
+ 
+  .favorite-icon:hover {
+    color: red; /* Couleur au survol */
+  }

@@ -25,18 +25,23 @@
   margin-left: 50px;
   cursor: pointer;
   position: relative;
-  margin-right: 22%;
+  width: 60vw;
+}
+.logo-easy {
+  height: 50px;
 }
 .logo-nom {
-  padding: 5px;
+  width: 150px;
+  padding: 10px;
 }
 .pages {
   display: flex;
   height: 70px;
+  width: 100vw;
   align-items: center;
   justify-content: flex-start;
 }
-
+ 
 .pages ul {
   display: flex;
   justify-content: space-between;
@@ -53,12 +58,12 @@
 .pages a:hover {
   color: var(--blue);
 }
-
+ 
 .navbar a.active {
   color: var(--blue);
   text-decoration: underline;
 }
-
+ 
 .respo hr {
   color: white;
   width: 25px;
@@ -75,7 +80,7 @@
   .pages {
     display: none;
   }
-
+ 
   .respo {
     display: flex;
     width: 100px;
@@ -84,20 +89,21 @@
   }
   .navbar {
     width: 100vw;
+    margin: 0;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   .hamburger {
     height: 30px;
-    margin-left: 650%;
+    width: fit-content;
   }
   .logo-igl {
-    width: 50vw;
     display: flex;
     justify-content: center;
     height: 35px;
-    margin: 0;
+    margin-left: 0;
   }
   .logo-easy {
     height: 35px;
@@ -198,3 +204,4 @@
     position: absolute;
   }
 }
+ 

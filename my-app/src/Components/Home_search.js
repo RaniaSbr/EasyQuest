@@ -1,8 +1,6 @@
-// Dans Home_search.jsx
 import React from "react";
 import "../Styles/Home_search.css";
 import Search_bar from "../Components/Search_bar";
-
 function Home_search(params) {
   return (
     <div className="homesearch">
@@ -12,5 +10,4 @@ function Home_search(params) {
     </div>
   );
 }
-
 export default Home_search;
