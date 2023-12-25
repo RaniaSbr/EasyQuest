@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,500&display=swap');
+
+
+
+.mod_article_text{
+  font-family: var(--font-family-primary);
+  font-weight: bold;
+  color: var(--color-highlight-primary);
+  text-decoration: none;
+  font-size: 19px;
+  box-decoration-break: clone;
+  margin-top: 3px;
+}
+.mod_article_text a {
+  transition: all 0.3s ease 0s;
+}
+.mod_article_text a:hover{
+  color: var(--green-color);
+}
+.mod-article-link-style{
+  color: var(--color-highlight-primary);
+  font-style: italic;
+}
+
+.mod-article-row {
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mod_article-text-row{
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content:flex-start;
+}
+
+.mod-article-dropdown {
+  position: relative;
+  display: inline-block;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.mod-article-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--grey-color);
+  min-width: 160px;
+  border: 2px solid whitesmoke;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 12px;
+  z-index: 1;
+  text-align: center;
+  right: 0; 
+  left: auto; 
+}
+
+
+
+.mod-article-dropdown:hover .mod-article-dropdown-content {
+  display: block;
+}
+
+
+
