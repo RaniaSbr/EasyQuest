@@ -27,14 +27,14 @@ function Register() {
   };
 
   return (
-    <div className="login  m-w-[100vw] m-h-[70vh] truncate grid content-center justify-items-center ">
-      <div className="login-container flex items-center justify-center h-[100vh] sm:w-3/5 md:w-2/5 w-4/5 rounded-2xl my-8 ">
-        <div className="left-login grid  content-center justify-items-center rounded-3xl text-black bg-lightgrey  h-full m-2xl w-full  outline-0 ">
+    <div className="login  m-w-[100vw] m-h-[90vh] truncate grid content-center justify-items-center ">
+      <div className="login-container flex items-center justify-center h-[110vh] sm:w-3/5 md:w-2/5 w-4/5 rounded-2xl my-8 ">
+        <div className="left-login grid  content-center justify-items-center  rounded-3xl text-black bg-lightgrey  h-full m-2xl w-full  outline-0 ">
           <form
             className="text-black grid content-center justify-items-center grid-cols-1  w-full h-full"
             onSubmit={handleSubmit}
           >
-            <div className="grid content-center justify-items-center w-4/5 h-20">
+            <div className="grid content-start justify-items-center w-4/5 h-20 mt-0">
               <label
                 className=" text-sm text-grey block m-2 float-left w-[70%] "
                 htmlFor="first"
