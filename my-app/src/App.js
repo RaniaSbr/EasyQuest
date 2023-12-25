@@ -15,7 +15,7 @@ function App() {
     <>
     <Router>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/" element={<ModPage />}></Route>
         <Route path="/Profile" element={<Profile />}></Route>
         <Route path="/Settings" element={<Settings />}></Route>{" "}
         <Route path="/Favorites" element={<Favorites />}></Route>
