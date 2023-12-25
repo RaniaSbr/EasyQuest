@@ -13,30 +13,32 @@
 }
 .navbar {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: 70px;
   width: 100vw;
   background-color: var(--grey);
 }
-.logo-igl {
+.logo {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  height: 70px;
+  justify-content: center;
+  height: 0px;
   margin-left: 50px;
-  cursor: pointer;
-  position: relative;
-  margin-right: 22%;
+}
+.logo-easy {
+  height: 50px;
 }
 .logo-nom {
-  padding: 5px;
+  width: 110px;
+  padding: 10px;
 }
 .pages {
+  width: 100%;
   display: flex;
-  height: 70px;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
-
 .pages ul {
   display: flex;
   justify-content: space-between;
@@ -58,7 +60,9 @@
   color: var(--blue);
   text-decoration: underline;
 }
-
+.respo {
+  display: block;
+}
 .respo hr {
   color: white;
   width: 25px;
@@ -77,27 +81,12 @@
   }
 
   .respo {
-    display: flex;
-    width: 100px;
-    position: relative;
-    z-index: 999;
+    display: block;
+    margin-right: 30px;
   }
   .navbar {
-    width: 100vw;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-  }
-  .hamburger {
-    height: 30px;
-    margin-left: 650%;
-  }
-  .logo-igl {
-    width: 50vw;
-    display: flex;
-    justify-content: center;
-    height: 35px;
-    margin: 0;
   }
   .logo-easy {
     height: 35px;
@@ -124,9 +113,7 @@
     height: 350px;
     width: 250px;
     border-radius: 25px;
-    display: block;
-    gap: 50px;
-    z-index: 1000;
+    display: grid;
   }
   .respo-list a {
     display: flex;
@@ -138,56 +125,48 @@
   }
   .respo-list2 ul {
     list-style: none;
-  }
-  .nom-user p {
-    margin-bottom: 10px;
+    margin-top: 30px;
   }
   .nom-user {
     display: grid;
-    grid-template-columns: 1fr;
     justify-items: center;
     align-content: center;
-    font-size: 20px;
   }
   .nom-user hr {
-    width: 170px;
-    display: flex;
+    width: 200px;
+    margin-top: 10px;
   }
   .x {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    margin: 10px;
     font-size: 30px;
-    width: 100%;
   }
   .x button,
   .respo button {
     background-color: transparent;
     border: none;
   }
-  .x button {
-    background-color: transparent;
-  }
   .x button:hover,
   .respo button:hover {
     cursor: pointer;
   }
-  .xx {
-    height: 25px;
+
+  .hamburger {
+    height: 30px;
+    margin-right: 10px;
   }
   .icon-x {
-    height: 50px;
+    height: 30px;
     background-color: transparent;
     border: none;
     margin-right: 10px;
-    width: 90%;
-    margin-top: 30px;
-    display: flex;
-    justify-content: flex-end;
   }
   .hr1,
   .hr2 {
     width: 30px;
     height: 3px;
+    background-color: white;
     border: transparent;
     border-radius: 10px;
   }

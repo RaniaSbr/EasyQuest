@@ -19,7 +19,7 @@ function Navbar(params) {
     <div className="navbar">
       <NavLink to="/">
         {" "}
-        <div className="logo">
+        <div className="logo ">
           <img className="logo-easy" src="./Assets/logo.png" alt="" />
           <img className="logo-nom" src="./Assets/nom.png" alt="" />
         </div>
@@ -32,7 +32,7 @@ function Navbar(params) {
               to="/"
               className={location.pathname === "/" ? "active" : ""}
             >
-              Home
+              ARTICLES
             </NavLink>{" "}
           </li>
           <li>
@@ -42,15 +42,6 @@ function Navbar(params) {
               className={location.pathname === "/Profile" ? "active" : ""}
             >
               Profile
-            </NavLink>{" "}
-          </li>
-          <li>
-            {" "}
-            <NavLink
-              to="/Favorites"
-              className={location.pathname === "/Favorites" ? "active" : ""}
-            >
-              Favorites
             </NavLink>{" "}
           </li>
         </ul>
@@ -63,11 +54,11 @@ function Navbar(params) {
       </div>
 
       {respoListVisible && (
-        <div className="respo-list">
+        <div className="respo-list z-10">
           <div className="respo-list2">
             <div className="x">
               <button href="" onClick={respoOff}>
-                <FontAwesomeIcon className="icon-x" icon={faX} />{" "}
+                <FontAwesomeIcon className="icon-x" icon={faX}  />{" "}
               </button>
             </div>
 
@@ -82,14 +73,6 @@ function Navbar(params) {
                   className={location.pathname === "/Profile" ? "active" : ""}
                 >
                   <img src="./Assets/profile.png" alt="" /> Profile
-                </NavLink>{" "}
-              </li>
-              <li>
-                <NavLink
-                  to="/Favorites"
-                  className={location.pathname === "/Favorites" ? "active" : ""}
-                >
-                  <img src="./Assets/coeur.png" alt="" /> Favorites
                 </NavLink>{" "}
               </li>
               <li>

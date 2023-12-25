@@ -1,14 +1,1 @@
-:root {
-  --darkgrey: #222831;
-  --grey: #393e46;
-  --blue: #00adb5;
-  --lightgrey: #d3d7e3;
-  --textcolor: #d3d7e3;
-}
-.home {
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-}
+
