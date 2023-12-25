@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../Styles/Navbar.css";
+import "../Styles/navbar_mod.css";
 import { NavLink } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
