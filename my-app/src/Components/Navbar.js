@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faBars } from "@fortawesome/free-solid-svg-icons";
-
+ 
 function Navbar(params) {
   const [respoListVisible, setRespoListVisible] = useState(false);
   const location = useLocation();
@@ -14,18 +14,19 @@ function Navbar(params) {
   const respoON = (event) => {
     setRespoListVisible(true);
   };
-
+ 
   return (
-    <div className="navbar">
-      <NavLink to="/">
-        {" "}
-        <div className="logo">
-          <img className="logo-easy" src="./Assets/logo.png" alt="" />
-          <img className="logo-nom" src="./Assets/nom.png" alt="" />
-        </div>
-      </NavLink>
-
-      <div className="pages">
+    <div className="navbar ">
+      <div className="logo-igl flex  items-center content-center w-4/5 ml-20">
+        <NavLink to="/">
+          <img className="logo-easy h-12  " src="./Assets/logo.png" alt="" />
+        </NavLink>
+        <NavLink to="/">
+          <img className="logo-nom w-36 ml-2" src="./Assets/nom.png" alt="" />
+        </NavLink>
+      </div>
+ 
+      <div className="pages object-none object-center">
         <ul>
           <li>
             <NavLink
@@ -55,26 +56,26 @@ function Navbar(params) {
           </li>
         </ul>
       </div>
-
+ 
       <div className="respo">
         <button onClick={respoON}>
           <FontAwesomeIcon icon={faBars} className="hamburger" />
         </button>
       </div>
-
+ 
       {respoListVisible && (
         <div className="respo-list">
           <div className="respo-list2">
+            <button href="" onClick={respoOff} className="icon-x">
+              <FontAwesomeIcon icon={faX} className="xx" />{" "}
+            </button>
             <div className="x">
-              <button href="" onClick={respoOff}>
-                <FontAwesomeIcon className="icon-x" icon={faX} />{" "}
-              </button>
+              <div className="nom-user">
+                <p>Zaidi Yasmine</p>
+                <hr />
+              </div>
             </div>
-
-            <div className="nom-user">
-              <p>Zaidi Yasmine</p>
-              <hr />
-            </div>
+ 
             <ul>
               <li>
                 <NavLink

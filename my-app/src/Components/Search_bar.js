@@ -4,6 +4,11 @@ import "../Styles/Search_bar.css";
 const Search_bar = ({ backgroundColor }) => {
   return (
     <div className="bar-search">
+       <img
+          src="./Assets/search.png"
+          alt="Recherche"
+          className="search-icon"
+        />
       <input
         type="search"
         placeholder="Rechercher des articles scientifiques ..."
@@ -11,11 +16,6 @@ const Search_bar = ({ backgroundColor }) => {
       />
       <NavLink to={"/Search_result"}>
         {" "}
-        <img
-          src="./Assets/search.png"
-          alt="Recherche"
-          className="search-icon"
-        />
       </NavLink>
     </div>
   );
