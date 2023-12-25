@@ -27,7 +27,7 @@ const ArticleContainer = ({ articleData }) => {
           </div>
         </div>
       </div>
-        <p className=' hyphens-auto mt-5 ml-5 font-Montserrat text-green font-bold text-2xl '>
+        <p className=' hyphens-auto mt-5 ml-5 font-Montserrat text-green font-bold text-xl sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl 2xl:text-3xl '>
           {title}
         </p>
       <div className='mt-5 ml-5 font-Montserrat font-bold text-xl'>
@@ -36,7 +36,7 @@ const ArticleContainer = ({ articleData }) => {
           <React.Fragment key={index}>
             <a
               href='#'
-              className='underline decoration-sky-500 font-Montserrat'
+              className='underline decoration-sky-500 font-Montserrat text-base sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl'
             >
               {author}
             </a>
@@ -48,17 +48,17 @@ const ArticleContainer = ({ articleData }) => {
       <div className='mt-5 ml-5 font-Montserrat font-bold text-xl'>
         {/* Institutions */}
         {institutions.map((institution, index) => (
-          <div className='font-Montserrat underline decoration-green' key={index}>
+          <div className='font-Montserrat underline decoration-green text-base sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl' key={index}>
             {institution}
           </div>
         ))}
       </div>
 
-      <div className='hyphens-auto mt-5 ml-5 font-Montserrat font-bold text-xl'>
+      <div className='hyphens-auto mt-5 ml-5 font-Montserrat font-bold text-base sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl'>
         URL :
         <a
           href={url}
-          className='mt-5 ml-5 font-Montserrat font-bold italic text-xl text-green underline decoration-lightStartD'
+          className='mt-5 ml-5 font-Montserrat font-bold italic text-base sm:text-xl md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl text-green underline decoration-lightStartD'
         >
           {url}
         </a>
