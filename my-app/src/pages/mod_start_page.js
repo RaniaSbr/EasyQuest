@@ -1,6 +1,6 @@
 import React from 'react';
 import ArticleContainer from '../Components/Article_Container';
-import Navbar from '../Components/ModeratorNavBar';
+import Navbar_mod from '../Components/Navbar_moderateur';
 
 const ModPage = () => {
   const articleData = {
@@ -14,7 +14,7 @@ const ModPage = () => {
 
   return (
     <div className="min-h-screen w-full m-0 bg-[#06141D] text-white">
-      <Navbar />
+    <Navbar_mod></Navbar_mod>
       <ArticleContainer articleData={articleData} />
     </div>
   );

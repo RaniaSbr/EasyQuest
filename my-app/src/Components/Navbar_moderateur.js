@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faBars } from "@fortawesome/free-solid-svg-icons";
 
-function Navbar(params) {
+function Navbar_mod(params) {
   const [respoListVisible, setRespoListVisible] = useState(false);
   const location = useLocation();
   const respoOff = (event) => {
@@ -19,7 +19,7 @@ function Navbar(params) {
     <div className="navbar">
       <NavLink to="/">
         {" "}
-        <div className="logo ">
+        <div className="logo">
           <img className="logo-easy" src="./Assets/logo.png" alt="" />
           <img className="logo-nom" src="./Assets/nom.png" alt="" />
         </div>
@@ -32,7 +32,7 @@ function Navbar(params) {
               to="/"
               className={location.pathname === "/" ? "active" : ""}
             >
-              ARTICLES
+              Articles
             </NavLink>{" "}
           </li>
           <li>
@@ -44,6 +44,7 @@ function Navbar(params) {
               Profile
             </NavLink>{" "}
           </li>
+         
         </ul>
       </div>
 
@@ -54,11 +55,11 @@ function Navbar(params) {
       </div>
 
       {respoListVisible && (
-        <div className="respo-list z-10">
+        <div className="respo-list">
           <div className="respo-list2">
             <div className="x">
               <button href="" onClick={respoOff}>
-                <FontAwesomeIcon className="icon-x" icon={faX}  />{" "}
+                <FontAwesomeIcon className="icon-x" icon={faX} />{" "}
               </button>
             </div>
 
@@ -72,19 +73,18 @@ function Navbar(params) {
                   to="/Profile"
                   className={location.pathname === "/Profile" ? "active" : ""}
                 >
-                  <img src="./Assets/profile.png" alt="" /> Profile
+                  <img src="./Assets/profile.png" alt="" /> Articles
                 </NavLink>{" "}
               </li>
               <li>
-                {" "}
                 <NavLink
-                  to="/Settings"
-                  className={location.pathname === "/Settings" ? "active" : ""}
+                  to="/Favorites"
+                  className={location.pathname === "/Favorites" ? "active" : ""}
                 >
-                  <img src="./Assets/settings.png" alt="" />
-                  Settings
+                  <img src="./Assets/coeur.png" alt="" /> Profile
                 </NavLink>{" "}
               </li>
+
             </ul>
           </div>
         </div>
@@ -92,4 +92,4 @@ function Navbar(params) {
     </div>
   );
 }
-export default Navbar;
+export default Navbar_mod;
