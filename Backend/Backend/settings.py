@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'myApp',
+    'UserPart.apps.UserpartConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
