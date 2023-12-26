@@ -86,6 +86,9 @@ DATABASES = {
         'PASSWORD': 'yasmine1',  # Replace with your MySQL password
         'HOST': '127.0.0.1',              # Replace with your MySQL host (usually 'localhost')
         'PORT': '3306',                   # Replace with your MySQL port (usually '3306')
+        'OPTIONS': {
+#             'client_encoding': 'UTF8',
+#         },
     }
 }
 
@@ -131,6 +134,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Add your React app's origin
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # Add your React app's origin
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',]
+}
+
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://elastic:ar*==+FV5XfBWpjwDy1p@localhost:9200',
+    },
+}
