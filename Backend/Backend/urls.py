@@ -6,5 +6,5 @@ urlpatterns = [
     path('moderator/', include('moderator.urls')),
     path('article/', include('article.urls')),
     path('myapp/', include('myApp.urls')),
-    path('email/', include('email_provider.urls')),
 ]
+    
