@@ -1,12 +1,12 @@
 import logo from "./logo.svg";
 import "./App.css";
-import React from "react";
+import React, { Component } from "react";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Favorites from "./pages/Favorites";
 import Search_result from "./pages/Search_result.js";
-
+import YourFormComponent from "./Components/form.js";
 
 import Login_page from "./pages/Login_page";
 import Register_page from "./pages/Register_page";
@@ -20,8 +20,8 @@ function App() {
 
       <Router>
         <Routes>
-          <Route path="/" element={<ModPage />}></Route>
-          <Route path="/Profile" element={<Profile />}></Route>
+          <Route path="/" element={<YourFormComponent/>}></Route>
+         <Route path="/Profile" element={<Profile />}></Route>
           <Route path="/Settings" element={<Settings />}></Route>{" "}
           <Route path="/Favorites" element={<Favorites />}></Route>
           <Route path="/Login" element={<Login_page />}></Route>
