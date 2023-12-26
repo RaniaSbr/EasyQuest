@@ -174,5 +174,3 @@ EMAIL_USE_TLS = True
 # Your Gmail email and app password
 EMAIL_HOST_USER = 'kazmaho35@gmail.com'
 EMAIL_HOST_PASSWORD = 'jyhu wbmo orul vuqa '
-=======
->>>>>>> MAHRAZABDELRAHMEN
