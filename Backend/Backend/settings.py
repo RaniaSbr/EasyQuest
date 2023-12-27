@@ -18,7 +18,8 @@ from pathlib import Path
 >>>>>>> MAHRAZABDELRAHMEN
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print(BASE_DIR)
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -81,18 +82,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Backend.wsgi.application'
-<<<<<<< HEAD
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'https://localhost:9200/',
         'http_auth': ('elastic', 'IZf+4ZnWoa18MqqGl4XX'),
-=======
-
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'https://localhost:9200/',
-        'http_auth': ('elastic', 'you code'),
->>>>>>> MAHRAZABDELRAHMEN
         'verify_certs': False,  # Disable certificate verification (not recommended for production)
     }
 }
@@ -102,22 +95,14 @@ ELASTICSEARCH_DSL = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'TP',     # Replace with your MySQL database name
+        'USER': 'root',        # Replace with your MySQL username
+        'PASSWORD': 'yasmine1',  # Replace with your MySQL password
+        'HOST': '127.0.0.1',              # Replace with your MySQL host (usually 'localhost')
+        'PORT': '3306',                   # Replace with your MySQL port (usually '3306')
     }
 }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'TP',     # Replace with your MySQL database name
-#         'USER': 'root',        # Replace with your MySQL username
-#         'PASSWORD': 'mahraz',  # Replace with your MySQL password
-#         'HOST': '127.0.0.1',              # Replace with your MySQL host (usually 'localhost')
-#         'PORT': '3306',                   # Replace with your MySQL port (usually '3306')
-#     }
-# }
 
 
 # Password validation
