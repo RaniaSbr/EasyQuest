@@ -12,7 +12,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-<<<<<<< HEAD
     "@react-pdf/renderer": "^3.1.17",
 =======
     "@react-pdf/renderer": "^3.1.14",
@@ -23,9 +22,12 @@
 <<<<<<< HEAD
     "axios": "^1.6.3",
     "emailjs-com": "^3.2.0",
+<<<<<<< HEAD
 =======
     "axios": "^1.6.2",
 >>>>>>> a1106402 (added Moderator app  and relevant api change)
+=======
+>>>>>>> ad06ba6a (added Moderator app  and relevant api change)
     "framer-motion": "^10.16.16",
     "jspdf": "^2.5.1",
     "pdfjs-dist": "^4.0.269",
@@ -34,16 +36,18 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-hyphen": "^1.4.0",
-<<<<<<< HEAD
     "react-router-dom": "^6.21.3",
     "react-scripts": "^5.0.1",
     "react-toastify": "^10.0.4",
+<<<<<<< HEAD
 =======
     "react-pdf": "^7.6.0",
     "react-router-dom": "^6.21.1",
     "react-scripts": "^5.0.1",
     "react-zoom-pan-pinch": "^3.3.0",
 >>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
+=======
+>>>>>>> ad06ba6a (added Moderator app  and relevant api change)
     "styled-components": "^6.1.1",
     "tailwindcss": "^3.3",
     "web-vitals": "^2.1.4"
