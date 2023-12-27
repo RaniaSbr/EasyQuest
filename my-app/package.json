@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@agney/react-loading": "^0.1.2",
     "@ckeditor/ckeditor5-build-classic": "^40.2.0",
@@ -15,8 +16,12 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+<<<<<<< HEAD
     "axios": "^1.6.3",
     "emailjs-com": "^3.2.0",
+=======
+    "axios": "^1.6.2",
+>>>>>>> a1106402 (added Moderator app  and relevant api change)
     "framer-motion": "^10.16.16",
     "jspdf": "^2.5.1",
     "pdfjs-dist": "^4.0.269",
