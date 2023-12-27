@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+<<<<<<< HEAD
             name='Moderator',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -27,5 +28,28 @@ class Migration(migrations.Migration):
             options={
                 'permissions': [('Can access moderator pages', 'mod_only_perm'), ('Can access non user pages', 'mod_admin_only')],
             },
+=======
+            name="Moderator",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("mod_id", models.CharField(max_length=255, unique=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+            ],
+>>>>>>> 1d592c85 (added Moderator app +delete + create+fetch)
         ),
     ]
