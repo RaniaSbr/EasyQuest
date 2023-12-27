@@ -18,7 +18,7 @@ const YourFormComponent = () => {
     e.preventDefault();
 
     // Make an HTTP request to your Django backend API
-    const response = await fetch('http://localhost:8000/api/yourmodel/', {
+    const response = await fetch('http://127.0.0.1:8000/api/yourmodel/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
