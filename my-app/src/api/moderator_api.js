@@ -8,7 +8,7 @@ class ModeratorAPI {
     moderatorData,
     successCallback,
     errorCallback
-  ) => {
+  ) => { 
     axios
       .post(url, moderatorData)
       .then(response => {
