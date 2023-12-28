@@ -6,6 +6,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('myApp.urls')),  # Replace 'myApp' with the actual name of your app
     path('', include('myApp.urls')),      # Add this line for the root URL
+    path('api/',include('UserPart.api.urls')),
 
 ]
 
