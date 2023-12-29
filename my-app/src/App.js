@@ -6,7 +6,8 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Favorites from "./pages/Favorites";
 import Search_result from "./pages/Search_result.js";
-import YourFormComponent from "./Components/form.js";
+import YourFormComponent from "./Components/form.js"; 
+import SearchResults from "./Components/SearchResults.js";
 
 import Login_page from "./pages/Login_page";
 import Register_page from "./pages/Register_page";

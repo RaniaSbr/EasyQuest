@@ -40,7 +40,29 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'myApp',
+    'django_elasticsearch_dsl',
 ]
+
+''''
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': 'localhost:9200',
+        'http_auth': ('elastic', 'mJ+aOdFdiIQITe1H-zmA')
+    }
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200',
+    },
+}
+'''
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://elastic:mJ+aOdFdiIQITe1H-zmA@localhost:9200',
+    },
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

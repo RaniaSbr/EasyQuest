@@ -1,6 +1,7 @@
 from django.apps import AppConfig
+from django_elasticsearch_dsl.apps import DEDConfig
 
-
-class MyappConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
+class MyappConfig(DEDConfig,AppConfig):
+    #default_auto_field = 'django.db.models.BigAutoField'
     name = 'myApp'
+

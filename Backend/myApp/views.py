@@ -3,20 +3,20 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import YourModel
-from .serializers import YourModelSerializer
+from .models import User
+from .serializers import UserSerializer
 from rest_framework import generics
 
 
-class YourModelListCreateView(generics.ListCreateAPIView):
-    queryset = YourModel.objects.all()
-    serializer_class = YourModelSerializer
+class UserListCreateView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 
 @api_view(['POST'])
 def create_your_model(request):
-    serializer = YourModelSerializer(data=request.data)
+    serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
