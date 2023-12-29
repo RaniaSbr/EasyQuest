@@ -6,10 +6,6 @@ from elasticsearch_dsl import Search
 from myApp.Admin.user_index import UserIndexIndex, UserIndex
 from myApp.models import User
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from elasticsearch_dsl import Search
-from myApp.Admin.user_index import UserIndexIndex  # Adjust the import as needed
 
 class SearchAPIView(APIView):
     def get(self, request):
@@ -28,6 +24,7 @@ class SearchAPIView(APIView):
 
 
 
+import logging
 
 class IndexUserAPIView(APIView):
     def get(self, request):
@@ -36,8 +33,18 @@ class IndexUserAPIView(APIView):
 
         # Index data in Elasticsearch
         for result in user_data:
-            user_doc = UserIndex(**result)
-            user_doc.save(index=UserIndexIndex.name)
+            user_id = result['id']
+            # Log relevant information
+            logging.info(f"Indexing user with ID: {user_id}")
+            # Check if the document already exists in Elasticsearch
+            existing_doc = UserIndex.get(id=user_id, index=UserIndexIndex.name, ignore=404)
+
+            if existing_doc:
+                # If document exists, update it
+                existing_doc.update(**result)
+            else:
+                # If not, create a new document
+                user_doc = UserIndex(**result)
+                user_doc.save(index=UserIndexIndex.name)
 
         return Response({'message': 'User data indexed successfully!'})
-
