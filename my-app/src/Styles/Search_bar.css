@@ -18,26 +18,21 @@
 
 .search-icon {
   position: absolute;
-
   left: 20px;
-
-
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
-  width: 25px;
+  width: 22px;
   height: auto;
   cursor: pointer;
   margin-right: 20px;
 }
-
 
 @media only screen and (max-width: 600px) {
   .bar-search input[type="search"] {
     max-width: 400px;
   }
   .search-icon {
-    left: 50px;
-
+    left: 20px;
   }
 }
