@@ -1,3 +1,4 @@
+
 import React from 'react'
 import '../Styles/Article_Container.css'
 import Hyphenated from 'react-hyphen';
@@ -40,10 +41,12 @@ const ArticleContainer = ({ articleData }) => {
             >
               {author}
             </a>
+
             {index < authors.length - 1 && ' | '}
           </React.Fragment>
         ))}
       </div>
+
 
       <div className='mt-5 ml-5 font-Montserrat font-bold text-xl'>
         {/* Institutions */}
@@ -69,3 +72,4 @@ const ArticleContainer = ({ articleData }) => {
 }
 
 export default ArticleContainer
+
