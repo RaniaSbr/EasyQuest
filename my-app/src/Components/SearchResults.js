@@ -1,12 +1,12 @@
 // frontend/src/SearchResults.js
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const SearchResults = () => {
   const [results, setResults] = useState([]);
 
   const handleSearch = async () => {
-    const response = await fetch('/api/search/?q=your-search-query');
+    const response = await fetch("/api/search/?q=your-search-query");
     const data = await response.json();
     setResults(data.results);
   };
