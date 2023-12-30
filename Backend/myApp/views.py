@@ -50,3 +50,13 @@ class  ModViewSet(viewsets.ModelViewSet):
         serializer =  ModSerializer(user)
 
         return Response(serializer.data)
+
+
+class ReadModerateur(viewsets.ModelViewSet):
+    queryset = Moderateur.objects.all()
+    serializer_class = ModSerializer
+
+    def get_mod_list(self, request):
+        moderators = Moderateur.objects.all()
+        serializer = ModSerializer(moderators, many=True)
+        return Response(serializer.data)

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-
+import axios from 'axios';
 import "../Styles/admin.css";
 import SearchField from "../Components/SearchField";
 import User from "../Components/user";
@@ -13,23 +13,26 @@ function Moderators(params) {
   const [displayedUsers, setDisplayedUsers] = useState([]);
   const [activeButton, setActiveButton] = useState("All");
 
-  const users = [
-    { id: 1, name: "Ahmed Al-Mansoori", title: "Admin" },
-    { id: 2, name: "Fatima Khalid", title: "Moderator" },
-    { id: 3, name: "Ali Abdullah", title: "User" },
-    { id: 4, name: "Layla Ahmed", title: "Admin" },
-    { id: 5, name: "Youssef Al-Farsi", title: "Moderator" },
-    { id: 6, name: "Amina Hassan", title: "User" },
-    { id: 7, name: "Omar Al-Maktoum", title: "Admin" },
-    { id: 8, name: "Noura Ibrahim", title: "Moderator" },
-    { id: 9, name: "Karim Abdel-Rahman", title: "User" },
-    { id: 10, name: "Sara Al-Saud", title: "Admin" },
-    { id: 11, name: "Hassan Al-Hamdi", title: "Moderator" },
-    { id: 12, name: "Amira Salah", title: "User" },
-    { id: 13, name: "Khalid Al-Mansour", title: "Admin" },
-    { id: 14, name: "Lina Abdel-Aziz", title: "Moderator" },
-    { id: 15, name: "Mahmoud Jamal", title: "User" },
-  ];
+  const [moderators, setModerators] = useState([]);
+  useEffect(() => {
+    const fetchModerators = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/ReadModerateurs'); // Update the URL with your API endpoint
+        setModerators(response.data);
+      } catch (error) {
+        console.error('Error fetching moderators:', error);
+      }
+    };
+
+    fetchModerators();
+  }, []); 
+
+ 
+  const users = moderators.map((moderateur) => ({
+    id: moderateur.id,
+    name: moderateur.username,  // Assuming 'username' is the field in your Django model
+    title: moderateur.email,    // Assuming 'email' is the field in your Django model
+  }));
   
 
   useEffect(() => {
