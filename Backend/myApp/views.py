@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render ,redirect
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User ,Moderateur
@@ -50,3 +50,34 @@ class  ModViewSet(viewsets.ModelViewSet):
         serializer =  ModSerializer(user)
 
         return Response(serializer.data)
+
+
+class ReadModerateur(viewsets.ModelViewSet):
+    queryset = Moderateur.objects.all()
+    serializer_class = ModSerializer
+
+    def get_mod_list(self, request):
+        moderators = Moderateur.objects.all()
+        serializer = ModSerializer(moderators, many=True)
+        return Response(serializer.data)
+
+
+
+class DeleteModerateur(viewsets.ModelViewSet):
+    queryset = Moderateur.objects.all()
+    serializer_class = ModSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+def delete_mod(request, mod_id):
+    # Get the user by ID
+    user = Moderateur.objects.get(pk=mod_id)
+
+    # Delete the user
+    user.delete()
+    return redirect('delete')
+
+    
