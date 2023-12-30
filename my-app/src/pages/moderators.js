@@ -51,6 +51,7 @@ function Moderators(params) {
   };
 
   const handleDeleteClick = (id) => {
+    handleDeletemod(id);
     const updatedUsers = displayedUsers.filter((user) => user.id !== id);
     setDisplayedUsers(updatedUsers);
   };
@@ -63,6 +64,33 @@ function Moderators(params) {
     );
     setDisplayedUsers(filteredUsers);
   };
+
+  const [mod, setmod] = useState([]);
+
+  useEffect(() => {
+    const fetchmod = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/DeleteModerateurs/');
+        setmod(response.data);
+      } catch (error) {
+        console.error('Error fetching mod:', error);
+      }
+    };
+
+    fetchmod();
+  }, []);
+
+  const handleDeletemod = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000//DeleteModerateurs/${id}/`);
+      // Refresh the list after successful deletion
+      const response = await axios.get('http://localhost:8000/DeleteModerateurs/');
+      setmod(response.data);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
 
   return (
     <div className="admin">
