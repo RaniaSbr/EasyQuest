@@ -1,15 +1,30 @@
+// frontend/src/SearchResults.js
+import axios from "axios";
+import React, { useState } from "react";
 
-import React from "react";
-import "../Styles/Search_result.css";
-import Navbar from "../Components/Navbar";
-import SearchResults from "../Components/SearchResults.js";
-function Search_result(params) {
+const SearchResults = () => {
+  const [results, setResults] = useState([]);
+
+  const handleSearch = async () => {
+    const apiUrl = `http://localhost:8000/api/search/?q=${encodeURIComponent("maria")}`;
+    axios.get(apiUrl)
+      .then(response => console.log(response.data))
+      .catch(error => console.error('Error:', error));
+  };
+  
+ 
   return (
-    <div className="result">
-      <Navbar></Navbar>
-      <SearchResults></SearchResults>
+    <div>
+      <button onClick={handleSearch}>Search</button>
+      <ul>
+        {results.map((result, index) => (
+          <li key={index}>
+            {result.username} - {result.email}
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
-export default Search_result;
+};
 
+export default SearchResults;
