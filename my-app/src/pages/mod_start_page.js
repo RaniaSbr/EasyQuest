@@ -1,7 +1,7 @@
 import React from "react";
 
 import ArticleContainer from "../Components/Article_Container";
-import Navbar_mod from "../Components/Navbar_moderateur";
+import Navbar_mod from "../Components/Navbar_admin";
 
 const ModPage = () => {
   const articleData = {
