@@ -1,0 +1,170 @@
+/*Admin css*/
+:root {
+    --darkgrey: #222831;
+    --grey: #393e46;
+    --blue: #00adb5;
+    --lightgrey: #d3d7e3;
+    --textcolor: #d3d7e3;
+  }
+  
+  .active {
+    color: #00adb5;
+  }
+  
+  .admin_part1 {
+    display: flex;
+    justify-content: space-between;
+    width: 84%;
+    height: 100%;
+    margin: 18px 8% 0%;
+  }
+
+  
+  .search-add {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Add space between the SearchField and Add button */
+    width: 100%; /* You can adjust the width as needed */
+  }
+
+  .add-button {
+
+    width: 15.5%;
+    height: 50px;
+    background-color: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 8px;
+    cursor: pointer;
+    margin-left: 8px;
+  }
+  .all-button {
+    height: 25px;
+    width: 110px;
+    background-color: var(--blue);
+    border: 1px solid var(--lightgrey); /* Add initial border */
+    color: #fff;
+    border-radius: 30px;
+    cursor: pointer;
+ 
+  }
+  .mod-button {
+    height: 25px;
+    width: 220px;
+    background-color: var(--grey);
+    color: #fff;
+    border: 1px solid var(--lightgrey); /* Add initial border */
+    border-radius: 30px;
+    cursor: pointer;
+
+  }
+  
+  .add_div{
+    display: flex;
+    justify-content: space-around;
+    width: 15.5%;
+  }
+
+  .add_img {
+    display: inline;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .add-button p {
+    display: inline;
+    margin-right: 8px; /* Add margin to the right of the text */
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .all-button p {
+    font-size: 15px;
+    font-weight: normal;
+  }
+  .mod-button p {
+    font-size: 15px;
+    font-weight: normal;
+  }
+  
+  .add-button:hover {
+    background-color: #007b8e;
+  }
+  
+  .add-button:hover {
+    background-color: #007b8e; /* Adjust the color on hover as needed */
+  }
+
+  i {
+    margin-left: 8px;
+    color: var(--darkgrey);
+  }
+ 
+  .filter{
+    display: flex;
+    justify-content: space-between;
+    width: 370px;
+    height: 30px;
+  }
+
+.active-button {
+  background-color: var(--blue);
+}
+.inactive-button {
+  background-color: var(--grey);
+}
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 22px; /* Set the font size for the entire table */
+
+}
+
+/* Set the width for each column */
+.user-table th:nth-child(1),
+.user-table td:nth-child(1) {
+  width: 60%;
+  text-align: start; /* Align text to the start (left) */
+  padding-left: 5%;
+
+}
+
+.user-table th:nth-child(2),
+.user-table td:nth-child(2),
+.user-table th:nth-child(3),
+.user-table td:nth-child(3) {
+  width: 20%;
+  text-align: start; /* Align text to the start (left) */
+}
+
+/* Set background color for the first row */
+/* Set background color and text color for the first row */
+.user-table thead tr {
+  background-color: var(--lightgrey);
+  color: black; /* Set text color to black */
+}
+
+.user-table th {
+  color: black;
+}
+/* Set background color for the rest of the table */
+.user-table tbody tr {
+  
+  background-color: var(--grey);
+}
+
+.user-table th:nth-child(2),
+.user-table td:nth-child(2),
+.user-table th:nth-child(3),
+.user-table td:nth-child(3) {
+  width: 20%;
+  text-align: start; /* Align text to the start (left) */
+}
+
+
+  @media (max-width: 820px) {
+    .add-button p {
+      display: none; /* Hide the "Add" button when screen width is less than 820px */
+    }
+  }
+  
