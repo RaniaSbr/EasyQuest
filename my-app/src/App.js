@@ -12,15 +12,18 @@ import Register_page from "./pages/Register_page";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import ModPage from "./pages/mod_start_page.js";
-import Moderators from "./pages/moderators.js";
+
+import UserForm from "./Components/InserModerateur.js";
 
 function App() {
   return (
     
 
+
+
       <Router>
         <Routes>
-          <Route path="/" element={<Search_result/>}></Route>
+          <Route path="/" element={ <UserForm />}></Route>
          <Route path="/Profile" element={<Profile />}></Route>
           <Route path="/Settings" element={<Settings />}></Route>{" "}
           <Route path="/Favorites" element={<Favorites />}></Route>

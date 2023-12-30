@@ -8,15 +8,6 @@ class YourModel(models.Model):
     field1 = models.CharField(max_length=100)
     field2 = models.TextField()
 
-''''
-class UserIndex(models.Model):
-    username = models.CharField(max_length=255)
-    email = models.EmailField()
-    # Add other fields as needed
-'''
-# models.py in your Django app
-from django.db import models
-
 class User(models.Model):
     username = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
@@ -34,3 +25,12 @@ def update_index(sender, instance, **kwargs):
 @receiver(post_delete, sender=UserIndex)
 def delete_index(sender, instance, **kwargs):
     instance.search_index.delete(ignore=404)
+
+
+class Moderateur(models.Model):
+  
+    username =models.CharField( max_length=50)
+    email=models.CharField( max_length=50)
+    
+    class Meta:
+        db_table="moderateur"  
