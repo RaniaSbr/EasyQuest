@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 ARTICLE_INDEX = "article"
@@ -12,3 +13,6 @@ URL = "https://localhost"
 
 >>>>>>> 4fe85a8e (added articles json keys constant)
 ARTICLE_KEYS = ["title", "authors", "keywords", "institutions", "publication_date"]
+=======
+
+>>>>>>> b21f804c (Update constants.py)
