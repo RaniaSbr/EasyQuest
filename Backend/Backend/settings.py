@@ -91,6 +91,14 @@ ELASTICSEARCH_DSL = {
     }
 }
 
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'https://localhost:9200/',
+        'http_auth': ('elastic', 'DuF83ML=V2nOIp0hVDpj'),
+        'verify_certs': False,  # Disable certificate verification (not recommended for production)
+    }
+}
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
