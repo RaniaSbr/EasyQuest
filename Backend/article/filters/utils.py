@@ -4,15 +4,18 @@ from elasticsearch.exceptions import *
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+from ..constants import ARTICLE_KEYS
+
 
 class FilterUtil:
     @staticmethod
     def apply_filter(filters_json):
+        load_dotenv()
         url = os.environ.get('URL')
         port = os.environ.get('PORT')
         user_name = os.environ.get("USER_NAME")
         user_pass = os.environ.get("USER_PASSWORD")
+        article_index = os.environ.get("ARTICLE_INDEX")
         try:
             connections.create_connection(
                 hosts=[f'{url}:{port}'],
@@ -27,7 +30,7 @@ class FilterUtil:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
-        search = Search(index=ARTICLE_INDEX)
+        search = Search(index=article_index)
 
         keywords_filter = KeywordsFilter()
         authors_filter = AuthorsFilter()
