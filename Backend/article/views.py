@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
@@ -27,6 +26,7 @@ from Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION
 class ReferenceListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
     permission_required = MODS_ADMIN_NO_USER_PERM
     raise_exception = True
+<<<<<<< HEAD
 =======
 from rest_framework import generics
 from .models import Reference, Author, Institution, MetaData, Article
@@ -45,21 +45,26 @@ from .serializers import (
 
 class ReferenceListCreateView(generics.ListCreateAPIView):
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
     queryset = Reference.objects.all()
     serializer_class = ReferenceSerializer
 
 
-<<<<<<< HEAD
 class AuthorListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
     permission_required = MODS_ADMIN_NO_USER_PERM
     raise_exception = True
+<<<<<<< HEAD
 =======
 class AuthorListCreateView(generics.ListCreateAPIView):
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 class InstitutionListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
@@ -75,33 +80,45 @@ class KeywordListCreateView(generics.ListCreateAPIView):
 >>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
 class InstitutionListCreateView(generics.ListCreateAPIView):
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+class InstitutionListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
+    permission_required = MODS_ADMIN_NO_USER_PERM
+    raise_exception = True
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
 
 
-<<<<<<< HEAD
 class MetaDataListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
     permission_required = MODS_ADMIN_NO_USER_PERM
     raise_exception = True
+<<<<<<< HEAD
 =======
 class MetaDataListCreateView(generics.ListCreateAPIView):
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
     queryset = MetaData.objects.all()
     serializer_class = MetaDataSerializer
 
 
-<<<<<<< HEAD
 class ArticleListCreateView(generics.ListAPIView):
     raise_exception = True
+<<<<<<< HEAD
 =======
 class ArticleListCreateView(generics.ListCreateAPIView):
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
 class UnPublishedArticleDetailView(viewsets.ModelViewSet):
     queryset = UnPublishedArticle.objects.all()
     serializer_class = UnPublishedArticleSerializer
@@ -200,8 +217,11 @@ class ArticleManager(PermissionRequiredMixin, viewsets.ModelViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+<<<<<<< HEAD
 =======
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
 
 
 @require_GET

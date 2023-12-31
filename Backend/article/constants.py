@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 ARTICLE_INDEX = "article"
@@ -12,6 +13,8 @@ URL = "https://localhost"
 =======
 
 >>>>>>> 4fe85a8e (added articles json keys constant)
+=======
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
 ARTICLE_KEYS = ["title", "authors", "keywords", "institutions", "publication_date"]
 =======
 

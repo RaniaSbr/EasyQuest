@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 from elasticsearch_dsl import Search
@@ -72,3 +73,5 @@ for hit in response:
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
 =======
 >>>>>>> 4fe85a8e (added articles json keys constant)
+=======
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)

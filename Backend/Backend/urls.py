@@ -1,16 +1,21 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('moderator/', include('moderator.urls')),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     path('article/', include('article.urls')),
     path('myapp/', include('myApp.urls')),
 =======
 >>>>>>> a1106402 (added Moderator app  and relevant api change)
+=======
+    path('article/', include('article.urls')),
+    path('myapp/', include('myApp.urls')),
+    path('email/', include('email_provider.urls')),
+>>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
 ]
     
 =======

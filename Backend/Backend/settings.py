@@ -96,16 +96,11 @@ ELASTICSEARCH_DSL = {
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'TP',     # Replace with your MySQL database name
-        'USER': 'root',        # Replace with your MySQL username
-        'PASSWORD': 'yasmine1',  # Replace with your MySQL password
-        'HOST': '127.0.0.1',              # Replace with your MySQL host (usually 'localhost')
-        'PORT': '3306',                   # Replace with your MySQL port (usually '3306')
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
