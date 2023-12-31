@@ -11,12 +11,16 @@ class ReferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reference
         fields = '__all__'
-
-
-class AuthorSerializer(serializers.ModelSerializer):
-    class Meta:
+        fields = ['id', 'publicationDate', 'title']
         model = Author
         fields = '__all__'
+        fields = ['id', 'name', 'app_label']
+
+
+class KeywordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Keyword
+        fields = ['id', 'name']
 
 
 class InstitutionSerializer(serializers.ModelSerializer):
@@ -26,6 +30,11 @@ class InstitutionSerializer(serializers.ModelSerializer):
 
 
 class MetaDataSerializer(serializers.ModelSerializer):
+        fields = ['id', 'name']
+
+
+class MetaDataSerializer(serializers.ModelSerializer):
+    keywords = KeywordSerializer(many=True)
     authors = AuthorSerializer(many=True)
     institutions = InstitutionSerializer(many=True)
     references = ReferenceSerializer(many=True)
@@ -50,10 +59,20 @@ class UnPublishedArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = UnPublishedArticle
         fields = '__all__'
+<<<<<<< HEAD
 =======
+=======
+        fields = ['id', 'title', 'fullText', 'abstract', 'keywords', 'authors', 'institutions', 'references']
+
+
+class ArticleSerializer(serializers.ModelSerializer):
+>>>>>>> 362a0136 (added Article Index + Filter Function + Need to create the api)
     content = MetaDataSerializer()
 
     class Meta:
         model = Article
         fields = ['id', 'content']
+<<<<<<< HEAD
 >>>>>>> MAHRAZABDELRAHMEN
+=======
+>>>>>>> 362a0136 (added Article Index + Filter Function + Need to create the api)
