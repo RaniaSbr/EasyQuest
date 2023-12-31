@@ -15,22 +15,32 @@ from elasticsearch.exceptions import *
 import os
 from dotenv import load_dotenv
 
+<<<<<<< HEAD
 load_dotenv()
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+from ..constants import ARTICLE_KEYS
+
+>>>>>>> 4fe85a8e (added articles json keys constant)
 
 class FilterUtil:
     @staticmethod
     def apply_filter(filters_json):
+<<<<<<< HEAD
 <<<<<<< HEAD
         ElasticSearchUtil.get_elasticsearch_connection()
 
         article_index = os.environ.get("ARTICLE_INDEX")
         search = Search(index=article_index)
 =======
+=======
+        load_dotenv()
+>>>>>>> 4fe85a8e (added articles json keys constant)
         url = os.environ.get('URL')
         port = os.environ.get('PORT')
         user_name = os.environ.get("USER_NAME")
         user_pass = os.environ.get("USER_PASSWORD")
+        article_index = os.environ.get("ARTICLE_INDEX")
         try:
             connections.create_connection(
                 hosts=[f'{url}:{port}'],
@@ -45,8 +55,12 @@ class FilterUtil:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
+<<<<<<< HEAD
         search = Search(index=ARTICLE_INDEX)
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+        search = Search(index=article_index)
+>>>>>>> 4fe85a8e (added articles json keys constant)
 
         keywords_filter = KeywordsFilter()
         authors_filter = AuthorsFilter()
