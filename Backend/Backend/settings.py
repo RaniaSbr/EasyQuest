@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'https://localhost:9200/',
-        'http_auth': ('elastic', 'DuF83ML=V2nOIp0hVDpj'),
+        'http_auth': ('elastic', 'you code'),
         'verify_certs': False,  # Disable certificate verification (not recommended for production)
     }
 }
