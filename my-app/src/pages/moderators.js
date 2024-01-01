@@ -1,9 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "../Styles/admin.css";
 import SearchField from "../Components/SearchField";
-import User from "../Components/user";
 import Navbar_Admin from "../Components/Navbar_admin";
 
 function Moderators(params) {
@@ -17,7 +15,7 @@ function Moderators(params) {
   useEffect(() => {
     const fetchModerators = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/ReadModerateurs/'); // Update the URL with your API endpoint
+        const response = await axios.get('http://localhost:8000/ModerateurManager/');
         setModerators(response.data);
       } catch (error) {
         console.error('Error fetching moderators:', error);
@@ -25,37 +23,29 @@ function Moderators(params) {
     };
 
     fetchModerators();
-  }, [displayedUsers]); 
+  }, [displayedUsers]);
 
- 
   const users = moderators.map((moderateur) => ({
     id: moderateur.id,
-    name: moderateur.username,  // Assuming 'username' is the field in your Django model
-    title: moderateur.email,    // Assuming 'email' is the field in your Django model
+    name: moderateur.username,
+    title: moderateur.email,
   }));
-  
 
   useEffect(() => {
     setDisplayedUsers(users);
-  }, []); 
+  }, []);
 
-// je refais la lecture pour faire un refresh 
- 
   useEffect(() => {
     const updatedUsers = moderators.map((moderateur) => ({
       id: moderateur.id,
       name: moderateur.username,
       title: moderateur.email,
     }));
-  
+
     setDisplayedUsers(updatedUsers);
   }, [moderators]);
-  
-  
 
   const handleAddClick = () => {
-  
-   // a popup page to insert moderators (componenent ModeratorForm)
     console.log("Add button clicked");
   };
 
@@ -67,17 +57,23 @@ function Moderators(params) {
 
   const handleDeleteClick = async (id) => {
     try {
-      // Send DELETE request to delete the user with the specified ID
-      await axios.delete(`http://localhost:8000/ReadModerateurs/${id}/`);
-  
-      // Update the displayed users in the frontend
+      await axios.delete(`http://localhost:8000/ModerateurManager/${id}/`);
       const updatedUsers = displayedUsers.filter((user) => user.id !== id);
       setDisplayedUsers(updatedUsers);
     } catch (error) {
       console.error('Error deleting user:', error);
     }
   };
-  
+
+  const handleShowPasswordClick = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/ModerateurManager/show-password/${id}/`);
+      const realPassword = response.data.real_password;
+      alert(`Password: ${realPassword}`);
+    } catch (error) {
+      console.error('Error fetching real password:', error);
+    }
+  };
 
   const handleSearchChange = (e) => {
     const newValue = e.target.value;
@@ -88,16 +84,9 @@ function Moderators(params) {
     setDisplayedUsers(filteredUsers);
   };
 
-
-
-
-
-
-
-
   return (
     <div className="admin">
-      <Navbar_Admin/>
+      <Navbar_Admin />
       <div className="admin_part1">
         <div className="search-add">
           <SearchField
@@ -147,13 +136,15 @@ function Moderators(params) {
                 <td>{user.name}</td>
                 <td>{user.title}</td>
                 <td>
-                <button className="delete-button" onClick={() => handleDeleteClick(user.id)}>
+                  <button className="show-password-button" onClick={() => handleShowPasswordClick(user.id)}>
+                    Show Password
+                  </button>
+                  <button className="delete-button" onClick={() => handleDeleteClick(user.id)}>
                     <img className="delete_img" src="./Assets/trash.svg" alt="Trash Icon" />
-                    </button>
-
-                <button className="edit-button">
-                 <img className="edit_img" src="./Assets/treepoint.svg" alt="Treepoint Icon" />
-                </button>
+                  </button>
+                  <button className="edit-button">
+                    <img className="edit_img" src="./Assets/treepoint.svg" alt="Treepoint Icon" />
+                  </button>
                 </td>
               </tr>
             ))}

@@ -1,29 +1,39 @@
 
-from rest_framework.response import Response
-from rest_framework import status
 from .models import Moderateur
-from .serializers import  ModSerializer
-
-from django.http import HttpResponse
 from rest_framework import viewsets 
- 
+from django.contrib.auth.hashers import make_password
+import secrets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from .serializers import ModSerializer
+from django.contrib.auth.hashers import check_password  # Import the check_password function
+from rest_framework.decorators import action
 
 
-class  ModViewSet(viewsets.ModelViewSet):
+
+class ModViewSet(viewsets.ModelViewSet):
     queryset = Moderateur.objects.all()
-    serializer_class =  ModSerializer
+    serializer_class = ModSerializer
 
     def create(self, request, *args, **kwargs):
-        # Assuming that 'name' and 'email' are part of the request data
-        user = Moderateur.objects.create(username=request.data['username'], email=request.data['email'])
+        # Generate a 12-character random password
+        generated_password = secrets.token_urlsafe(8)  # 8 characteres password generated 
+        #hashed_password = make_password(generated_password) # hash the password to stock it 
+        hashed_password = generated_password
+        user = Moderateur.objects.create(
+            username=request.data['username'],
+            email=request.data['email'],
+            password=hashed_password
+        )
 
-        # Serialize the created user to include the UID (id field)
-        serializer =  ModSerializer(user)
+        serializer = ModSerializer(user)
 
         return Response(serializer.data)
 
 
-class ReadModerateur(viewsets.ModelViewSet):
+
+
+class ModerateurManager(viewsets.ModelViewSet):
     queryset = Moderateur.objects.all()
     serializer_class = ModSerializer
 
@@ -40,3 +50,23 @@ class ReadModerateur(viewsets.ModelViewSet):
         except Moderateur.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @action(detail=True, methods=['get'])
+    def show_passwords(self, request, pk=None):
+        try:
+            moderator = Moderateur.objects.get(pk=pk)
+            serialized_data = ModSerializer(moderator).data
+            serialized_data['real_password'] = moderator.password
+            return Response(serialized_data)
+        except Moderateur.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    def update(self, request, pk=None):
+        try:
+            moderator = Moderateur.objects.get(pk=pk)
+            serializer = ModSerializer(moderator, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Moderateur.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
