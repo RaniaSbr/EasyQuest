@@ -10,8 +10,10 @@ function Moderators(params) {
   const [searchValue, setSearchValue] = useState('');
   const [displayedUsers, setDisplayedUsers] = useState([]);
   const [activeButton, setActiveButton] = useState("All");
+  const [editUserId, setEditUserId] = useState(null); // Track the user being edited
 
   const [moderators, setModerators] = useState([]);
+
   useEffect(() => {
     const fetchModerators = async () => {
       try {
@@ -23,17 +25,13 @@ function Moderators(params) {
     };
 
     fetchModerators();
-  }, [displayedUsers]);
+  }, []);  // Remove displayedUsers from the dependency array
 
   const users = moderators.map((moderateur) => ({
     id: moderateur.id,
     name: moderateur.username,
     title: moderateur.email,
   }));
-
-  useEffect(() => {
-    setDisplayedUsers(users);
-  }, []);
 
   useEffect(() => {
     const updatedUsers = moderators.map((moderateur) => ({
@@ -47,6 +45,7 @@ function Moderators(params) {
 
   const handleAddClick = () => {
     console.log("Add button clicked");
+    // Implement logic to open a form for adding a new user
   };
 
   const handleFilterClick = (title) => {
@@ -68,11 +67,40 @@ function Moderators(params) {
   const handleShowPasswordClick = async (id) => {
     try {
       const response = await axios.get(`http://localhost:8000/ModerateurManager/show-password/${id}/`);
-      const realPassword = response.data.real_password;
-      alert(`Password: ${realPassword}`);
+      const { real_password, password } = response.data;
+      alert(`Real Password: ${real_password}\nHashed Password: ${password}`);
     } catch (error) {
-      console.error('Error fetching real password:', error);
+      console.error('Error fetching passwords:', error);
     }
+  };
+
+  const handleEditClick = (id) => {
+    setEditUserId(id);
+    // Implement logic to open a form for editing the user
+  };
+
+  const handleEditSubmit = async (id, updatedUserData) => {
+    try {
+      await axios.put(`http://localhost:8000/ModerateurManager/update/${id}/`, updatedUserData);
+      setEditUserId(null);
+      // You may want to fetch the updated list of users here
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
+  const handleEditChange = (value, field) => {
+    // Update the edited user data in the state
+    const updatedUsers = displayedUsers.map((user) => {
+      if (user.id === editUserId) {
+        return {
+          ...user,
+          [field]: value,
+        };
+      }
+      return user;
+    });
+    setDisplayedUsers(updatedUsers);
   };
 
   const handleSearchChange = (e) => {
@@ -123,7 +151,7 @@ function Moderators(params) {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Title</th>
+              <th>Email</th>
               <th></th>
             </tr>
           </thead>
@@ -133,18 +161,38 @@ function Moderators(params) {
             </tr>
             {displayedUsers.map((user) => (
               <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.title}</td>
+                <td>{editUserId === user.id ? (
+                  <input
+                    type="text"
+                    value={user.name}
+                    onChange={(e) => handleEditChange(e.target.value, 'name')}
+                  />
+                ) : user.name}</td>
+                <td>{editUserId === user.id ? (
+                  <input
+                    type="text"
+                    value={user.title}
+                    onChange={(e) => handleEditChange(e.target.value, 'title')}
+                  />
+                ) : user.title}</td>
                 <td>
-                  <button className="show-password-button" onClick={() => handleShowPasswordClick(user.id)}>
-                    Show Password
-                  </button>
-                  <button className="delete-button" onClick={() => handleDeleteClick(user.id)}>
-                    <img className="delete_img" src="./Assets/trash.svg" alt="Trash Icon" />
-                  </button>
-                  <button className="edit-button">
-                    <img className="edit_img" src="./Assets/treepoint.svg" alt="Treepoint Icon" />
-                  </button>
+                  {editUserId === user.id ? (
+                    <button onClick={() => handleEditSubmit(user.id, { username: user.name, email: user.title })}>
+                      Submit Edit
+                    </button>
+                  ) : (
+                    <>
+                      <button className="show-password-button" onClick={() => handleShowPasswordClick(user.id)}>
+                        Show Password
+                      </button>
+                      <button className="delete-button" onClick={() => handleDeleteClick(user.id)}>
+                        <img className="delete_img" src="./Assets/trash.svg" alt="Trash Icon" />
+                      </button>
+                      <button className="edit-button" onClick={() => handleEditClick(user.id)}>
+                        <img className="edit_img" src="./Assets/treepoint.svg" alt="Treepoint Icon" />
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}
