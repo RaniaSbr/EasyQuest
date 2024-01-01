@@ -23,7 +23,6 @@ function App() {
 
       <Router>
         <Routes>
-         
          <Route path="/" element={ <Moderators />}></Route>
          <Route path="/Profile" element={<Profile />}></Route>
           <Route path="/Settings" element={<Settings />}></Route>{" "}
