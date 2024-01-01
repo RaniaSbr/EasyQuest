@@ -1,10 +1,9 @@
-from django.shortcuts import render ,redirect
+
 from rest_framework.response import Response
 from rest_framework import status
-from .models import User ,Moderateur
-from .serializers import UserSerializer , ModSerializer
-from rest_framework import generics
-from myApp.Admin.user_index import UserIndex, UserIndexIndex
+from .models import Moderateur
+from .serializers import  ModSerializer
+
 from django.http import HttpResponse
 from rest_framework import viewsets 
  
