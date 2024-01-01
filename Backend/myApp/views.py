@@ -10,7 +10,6 @@ from django.contrib.auth.hashers import check_password  # Import the check_passw
 from rest_framework.decorators import action
 
 
-
 class ModViewSet(viewsets.ModelViewSet):
     queryset = Moderateur.objects.all()
     serializer_class = ModSerializer
@@ -29,9 +28,6 @@ class ModViewSet(viewsets.ModelViewSet):
         serializer = ModSerializer(user)
 
         return Response(serializer.data)
-
-
-
 
 class ModerateurManager(viewsets.ModelViewSet):
     queryset = Moderateur.objects.all()
@@ -59,14 +55,15 @@ class ModerateurManager(viewsets.ModelViewSet):
             return Response(serialized_data)
         except Moderateur.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
     def update(self, request, pk=None):
         try:
             moderator = Moderateur.objects.get(pk=pk)
             serializer = ModSerializer(moderator, data=request.data)
             if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+               serializer.save()
+               return Response(serializer.data)
+            else:
+               print(serializer.errors)  #
+               return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Moderateur.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

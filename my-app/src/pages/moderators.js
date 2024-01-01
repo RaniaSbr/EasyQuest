@@ -11,7 +11,6 @@ function Moderators(params) {
   const [displayedUsers, setDisplayedUsers] = useState([]);
   const [activeButton, setActiveButton] = useState("All");
   const [editUserId, setEditUserId] = useState(null); // Track the user being edited
-
   const [moderators, setModerators] = useState([]);
 
   useEffect(() => {
@@ -79,16 +78,36 @@ function Moderators(params) {
     // Implement logic to open a form for editing the user
   };
 
+
+
   const handleEditSubmit = async (id, updatedUserData) => {
     try {
-      await axios.put(`http://localhost:8000/ModerateurManager/update/${id}/`, updatedUserData);
+      const currentUser = moderators.find((user) => user.id === id);
+      const currentPassword = currentUser ? currentUser.password : '';
+  
+      // Include the current password in the request
+      const requestData = {
+        ...updatedUserData,
+        password: currentPassword,
+      };
+  
+      // Log the data before making the request
+      console.log('Updated User Data:', requestData);
+  
+      await axios.put(`http://localhost:8000/ModerateurManager/update/${id}/`, requestData);
       setEditUserId(null);
       // You may want to fetch the updated list of users here
     } catch (error) {
       console.error('Error updating user:', error);
     }
   };
+  
 
+
+
+
+  
+  
   const handleEditChange = (value, field) => {
     // Update the edited user data in the state
     const updatedUsers = displayedUsers.map((user) => {
@@ -178,7 +197,7 @@ function Moderators(params) {
                 <td>
                   {editUserId === user.id ? (
                     <button onClick={() => handleEditSubmit(user.id, { username: user.name, email: user.title })}>
-                      Submit Edit
+                      Submit
                     </button>
                   ) : (
                     <>

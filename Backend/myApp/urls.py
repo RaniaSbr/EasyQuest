@@ -11,4 +11,6 @@ urlpatterns = [
     path('ModerateurManager/<int:pk>/', ModerateurManager.as_view({'delete': 'destroy'}), name='moderateur-detail'),
     path('ModerateurManager/show-password/<int:pk>/', ModerateurManager.as_view({'get': 'show_passwords'}), name='moderateur-show-password'),
     path('ModerateurManager/update/<int:pk>/', ModerateurManager.as_view({'put': 'update'}), name='moderateur-update'),
+        
+
 ]
