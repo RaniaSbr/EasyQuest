@@ -17,7 +17,7 @@ function Moderators(params) {
   useEffect(() => {
     const fetchModerators = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/ReadModerateurs'); // Update the URL with your API endpoint
+        const response = await axios.get('http://localhost:8000/ReadModerateurs/'); // Update the URL with your API endpoint
         setModerators(response.data);
       } catch (error) {
         console.error('Error fetching moderators:', error);
@@ -25,7 +25,7 @@ function Moderators(params) {
     };
 
     fetchModerators();
-  }, []); 
+  }, [displayedUsers]); 
 
  
   const users = moderators.map((moderateur) => ({
@@ -39,8 +39,23 @@ function Moderators(params) {
     setDisplayedUsers(users);
   }, []); 
 
+// je refais la lecture pour faire un refresh 
+ 
+  useEffect(() => {
+    const updatedUsers = moderators.map((moderateur) => ({
+      id: moderateur.id,
+      name: moderateur.username,
+      title: moderateur.email,
+    }));
+  
+    setDisplayedUsers(updatedUsers);
+  }, [moderators]);
+  
+  
+
   const handleAddClick = () => {
-    // Handle the "Add" button click logic here
+  
+   // a popup page to insert moderators (componenent ModeratorForm)
     console.log("Add button clicked");
   };
 
@@ -50,11 +65,19 @@ function Moderators(params) {
     setDisplayedUsers(filteredUsers);
   };
 
-  const handleDeleteClick = (id) => {
-    handleDeletemod(id);
-    const updatedUsers = displayedUsers.filter((user) => user.id !== id);
-    setDisplayedUsers(updatedUsers);
+  const handleDeleteClick = async (id) => {
+    try {
+      // Send DELETE request to delete the user with the specified ID
+      await axios.delete(`http://localhost:8000/ReadModerateurs/${id}/`);
+  
+      // Update the displayed users in the frontend
+      const updatedUsers = displayedUsers.filter((user) => user.id !== id);
+      setDisplayedUsers(updatedUsers);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
   };
+  
 
   const handleSearchChange = (e) => {
     const newValue = e.target.value;
@@ -65,31 +88,11 @@ function Moderators(params) {
     setDisplayedUsers(filteredUsers);
   };
 
-  const [mod, setmod] = useState([]);
 
-  useEffect(() => {
-    const fetchmod = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/DeleteModerateurs/');
-        setmod(response.data);
-      } catch (error) {
-        console.error('Error fetching mod:', error);
-      }
-    };
 
-    fetchmod();
-  }, []);
 
-  const handleDeletemod = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8000//DeleteModerateurs/${id}/`);
-      // Refresh the list after successful deletion
-      const response = await axios.get('http://localhost:8000/DeleteModerateurs/');
-      setmod(response.data);
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
-  };
+
+
 
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const UserForm = () => {
+const ModeratorForm = () => {
     const [userData, setUserData] = useState({
         username: '',
         email: '',
@@ -24,7 +24,7 @@ const UserForm = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>Name: </label>
+            <label>Full Name: </label>
             <input type="text" name="username" onChange={handleChange} required />
 
             <label>Email: </label>
@@ -35,4 +35,4 @@ const UserForm = () => {
     );
 };
 
-export default UserForm;
+export default ModeratorForm;
