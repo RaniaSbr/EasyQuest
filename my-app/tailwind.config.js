@@ -12,6 +12,7 @@ module.exports = {
       dark: "#222831",
       lightStartD: "#D3D7E3",
       lightStartE: "#EEEEEE",
+      transparent: "rgba(255, 255, 255, 0)", // Fully transparent white
     },
     fontSize: {
       sm: "0.8rem",

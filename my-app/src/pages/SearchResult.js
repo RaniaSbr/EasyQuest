@@ -1,9 +1,9 @@
 import React from "react";
-
-import ArticleContainer from "../Components/Article_Container";
-import Navbar_mod from "../Components/Navbar_admin";
-
-const ModPage = () => {
+import Navbar from "../Components/Navbar";
+import Search_bar from "../Components/Search_bar";
+import Article from "../Components/Article";
+import Filter from "../Components/Filter";
+function SearchResult(params) {
   const articleData = {
     date: "12/12/2023",
     title:
@@ -21,11 +21,12 @@ const ModPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full m-0  text-white">
-      <Navbar_mod></Navbar_mod>
-      <ArticleContainer articleData={articleData} />
+    <div className="SeearchResult_Page">
+      <Navbar></Navbar>
+      <Search_bar backgroundColor="white"></Search_bar>
+      <Filter></Filter>
+      <Article articleData={articleData}></Article>
     </div>
   );
-};
-
-export default ModPage;
+}
+export default SearchResult;
