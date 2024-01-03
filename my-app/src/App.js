@@ -23,7 +23,7 @@ function App() {
 
       <Router>
         <Routes>
-         <Route path="/" element={ <div><Moderators /> <ModeratorForm/></div>}></Route>
+         <Route path="/" element={ <div><Moderators /></div>}></Route>
          <Route path="/Profile" element={<Profile />}></Route>
           <Route path="/Settings" element={<Settings />}></Route>{" "}
           <Route path="/Favorites" element={<Favorites />}></Route>

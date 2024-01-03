@@ -1,6 +1,7 @@
 // src/components/ModeratorForm.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import "../Styles/moderateurForm.css";
 
 const ModeratorForm = () => {
     const [userData, setUserData] = useState({
@@ -24,17 +25,32 @@ const ModeratorForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>Full Name: </label>
-            <input type="text" name="username" onChange={handleChange} required />
+        <div className='mod-form'>
+            <form onSubmit={handleSubmit}>
+                <div className="form-button">
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Full Name"
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-            <label>Email: </label>
-            <input type="email" name="email" onChange={handleChange} required />
+                <div className="form-button">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-            {/* No need for manual password input */}
-
-            <button type="submit">Submit</button>
-        </form>
+                {/* No need for manual password input */}
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     );
 };
 

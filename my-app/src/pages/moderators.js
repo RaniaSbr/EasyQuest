@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+// src/pages/Moderators.js
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../Styles/admin.css";
 import SearchField from "../Components/SearchField";
 import Navbar_Admin from "../Components/Navbar_admin";
+import AddContainer from "../Components/AddContainer";
+import ModeratorForm from "../Components/InserModerateur";
 
 function Moderators(params) {
   const searchPlaceholder = "Search...";
-
   const [searchValue, setSearchValue] = useState('');
   const [displayedUsers, setDisplayedUsers] = useState([]);
-  const [activeButton, setActiveButton] = useState("All");
-  const [editUserId, setEditUserId] = useState(null); // Track the user being edited
+  const [editUserId, setEditUserId] = useState(null);
   const [moderators, setModerators] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const fetchModerators = async () => {
@@ -43,14 +45,11 @@ function Moderators(params) {
   }, [moderators]);
 
   const handleAddClick = () => {
-    console.log("Add button clicked");
-    // Implement logic to open a form for adding a new user
+    setShowAddModal(true);
   };
 
-  const handleFilterClick = (title) => {
-    setActiveButton(title);
-    const filteredUsers = title === "All" ? users : users.filter((user) => user.title === title);
-    setDisplayedUsers(filteredUsers);
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
   };
 
   const handleDeleteClick = async (id) => {
@@ -78,8 +77,6 @@ function Moderators(params) {
     // Implement logic to open a form for editing the user
   };
 
-
-
   const handleEditSubmit = async (id, updatedUserData) => {
     try {
       const currentUser = moderators.find((user) => user.id === id);
@@ -101,12 +98,6 @@ function Moderators(params) {
       console.error('Error updating user:', error);
     }
   };
-  
-
-
-
-
-  
   
   const handleEditChange = (value, field) => {
     // Update the edited user data in the state
@@ -134,12 +125,14 @@ function Moderators(params) {
   return (
     <div className="admin">
       <Navbar_Admin />
+
+      {/**Search&add button */}
       <div className="admin_part1">
         <div className="search-add">
           <SearchField
             placeholder={searchPlaceholder}
             value={searchValue}
-            onChange={handleSearchChange}
+            onChange={(e) => handleSearchChange(e)}
           />
           <button className="add-button" onClick={handleAddClick}>
             <div>
@@ -149,75 +142,69 @@ function Moderators(params) {
           </button>
         </div>
       </div>
+
+      {/**Users List */}
       <div className="admin_part1">
-        <div className="filter">
-          <button
-            className={`all-button ${activeButton === "All" ? "active-button" : "inactive-button"}`}
-            onClick={() => handleFilterClick("All")}
-          >
-            <p>All</p>
-          </button>
-          <button
-            className={`mod-button ${activeButton === "Moderator" ? "active-button" : "inactive-button"}`}
-            onClick={() => handleFilterClick("Moderator")}
-          >
-            <p>Moderateurs</p>
-          </button>
+        <div className="user-list">
+          {displayedUsers.map((user) => (
+            <div key={user.id} className="user-item">
+              {/* First Column: User Name and Email */}
+              <div className="user-info">
+              <p className={`user-name ${editUserId === user.id ? 'bold-text' : ''}`}>
+               {editUserId === user.id ? (
+                 <input
+                   type="text"
+                   value={user.name}
+                   onChange={(e) => handleEditChange(e.target.value, 'name')}
+                 />
+               ) : user.name}
+               </p>
+               <p className="user-mail">
+                 {editUserId === user.id ? (
+                   <input
+                     type="text"
+                     value={user.title}
+                     onChange={(e) => handleEditChange(e.target.value, 'title')}
+                   />
+                 ) : user.title}
+               </p>
+            </div>
+
+              {/* Second Column: Show Password Button */}
+              <div className="user-action">
+                {editUserId !== user.id && (
+                  <button className="show-password-button" onClick={() => handleShowPasswordClick(user.id)}>
+                    Show Password
+                  </button>
+                )}
+              </div>
+
+              {/* Third Column: Delete and Threepoint Buttons */}
+              <div className="user-action">
+                {editUserId === user.id ? (
+                  <button onClick={() => handleEditSubmit(user.id, { username: user.name, email: user.title })}>
+                    Submit
+                  </button>
+                ) : (
+                  <>
+                    <button className="delete-button" onClick={() => handleDeleteClick(user.id)}>
+                      <img className="delete_img" src="./Assets/trash.svg" alt="Trash Icon" />
+                    </button>
+                    <button className="edit-button" onClick={() => handleEditClick(user.id)}>
+                      <img className="edit_img" src="./Assets/pen.svg" alt="Treepoint Icon" />
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      <div className="admin_part1">
-        <table className="user-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="table-header">
-              <td colSpan="2"></td>
-            </tr>
-            {displayedUsers.map((user) => (
-              <tr key={user.id}>
-                <td>{editUserId === user.id ? (
-                  <input
-                    type="text"
-                    value={user.name}
-                    onChange={(e) => handleEditChange(e.target.value, 'name')}
-                  />
-                ) : user.name}</td>
-                <td>{editUserId === user.id ? (
-                  <input
-                    type="text"
-                    value={user.title}
-                    onChange={(e) => handleEditChange(e.target.value, 'title')}
-                  />
-                ) : user.title}</td>
-                <td>
-                  {editUserId === user.id ? (
-                    <button onClick={() => handleEditSubmit(user.id, { username: user.name, email: user.title })}>
-                      Submit
-                    </button>
-                  ) : (
-                    <>
-                      <button className="show-password-button" onClick={() => handleShowPasswordClick(user.id)}>
-                        Show Password
-                      </button>
-                      <button className="delete-button" onClick={() => handleDeleteClick(user.id)}>
-                        <img className="delete_img" src="./Assets/trash.svg" alt="Trash Icon" />
-                      </button>
-                      <button className="edit-button" onClick={() => handleEditClick(user.id)}>
-                        <img className="edit_img" src="./Assets/treepoint.svg" alt="Treepoint Icon" />
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+      {/**Add Container */}
+      {showAddModal && <AddContainer onClose={handleCloseAddModal}>
+        <ModeratorForm />
+      </AddContainer>}
     </div>
   );
 }
