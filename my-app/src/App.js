@@ -17,12 +17,17 @@ import ModeratorForm from "./Components/InserModerateur.js";
 import SearchResult from "./pages/SearchResult.js";
 import Seemore from "./pages/See_more.js";
 import Landing from "./pages/Landing.js";
+import Log_land from "./pages/Log_land.js";
+import Reg_land from "./pages/Reg_land.js";
 function App() {
   return (
     <Router>
       <Routes>
         {/* <Route path="/" element={<Landing />}></Route>{" "} */}
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/" element={<Reg_land />}></Route>
+        <Route path="/Reg_land" element={<Reg_land />}></Route>
+        <Route path="/log_land" element={<Log_land />}></Route>
+        <Route path="/Landing_register" element={<Reg_land />}></Route>
         {/* <Route path="/" element={<Moderators />}></Route> */}
         <Route path="/Profile" element={<Profile />}></Route>
         <Route path="/Settings" element={<Settings />}></Route>{" "}
