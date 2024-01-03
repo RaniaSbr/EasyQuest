@@ -16,7 +16,7 @@ from elasticsearch_dsl import Document, Text, Date
 from elasticsearch_dsl.field import Object,Keyword
 from elasticsearch_dsl.connections import connections
 
-connections.create_connection(alias='default', hosts=['http://elastic:ar*==+FV5XfBWpjwDy1p@localhost:9200'])
+connections.create_connection(alias='default', hosts=['http://elastic:ar*==+FV5XfBWpjwDy1p@localhost:9200']) #ici changer le lien
 @api_view(['POST'])
 @csrf_protect
 @csrf_exempt
