@@ -21,7 +21,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />}></Route>
+        {/* <Route path="/" element={<Landing />}></Route>{" "} */}
+        <Route path="/" element={<Home />}></Route>
         {/* <Route path="/" element={<Moderators />}></Route> */}
         <Route path="/Profile" element={<Profile />}></Route>
         <Route path="/Settings" element={<Settings />}></Route>{" "}
@@ -31,6 +32,7 @@ function App() {
         <Route path="/Search_result" element={<Search_result />}></Route>
         <Route path="/ModPage" element={<ModPage />}></Route>
         <Route path="/See_more" element={<Seemore />}></Route>
+        <Route path="/SearchRes" element={<SearchResult />}></Route>
       </Routes>
     </Router>
   );

@@ -26,7 +26,7 @@ setDropdownVisible(false);
   }
   return (
     <Hyphenated>
-    <div className='overflow-wrap break-word mx-4 md:mx-8 lg:mx-16 xl:mx-24 mt-32 p-5 rounded-lg border-2 border-lightStartD bg-grey'>
+    <div className='overflow-wrap break-word mx-4 md:mx-8 lg:mx-16 xl:mx-24  p-5 rounded-lg border-2 border-lightStartD bg-grey'>
       <div className='mod-article-row'>
         <div className="article-row-left flex gap-5 items-center ">
           <time className='font-Montserrat'>{date}</time>

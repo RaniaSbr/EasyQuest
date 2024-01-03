@@ -21,10 +21,15 @@ function SearchResult(params) {
   };
 
   return (
-    <div className="SeearchResult_Page">
+    <div className="SeearchResult_Page grid content-center gap-10 justify-items-center ">
       <Navbar></Navbar>
-      <Search_bar backgroundColor="white"></Search_bar>
-      <Filter></Filter>
+      <div className="w-[90vw] flex items-center justify-start ">
+        {" "}
+        <Search_bar backgroundColor="white"></Search_bar>
+      </div>
+      <div className="w-[90vw] flex items-center justify-start ">
+        <Filter></Filter>
+      </div>
       <Article articleData={articleData}></Article>
     </div>
   );

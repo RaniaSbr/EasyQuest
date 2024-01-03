@@ -49,6 +49,10 @@
   text-decoration: none;
   list-style: none;
 }
+.active {
+  color: var(--blue);
+  text-decoration: underline;
+}
 .pages a,
 .pages li {
   text-decoration: none;
@@ -97,6 +101,13 @@
     display: grid;
     align-content: center;
     justify-items: flex-end;
+  }
+  .respo-listL {
+    position: fixed;
+    order: 2;
+    z-index: 100;
+    top: 1rem;
+    width: 100%;
   }
   .respo-list a {
     text-decoration: none;
