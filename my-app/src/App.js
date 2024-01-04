@@ -14,6 +14,7 @@ import "./index.css";
 import ModPage from "./pages/mod_start_page.js";
 import Moderators from "./pages/moderators.js"
 import ModeratorForm from "./Components/InserModerateur.js";
+import ArticleUploader from "./pages/UploadArticle.js"
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
 
       <Router>
         <Routes>
-         <Route path="/" element={ <div><Moderators /> <ModeratorForm/></div>}></Route>
+         <Route path="/" element={ <ArticleUploader/>}></Route>
          <Route path="/Profile" element={<Profile />}></Route>
           <Route path="/Settings" element={<Settings />}></Route>{" "}
           <Route path="/Favorites" element={<Favorites />}></Route>
