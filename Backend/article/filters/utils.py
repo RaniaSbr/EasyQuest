@@ -4,9 +4,11 @@ from elasticsearch_dsl import Search, connections
 
 from .filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
 from ..Exceptions import DataQueryInputIsNotList
-from ..constants import ARTICLE_KEYS
+from ..constants import
+ ARTICLE_KEYS
 from Backend.util import ElasticSearchUtil
 
+=======
 from elasticsearch_dsl import Search, connections
 from .filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
 from elasticsearch.exceptions import *
@@ -21,7 +23,19 @@ class FilterUtil:
         ElasticSearchUtil.get_elasticsearch_connection()
 
         article_index = os.environ.get("ARTICLE_INDEX")
-        search = Search(index=article_index)
+        try:
+            connections.create_connection(
+                hosts=[f'{url}:{port}'],
+                alias='default',
+                verify_certs=False,
+                http_auth=(user_name, user_pass)
+            )
+        except ConnectionError as ce:
+            print(f"ConnectionError: {ce}")
+        except AuthenticationException as ae:
+            print(f"AuthenticationException: {ae}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
         search = Search(index=ARTICLE_INDEX)
 
@@ -63,3 +77,4 @@ class InputIntegrity:
         for element in should_be_list:
             if not element.isalpha():
                 raise ValueError(f"Data Elements should only contain letters. Concerned Element : {element}")
+

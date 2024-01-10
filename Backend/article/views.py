@@ -1,17 +1,9 @@
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import generics, status, viewsets
-from rest_framework.response import Response
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import get_object_or_404
-from django.http import FileResponse
-
-from .controller import CreateArticleUtil
-from .models import *
+from rest_framework import generics
+from .models import Reference, Author, Keyword, Institution, MetaData, Article
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
-from .filters.utils import FilterUtil
-from django.db import transaction
-from datetime import datetime
+from filters.filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
+
 from .serializers import (
     ReferenceSerializer,
     AuthorSerializer,
@@ -57,104 +49,6 @@ class ArticleListCreateView(generics.ListAPIView):
     serializer_class = ArticleSerializer
 
 
-class UnPublishedArticleDetailView(viewsets.ModelViewSet):
-    queryset = UnPublishedArticle.objects.all()
-    serializer_class = UnPublishedArticleSerializer
-
-    @staticmethod
-    def validate(request, pk):
-        try:
-            article = get_object_or_404(UnPublishedArticle, pk=pk)
-
-            new_meta_data = article.get_meta_data()
-
-            with transaction.atomic():
-                new_meta_data.id = None
-                new_meta_data.save()
-
-                will_be_published_article = Article.objects.create(
-                    meta_data=new_meta_data,
-                    pdf_file=article.get_pdf_file()
-                )
-
-                will_be_published_article.save()
-                article.delete()
-
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def destroy(self, request, pk=None, *args):
-        try:
-            with transaction.atomic():
-                article = UnPublishedArticle.objects.get(pk=pk)
-                article.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def update(self, request, pk=None, *args, **kwargs):
-        try:
-            with transaction.atomic():
-                article = get_object_or_404(UnPublishedArticle, pk=pk)
-                data = request.data.get('meta_data', article.get_meta_data())
-                CreateArticleUtil.create_article_from_object(data, article.get_pdf_file())
-                return Response(status=status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    @staticmethod
-    def serve_unpublished_article_pdf(request, pk):
-        unpublished_article = get_object_or_404(UnPublishedArticle, pk=pk)
-        print(unpublished_article)
-        return FileResponse(unpublished_article.get_pdf_file(), as_attachment=True)
-
-    def retrieve(self, request, pk=None, *args):
-        paper = get_object_or_404(UnPublishedArticle, pk=pk)
-        serializer = self.get_serializer(paper)
-        return Response(serializer.data)
-
-
-class UnPublishedArticleListCreateView(generics.ListAPIView):
-    raise_exception = True
-    queryset = UnPublishedArticle.objects.all()
-    serializer_class = UnPublishedArticleSerializer
-
-
-class ArticleManager(PermissionRequiredMixin, viewsets.ModelViewSet):
-    permission_required = MODS_PERMISSION
-    raise_exception = True
-    queryset = UnPublishedArticle.objects.all()
-    serializer_class = UnPublishedArticleSerializer
-
-    @staticmethod
-    def get_articles_list():
-        article = UnPublishedArticle.objects.all()
-        serializer = UnPublishedArticleSerializer(article, many=True)
-        return Response(serializer.data)
-
-    @staticmethod
-    def destroy(request, pk=None, *args):
-        try:
-            article = UnPublishedArticle.objects.get(pk=pk)
-            article.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def update(self, request, pk=None, *args):
-        try:
-            article = UnPublishedArticle.objects.get(pk=pk)
-            serializer = UnPublishedArticleSerializer(article, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            else:
-                print(serializer.errors)  #
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 @require_GET

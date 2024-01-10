@@ -34,7 +34,6 @@ class MetaDataSerializer(serializers.ModelSerializer):
 
 
 class MetaDataSerializer(serializers.ModelSerializer):
-    keywords = KeywordSerializer(many=True)
     authors = AuthorSerializer(many=True)
     institutions = InstitutionSerializer(many=True)
     references = ReferenceSerializer(many=True)
