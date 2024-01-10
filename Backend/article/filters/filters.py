@@ -12,10 +12,14 @@ class KeywordsFilter(ArticleFilter):
             Q('match', keywords={'query': keyword, 'fuzziness': 'AUTO'}) for keyword in keywords
         ]
 <<<<<<< HEAD
+<<<<<<< HEAD
         return search.query('bool', should=should_queries)
 =======
         return search.query('bool', must=should_queries)
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+        return search.query('bool', should=should_queries)
+>>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
 
 
 class AuthorsFilter(ArticleFilter):

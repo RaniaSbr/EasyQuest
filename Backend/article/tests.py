@@ -28,17 +28,12 @@ authors_filter = AuthorsFilter()
 institutions_filter = InstitutionsFilter()
 date_range_filter = DateRangeFilter()
 
-# Example values for testing
-keywords = ['configuration management', 'continuous testing', 'blockchain in conservation',
-            'decentralized finance (defi)']
 
-authors = ['Adel Lahsasna', 'Chetanya Puri', 'luca saba']
-institutions = 'Austin Peay State University'
+authors = ['Chetanya Puri']
+
 period = [datetime(2022, 1, 1), datetime(2023, 12, 31)]
 
-search = keywords_filter.filter(search, keywords)
 search = authors_filter.filter(search, authors)
-search = institutions_filter.filter(search, institutions)
 search = date_range_filter.filter(search, period)
 
 # Execute the search

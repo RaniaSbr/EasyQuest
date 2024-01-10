@@ -29,15 +29,14 @@ class ReferenceListCreateView(PermissionRequiredMixin, generics.ListCreateAPIVie
     raise_exception = True
 =======
 from rest_framework import generics
-from .models import Reference, Author, Keyword, Institution, MetaData, Article
+from .models import Reference, Author, Institution, MetaData, Article
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
-from filters.filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
-
+from .filters.utils import FilterUtil
+from datetime import datetime
 from .serializers import (
     ReferenceSerializer,
     AuthorSerializer,
-    KeywordSerializer,
     InstitutionSerializer,
     MetaDataSerializer,
     ArticleSerializer,
@@ -62,6 +61,7 @@ class AuthorListCreateView(generics.ListCreateAPIView):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 class InstitutionListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
     permission_required = MODS_ADMIN_NO_USER_PERM
     raise_exception = True
@@ -71,6 +71,8 @@ class KeywordListCreateView(generics.ListCreateAPIView):
     serializer_class = KeywordSerializer
 
 
+=======
+>>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
 class InstitutionListCreateView(generics.ListCreateAPIView):
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
     queryset = Institution.objects.all()
@@ -98,6 +100,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 class UnPublishedArticleDetailView(viewsets.ModelViewSet):
     queryset = UnPublishedArticle.objects.all()
@@ -204,12 +207,17 @@ class ArticleManager(PermissionRequiredMixin, viewsets.ModelViewSet):
 @require_GET
 def search_api(request):
 <<<<<<< HEAD
+=======
+@require_GET
+def search_api(request):
+>>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
     """
             Function to return a filter json based on query that contains json details
 
             Returns:
                 json: list of results
     """
+<<<<<<< HEAD
     keywords = request.GET.getlist('keywords', [])
     authors = request.GET.getlist('authors', [])
     institutions = request.GET.getlist('institutions', [])
@@ -227,10 +235,21 @@ def search_api(request):
 
     # Define filter data
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+    keywords = request.GET.getlist('keywords', [])
+    authors = request.GET.getlist('authors', [])
+    institutions = request.GET.getlist('institutions', [])
+    start_date = request.GET.getlist('start_date', [])
+    end_date = request.GET.getlist('end_date', [])
+    date_range = [start_date, end_date]
+    date_range[0] = start_date if start_date else datetime(1970, 1, 1)
+    date_range[1] = end_date if end_date else datetime(datetime.today().year, 12, 30)
+>>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
     filters = {
         'keywords': keywords,
         'authors': authors,
         'institutions': institutions,
+<<<<<<< HEAD
 <<<<<<< HEAD
         'publication_date': date_range,
     }
@@ -251,3 +270,12 @@ def search_api(request):
 
     return JsonResponse(response_data)
 >>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
+=======
+        'publication_date': date_range,
+    }
+    results = FilterUtil.apply_filter(filters)
+    if isinstance(results, str):
+        return {"Exception": results}
+    else:
+        return JsonResponse(results.to_dict())
+>>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
