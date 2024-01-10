@@ -1,17 +1,9 @@
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import generics, status, viewsets
-from rest_framework.response import Response
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import get_object_or_404
-from django.http import FileResponse
-
-from .controller import CreateArticleUtil
-from .models import *
+from rest_framework import generics
+from .models import Reference, Author, Keyword, Institution, MetaData, Article
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
-from .filters.utils import FilterUtil
-from django.db import transaction
-from datetime import datetime
+from filters.filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
+
 from .serializers import (
     ReferenceSerializer,
     AuthorSerializer,
@@ -114,11 +106,6 @@ class ArticleListCreateView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
 class UnPublishedArticleDetailView(viewsets.ModelViewSet):
     queryset = UnPublishedArticle.objects.all()
     serializer_class = UnPublishedArticleSerializer
@@ -217,11 +204,6 @@ class ArticleManager(PermissionRequiredMixin, viewsets.ModelViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-<<<<<<< HEAD
-=======
->>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
-=======
->>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
 
 
 @require_GET

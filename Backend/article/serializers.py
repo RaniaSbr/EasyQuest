@@ -73,16 +73,6 @@ class MetaDataSerializer(serializers.ModelSerializer):
 
 class MetaDataSerializer(serializers.ModelSerializer):
     keywords = KeywordSerializer(many=True)
-<<<<<<< HEAD
->>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
-=======
-        fields = '__all__'
-
-
-class MetaDataSerializer(serializers.ModelSerializer):
->>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
-=======
->>>>>>> 2d60e561 (added Article Index + Filter Function + Need to create the api)
     authors = AuthorSerializer(many=True)
     institutions = InstitutionSerializer(many=True)
     references = ReferenceSerializer(many=True)
