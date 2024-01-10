@@ -1,61 +1,63 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef
+} from 'react';
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTWVYXZ123456789";
 
-const RandomizeText = () => {
+const useRandomizeText = (initialText, delay = 80, resetDelay = 800) => {
   const [intervalId, setIntervalId] = useState(null);
   const [mutex, setMutex] = useState(true);
   const originalTextRef = useRef('');
 
   const test = (letter) => {
-    if (letter.localeCompare(" ") !== 0) {
-      return ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
-    } else {
-      return " ";
-    }
+      if (letter.localeCompare(" ") !== 0) {
+          return ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+      } else {
+          return " ";
+      }
   };
 
-  const randomizeText = (event) => {
-    if (mutex) {
-      const textLength = event.target.innerText.length;
-      originalTextRef.current = event.target.innerText;
-      setMutex(false);
+  const randomizeText = (target) => {
+      if (mutex) {
+          const textLength = target.innerText.length;
+          originalTextRef.current = target.innerText;
+          setMutex(false);
 
-      let currentIndex = 0;
-      const id = setInterval(() => {
-        const randomLetters = event.target.innerText
-          .split("")
-          .map((letter) => test(letter))
-          .join("");
-        currentIndex += 0.5;
+          let currentIndex = 0;
+          const id = setInterval(() => {
+              const randomLetters = target.innerText
+                  .split("")
+                  .map((letter) => test(letter))
+                  .join("");
+              currentIndex += 0.5;
 
-        event.target.innerText =
-          originalTextRef.current.substring(0, Math.floor(currentIndex)) +
-          randomLetters.substring(Math.floor(currentIndex));
+              target.innerText =
+                  originalTextRef.current.substring(0, Math.floor(currentIndex)) +
+                  randomLetters.substring(Math.floor(currentIndex));
 
-        if (currentIndex >= textLength) {
-          clearInterval(id);
-          setTimeout(() => {
-            setMutex(true);
-          }, 800);
-        }
-      }, 80);
+              if (currentIndex >= textLength) {
+                  clearInterval(id);
+                  setTimeout(() => {
+                      setMutex(true);
+                  }, resetDelay);
+              }
+          }, delay);
 
-      setIntervalId(id);
-    }
+          setIntervalId(id);
+      }
   };
 
   useEffect(() => {
-    return () => {
-      clearInterval(intervalId);
-    };
+      return () => {
+          clearInterval(intervalId);
+      };
   }, [intervalId]);
 
-  return (
-
-      <h1 onMouseOver={(event) => randomizeText(event)}   className="font-bold text-white  md:text-10xl relative">EASY QUEST</h1>
-
-  );
+  return {
+      randomizeText
+  };
 };
 
-export default RandomizeText;
+export default useRandomizeText;

@@ -1,0 +1,5 @@
+
+class DataQueryInputIsNotList(Exception):
+    pass
+
+

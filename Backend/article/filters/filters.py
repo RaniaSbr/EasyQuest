@@ -11,7 +11,7 @@ class KeywordsFilter(ArticleFilter):
         should_queries = [
             Q('match', keywords={'query': keyword, 'fuzziness': 'AUTO'}) for keyword in keywords
         ]
-        return search.query('bool', must=should_queries)
+        return search.query('bool', should=should_queries)
 
 
 class AuthorsFilter(ArticleFilter):
