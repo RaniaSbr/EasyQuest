@@ -1,14 +1,17 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import '../Styles/Article_Container.css'
-import Hyphenated from 'react-hyphen';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-
+import { useNavigate } from 'react-router-dom';
 const ArticleContainer = ({ articleData }) => {
-  const { date, title, authors, institutions, url } = articleData
+  const { title, authors,  url, institutions, date, id } = articleData ;
+  const [clicked, setCliked] = useState(false);
+  const navigate = useNavigate();
+  const handleEditClick = (articleId) => {
+    navigate(`/edit-article/${articleId}`);
+  };
   return (
-    <Hyphenated>
     <div className='overflow-wrap break-word mx-4 md:mx-8 lg:mx-16 xl:mx-24 mt-32 p-5 rounded-lg border-2 border-lightStartD bg-grey'>
       <div className='mod-article-row'>
         <time className='font-Montserrat'>{date}</time>
@@ -17,8 +20,8 @@ const ArticleContainer = ({ articleData }) => {
           <FontAwesomeIcon icon={faEllipsis} size='2xl' className='z-0' />
           </span>
           <div className='mod-article-dropdown-content'>
-            <div className='mod_article_text'>
-              <a href='#'>EDIT</a>
+            <div className='mod_article_text cursor-pointer'>
+              <a onClick={() => handleEditClick(id)}>EDIT</a>
             </div>
             <div className='mod_article_text'>
               <a href='#' className='text-red-500'>
@@ -67,7 +70,6 @@ const ArticleContainer = ({ articleData }) => {
         </a>
       </div>
     </div>
-    </Hyphenated>
   )
 }
 

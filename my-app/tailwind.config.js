@@ -12,6 +12,8 @@ module.exports = {
       dark: "#222831",
       lightStartD: "#D3D7E3",
       lightStartE: "#EEEEEE",
+      red: "#E0115F",
+      validate_green:'#00ff40',
     },
     fontSize: {
       sm: "0.8rem",
@@ -30,6 +32,12 @@ module.exports = {
       xl: "1280px",
     },
     extend: {
+      width: {
+        '128': '32rem',
+      },
+      height: {
+        '128': '42rem',
+      },
       display: ["group-hover", "responsive", "hover"],
     },
   },

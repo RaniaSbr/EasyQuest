@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+print(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -27,42 +27,23 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    'moderator',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_elasticsearch_dsl',
     'corsheaders',
     'rest_framework',
     'myApp',
-    'django_elasticsearch_dsl',
+    'article',
+    'email_provider'
 ]
-
-''''
-ELASTICSEARCH_DSL={
-    'default': {
-        'hosts': 'localhost:9200',
-        'http_auth': ('elastic', 'mJ+aOdFdiIQITe1H-zmA')
-    }
-}
-
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'localhost:9200',
-    },
-}
-'''
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'http://elastic:mJ+aOdFdiIQITe1H-zmA@localhost:9200',
-    },
-}
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -95,21 +76,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Backend.wsgi.application'
 
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'https://localhost:9200/',
+        'http_auth': ('elastic', 'DuF83ML=V2nOIp0hVDpj'),
+        'verify_certs': False,  # Disable certificate verification (not recommended for production)
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'TP',     # Replace with your MySQL database name
-        'USER': 'root',        # Replace with your MySQL username
-        'PASSWORD': 'yasmine1',  # Replace with your MySQL password
-        'HOST': '127.0.0.1',              # Replace with your MySQL host (usually 'localhost')
-        'PORT': '3306',                   # Replace with your MySQL port (usually '3306')
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'TP',     # Replace with your MySQL database name
+#         'USER': 'root',        # Replace with your MySQL username
+#         'PASSWORD': 'mahraz',  # Replace with your MySQL password
+#         'HOST': '127.0.0.1',              # Replace with your MySQL host (usually 'localhost')
+#         'PORT': '3306',                   # Replace with your MySQL port (usually '3306')
+#     }
+# }
 
 
 # Password validation
@@ -130,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -141,7 +135,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -156,3 +149,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Add your React app's origin
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# SMTP server settings (example for Gmail)
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# Your Gmail email and app password
+EMAIL_HOST_USER = 'kazmaho35@gmail.com'
+EMAIL_HOST_PASSWORD = 'jyhu wbmo orul vuqa '

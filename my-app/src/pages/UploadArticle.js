@@ -11,7 +11,7 @@ const ArticleUploader = () => {
   const handleUpload = async () => {
     try {
       // Envoyer l'URL au backend Django pour le traitement en utilisant une requête GET
-      const response = await axios.get('http://localhost:8000/upload/', {
+      const response = await axios.get('http://localhost:8000/article/upload/', {
         params: { url },
       });
 
