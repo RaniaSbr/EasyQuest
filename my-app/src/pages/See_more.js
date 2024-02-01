@@ -1,9 +1,7 @@
 import React from "react";
-
-import ArticleContainer from "../Components/Article_Container";
-import Navbar_mod from "../Components/Navbar_admin";
-
-const ModPage = () => {
+import Navbar from "../Components/Navbar";
+import Seemore_compo from "../Components/Seemore_compo";
+function Seemore(params) {
   const articleData = {
     date: "12/12/2023",
     title:
@@ -21,11 +19,10 @@ const ModPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full m-0  text-white">
-      <Navbar_mod></Navbar_mod>
-      <ArticleContainer articleData={articleData} />
+    <div>
+      <Navbar></Navbar>
+      <Seemore_compo articleData={articleData}></Seemore_compo>
     </div>
   );
-};
-
-export default ModPage;
+}
+export default Seemore;
