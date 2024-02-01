@@ -1,7 +1,7 @@
 # UserPart/management/commands/import_data.py
 import json
 from django.core.management.base import BaseCommand
-from article.models import Refrence, Author, KeyWord, Institution, MetaData, Article
+from Backend.Backend.article.models import Refrence, Author, KeyWord, Institution, MetaData, Article
 
 class Command(BaseCommand):
     help = 'Import data from JSON file to Django models'

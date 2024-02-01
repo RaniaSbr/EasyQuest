@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Favorite</title>
+</head>
+<body>
+    <h1>Remove Favorite</h1>
+    <input type="text" id="articleId" placeholder="Enter Article ID">
+    <button onclick="removeFromFavorites()">Remove from Favorites</button>
+    <div id="message"></div>
+
+    <script>
+        var tokenValue = getCookie('token');
+        function removeFromFavorites() {
+            var articleId = document.getElementById('articleId').value;
+
+            fetch('http://127.0.0.1:8000/api/remove-favorite/' + articleId + '/', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + tokenValue  // Remplacez par votre jeton d'authentification JWT
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to remove article from favorites');
+                }
+            })
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('message').innerText = 'An error occurred while removing article from favorites';
+            });
+        }
+        function getCookie(name) {
+            const cookieName = name + '=';
+            const cookieArray = document.cookie.split(';');
+            
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i].trim();
+                if (cookie.indexOf(cookieName) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return null;
+        }
+    </script>
+</body>
+</html>

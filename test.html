@@ -1,0 +1,115 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #login-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #login-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        #login-form button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #login-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-form">
+        <h2>Login</h2>
+        <div id="error-message" style="color: red; margin-bottom: 10px;"></div>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <script>
+        
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+        
+            fetch('http://127.0.0.1:8000/api/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                      // Assuming you're using Django CSRF protection
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                  // Afficher le message de succès
+              
+                
+                if(data.error){
+                    console.log(data);
+                }else{
+                    
+                    document.cookie = `token=${data.token}; path=/; SameSite=None; Secure`;
+                    console.log(data);
+                    var tokenValue = getCookie('token');
+                    console.log(tokenValue);  
+                // Éventuellement, rediriger vers une autre page ou effectuer d'autres actions
+                    }
+            })
+            .catch(error => {
+                console.log('Erreur:', error);
+                document.getElementById('error-message').innerText = error; // Afficher le message d'erreur
+            }); 
+
+            
+        }
+       
+        // Function to get CSRF token from cookies (Django)
+        function getCookie(name) {
+            const cookieName = name + '=';
+            const cookieArray = document.cookie.split(';');
+            
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i].trim();
+                if (cookie.indexOf(cookieName) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return null;
+        }
+        
+
+    </script>
+</body>
+</html>

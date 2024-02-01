@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout Page</title>
+</head>
+<body>
+    <h1>Logout Page</h1>
+    <button id="logoutButton">Logout</button>
+
+    <script>
+        function logout() {
+            var tokenValue = getCookie('token'); // Récupère le token à partir du cookie
+        
+            fetch('http://127.0.0.1:8000/api/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + tokenValue  // Utilise le token récupéré
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                    return response.json();
+                } else {
+                    throw new Error('Erreur lors de la déconnexion.');
+                }
+            })
+            .then(data => {
+                console.log(data);
+                console.log(data.message); // Affichez le message de succès dans la console
+                // Vous pouvez rediriger l'utilisateur vers une autre page ou effectuer d'autres actions après la déconnexion
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                // Traitez l'erreur, par exemple, affichez un message d'erreur à l'utilisateur
+            });
+        }
+        
+        function getCookie(name) {
+            const cookieName = name + '=';
+            const cookieArray = document.cookie.split(';');
+            
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i].trim();
+                if (cookie.indexOf(cookieName) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return null;
+        }
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            logout();
+        });
+    </script>
+</body>
+</html>
