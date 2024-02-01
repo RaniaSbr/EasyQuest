@@ -1,0 +1,44 @@
+
+/* searchField.css */
+
+.search-field {
+    display: flex;
+    align-items: center;
+    width: 70%;
+    height: 50px;
+    background-color: #d3d7e3;
+    border-radius: 30px;
+    padding: 0 16px;
+    transition: border-color 0.3s; /* Add transition for a smooth effect */
+    border: 2px solid transparent; /* Add initial border */
+  }
+  
+  .search-field:focus-within {
+    border-color: var(--blue); /* Change border color when input is focused */
+  }
+  
+  .label-text {
+    margin-right: 8px;
+  }
+  
+  .search_img {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .search-input {
+    width: 58%;
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background-color: #d3d7e3;
+    color: var(--darkgrey);
+    border-radius: 4px;
+    outline: none; /* Remove default focus outline on input */
+  }
+  
+  .search-input::placeholder {
+    color: var(--darkgrey);
+    opacity: 0.8; /* Adjust the opacity as needed */
+    text-align: center; /* Center placeholder text */
+  }

@@ -131,7 +131,7 @@ function Register() {
             </div>{" "}
             <div className="grid content-center justify-items-center w-full h-20">
               <NavLink to="/">
-                <button
+                <button onclick={signUp()}
                   type="submit"
                   id="sub_button"
                   className="login-button  bg-grey px-[8rem] py-[0.5rem] cursor-pointer"
@@ -169,4 +169,33 @@ function Register() {
   );
 }
 
+function signUp() {
+  var firstName = document.getElementById('first').value;
+  var lastName = document.getElementById('last').value;
+  var email = document.getElementById('emil2').value;
+  var password = document.getElementById('pwd2').value;
+
+  fetch('http://127.0.0.1:8000/api/sign-up/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          password: password
+      })
+  })
+  .then(response => {
+      return response.json();
+  })
+  .then(data => {
+      alert(data.message); // You can handle success response here
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      document.getElementById('error-message').innerText = error.message; // Display error message
+  });
+}
 export default Register;

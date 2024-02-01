@@ -40,9 +40,11 @@ def login_user(request):
         token, created = Token.objects.get_or_create(user=user)
         print(token.key)
         # You can include the token in the response if needed
+        first_name = user.first_name
+        last_name = user.last_name
         message = "Login successful"
 
-        return Response({'message': message, 'token': token.key}, status=status.HTTP_200_OK)
+        return Response({'message': message, 'token': token.key,'first_name': first_name, 'last_name': last_name}, status=status.HTTP_200_OK)
     else:
         message = "Incorrect password"
         return Response({'error': message}, status=status.HTTP_401_UNAUTHORIZED)
@@ -121,7 +123,7 @@ def sign_up(request):
         return Response({'message': 'User with this email already exists'}, status=400)
 
     
-    user = User.objects.create_user(username=email, email=email, password=password)
+    user = User.objects.create_user(username=email, email=email, password=password,first_name=first_name, last_name=last_name)
     user_profile = UserProfile.objects.create(user = user)
 
     return Response({'message': 'User registered successfully'}, status=201)

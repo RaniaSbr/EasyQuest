@@ -5,11 +5,11 @@ import "../Styles/Login.css";
 function Login() {
   const [emailval, setemailval] = useState("");
   const [passval, setpassval] = useState();
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
   };
-
+  
   return (
     <div className="login m-w-[40vw] m-h-[60vh] truncate grid content-center justify-items-center">
       <div className="login-container flex items-center justify-center h-[70vh] sm:w-3/5 md:w-2/5 w-4/5 rounded-2xl my-8 ">
@@ -50,7 +50,7 @@ function Login() {
 
             {/* Login Button */}
             <NavLink to="/">
-              <button
+              <button onclick= {login_requet()}
                 type="submit"
                 id="sub_button"
                 className="login-button w-full bg-grey px-[1rem] py-[0.5rem] cursor-pointer"
@@ -75,6 +75,121 @@ function Login() {
       </div>
     </div>
   );
+  
+function login_requet() {
+  
+  var username = null;
+  var password = null;
+  var username = document.getElementById('emil1').value;
+  var password = document.getElementById('pwd1').value;
+  
+  fetch('http://127.0.0.1:8000/api/login/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+            // Assuming you're using Django CSRF protection
+      },
+      body: JSON.stringify({
+          username: username,
+          password: password
+      })
+  })
+  .then(response => {
+      return response.json();
+  })
+  .then(data => {
+        // Afficher le message de succès
+    
+      
+      if(data.error){
+          console.log(data);
+      }else{
+          
+          document.cookie = `token=${data.token}; path=/; SameSite=None; Secure`;
+          console.log(data);
+          var tokenValue = getCookie('token');
+          console.log(tokenValue);  
+      // Éventuellement, rediriger vers une autre page ou effectuer d'autres actions
+          }
+  })
+  .catch(error => {
+      console.log('Erreur:', error);
+      document.getElementById('error-message').innerText = error; // Afficher le message d'erreur
+  }); 
+
+  
+}
+
+// Function to get CSRF token from cookies (Django)
+function getCookie(name) {
+  const cookieName = name + '=';
+  const cookieArray = document.cookie.split(';');
+  
+  for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i].trim();
+      if (cookie.indexOf(cookieName) === 0) {
+          return cookie.substring(cookieName.length, cookie.length);
+      }
+  }
+  return null;
+}
+
+}
+
+
+function login_requet() {
+  var username = document.getElementById('email').value;
+  var password = document.getElementById('psw1').value;
+  
+  fetch('http://127.0.0.1:8000/api/login/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+            // Assuming you're using Django CSRF protection
+      },
+      body: JSON.stringify({
+          username: username,
+          password: password
+      })
+  })
+  .then(response => {
+      return response.json();
+  })
+  .then(data => {
+        // Afficher le message de succès
+    
+      
+      if(data.error){
+          console.log(data);
+      }else{
+          
+          document.cookie = `token=${data.token}; path=/; SameSite=None; Secure`;
+          console.log(data);
+          var tokenValue = getCookie('token');
+          console.log(tokenValue);  
+      // Éventuellement, rediriger vers une autre page ou effectuer d'autres actions
+          }
+  })
+  .catch(error => {
+      console.log('Erreur:', error);
+      document.getElementById('error-message').innerText = error; // Afficher le message d'erreur
+  }); 
+
+  
+}
+
+// Function to get CSRF token from cookies (Django)
+function getCookie(name) {
+  const cookieName = name + '=';
+  const cookieArray = document.cookie.split(';');
+  
+  for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i].trim();
+      if (cookie.indexOf(cookieName) === 0) {
+          return cookie.substring(cookieName.length, cookie.length);
+      }
+  }
+  return null;
 }
 
 export default Login;
