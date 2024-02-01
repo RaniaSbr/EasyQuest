@@ -8,10 +8,11 @@ import { faEllipsis ,faCircle,faHeart} from "@fortawesome/free-solid-svg-icons";
 import { BsCloudDownload } from "react-icons/bs";
 
 const Article = ({ articleData }) => {
-  const { date, title, authors, institutions, url} = articleData;
+  const { date, title, authors, institutions, url,fav} = articleData;
   const [dropdownVisible,setDropdownVisible]=useState();
   //favorite est un booleen qui prend la veulr false:si article non ajoute aux favorites et true:si article ajoute aux favorites
-  const [favorite,setFavorite]=useState();
+const [favorite, setFavorite] = useState(articleData.fav);
+
 
   const dropdownOff=(event)=>{
 setDropdownVisible(false);
@@ -21,7 +22,9 @@ setDropdownVisible(false);
     setDropdownVisible(!dropdownVisible); 
   };
   const toggleFavorite=()=>{
-    setFavorite(!favorite)
+        articleData.fav = !favorite ? '1' : '0';
+
+    setFavorite(!favorite);
      console.log("Liked:", favorite);
   }
   return (

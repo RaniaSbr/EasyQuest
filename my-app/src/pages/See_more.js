@@ -16,6 +16,7 @@ function Seemore(params) {
     ],
 
     url: "http://ictinnovations.org/2010",
+    favorite: 1,
   };
 
   return (

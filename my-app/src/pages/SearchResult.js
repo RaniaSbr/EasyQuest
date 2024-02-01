@@ -18,6 +18,7 @@ function SearchResult(params) {
     ],
 
     url: "http://ictinnovations.org/2010",
+    fav: "1",
   };
 
   return (
