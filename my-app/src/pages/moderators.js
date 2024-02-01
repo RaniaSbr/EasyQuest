@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "../Styles/admin.css";
 import SearchField from "../Components/SearchField";
+import User from "../Components/user";
 import Navbar_Admin from "../Components/Navbar_admin";
 
 function Moderators(params) {
@@ -10,13 +12,12 @@ function Moderators(params) {
   const [searchValue, setSearchValue] = useState('');
   const [displayedUsers, setDisplayedUsers] = useState([]);
   const [activeButton, setActiveButton] = useState("All");
-  const [editUserId, setEditUserId] = useState(null); // Track the user being edited
-  const [moderators, setModerators] = useState([]);
 
+  const [moderators, setModerators] = useState([]);
   useEffect(() => {
     const fetchModerators = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/ModerateurManager/');
+        const response = await axios.get('http://localhost:8000/ReadModerateurs/'); // Update the URL with your API endpoint
         setModerators(response.data);
       } catch (error) {
         console.error('Error fetching moderators:', error);
@@ -24,27 +25,38 @@ function Moderators(params) {
     };
 
     fetchModerators();
-  }, []);  // Remove displayedUsers from the dependency array
+  }, [displayedUsers]); 
 
+ 
   const users = moderators.map((moderateur) => ({
     id: moderateur.id,
-    name: moderateur.username,
-    title: moderateur.email,
+    name: moderateur.username,  // Assuming 'username' is the field in your Django model
+    title: moderateur.email,    // Assuming 'email' is the field in your Django model
   }));
+  
 
+  useEffect(() => {
+    setDisplayedUsers(users);
+  }, []); 
+
+// je refais la lecture pour faire un refresh 
+ 
   useEffect(() => {
     const updatedUsers = moderators.map((moderateur) => ({
       id: moderateur.id,
       name: moderateur.username,
       title: moderateur.email,
     }));
-
+  
     setDisplayedUsers(updatedUsers);
   }, [moderators]);
+  
+  
 
   const handleAddClick = () => {
+  
+   // a popup page to insert moderators (componenent ModeratorForm)
     console.log("Add button clicked");
-    // Implement logic to open a form for adding a new user
   };
 
   const handleFilterClick = (title) => {
@@ -55,72 +67,17 @@ function Moderators(params) {
 
   const handleDeleteClick = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/ModerateurManager/${id}/`);
+      // Send DELETE request to delete the user with the specified ID
+      await axios.delete(`http://localhost:8000/ReadModerateurs/${id}/`);
+  
+      // Update the displayed users in the frontend
       const updatedUsers = displayedUsers.filter((user) => user.id !== id);
       setDisplayedUsers(updatedUsers);
     } catch (error) {
       console.error('Error deleting user:', error);
     }
   };
-
-  const handleShowPasswordClick = async (id) => {
-    try {
-      const response = await axios.get(`http://localhost:8000/ModerateurManager/show-password/${id}/`);
-      const { real_password, password } = response.data;
-      alert(`Real Password: ${real_password}\nHashed Password: ${password}`);
-    } catch (error) {
-      console.error('Error fetching passwords:', error);
-    }
-  };
-
-  const handleEditClick = (id) => {
-    setEditUserId(id);
-    // Implement logic to open a form for editing the user
-  };
-
-
-
-  const handleEditSubmit = async (id, updatedUserData) => {
-    try {
-      const currentUser = moderators.find((user) => user.id === id);
-      const currentPassword = currentUser ? currentUser.password : '';
   
-      // Include the current password in the request
-      const requestData = {
-        ...updatedUserData,
-        password: currentPassword,
-      };
-  
-      // Log the data before making the request
-      console.log('Updated User Data:', requestData);
-  
-      await axios.put(`http://localhost:8000/ModerateurManager/update/${id}/`, requestData);
-      setEditUserId(null);
-      // You may want to fetch the updated list of users here
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
-  };
-  
-
-
-
-
-  
-  
-  const handleEditChange = (value, field) => {
-    // Update the edited user data in the state
-    const updatedUsers = displayedUsers.map((user) => {
-      if (user.id === editUserId) {
-        return {
-          ...user,
-          [field]: value,
-        };
-      }
-      return user;
-    });
-    setDisplayedUsers(updatedUsers);
-  };
 
   const handleSearchChange = (e) => {
     const newValue = e.target.value;
@@ -131,9 +88,16 @@ function Moderators(params) {
     setDisplayedUsers(filteredUsers);
   };
 
+
+
+
+
+
+
+
   return (
     <div className="admin">
-      <Navbar_Admin />
+      <Navbar_Admin/>
       <div className="admin_part1">
         <div className="search-add">
           <SearchField
@@ -170,7 +134,7 @@ function Moderators(params) {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Email</th>
+              <th>Title</th>
               <th></th>
             </tr>
           </thead>
@@ -180,38 +144,16 @@ function Moderators(params) {
             </tr>
             {displayedUsers.map((user) => (
               <tr key={user.id}>
-                <td>{editUserId === user.id ? (
-                  <input
-                    type="text"
-                    value={user.name}
-                    onChange={(e) => handleEditChange(e.target.value, 'name')}
-                  />
-                ) : user.name}</td>
-                <td>{editUserId === user.id ? (
-                  <input
-                    type="text"
-                    value={user.title}
-                    onChange={(e) => handleEditChange(e.target.value, 'title')}
-                  />
-                ) : user.title}</td>
+                <td>{user.name}</td>
+                <td>{user.title}</td>
                 <td>
-                  {editUserId === user.id ? (
-                    <button onClick={() => handleEditSubmit(user.id, { username: user.name, email: user.title })}>
-                      Submit
+                <button className="delete-button" onClick={() => handleDeleteClick(user.id)}>
+                    <img className="delete_img" src="./Assets/trash.svg" alt="Trash Icon" />
                     </button>
-                  ) : (
-                    <>
-                      <button className="show-password-button" onClick={() => handleShowPasswordClick(user.id)}>
-                        Show Password
-                      </button>
-                      <button className="delete-button" onClick={() => handleDeleteClick(user.id)}>
-                        <img className="delete_img" src="./Assets/trash.svg" alt="Trash Icon" />
-                      </button>
-                      <button className="edit-button" onClick={() => handleEditClick(user.id)}>
-                        <img className="edit_img" src="./Assets/treepoint.svg" alt="Treepoint Icon" />
-                      </button>
-                    </>
-                  )}
+
+                <button className="edit-button">
+                 <img className="edit_img" src="./Assets/treepoint.svg" alt="Treepoint Icon" />
+                </button>
                 </td>
               </tr>
             ))}

@@ -49,6 +49,10 @@
   text-decoration: none;
   list-style: none;
 }
+.active {
+  color: var(--blue);
+  text-decoration: underline;
+}
 .pages a,
 .pages li {
   text-decoration: none;
@@ -77,7 +81,7 @@
     display: flex;
     width: 100px;
     position: relative;
-    z-index: 9999;
+    z-index: 99999;
   }
 
   .hamburger {
@@ -89,13 +93,21 @@
     margin-left: 0;
   }
   .respo-list {
-    position: absolute;
+    position: fixed;
     order: 2;
+    z-index: 100;
     top: 5rem;
     width: 100%;
     display: grid;
     align-content: center;
     justify-items: flex-end;
+  }
+  .respo-listL {
+    position: fixed;
+    order: 2;
+    z-index: 100;
+    top: 1rem;
+    width: 100%;
   }
   .respo-list a {
     text-decoration: none;
@@ -109,7 +121,7 @@
     border-radius: 25px;
     display: block;
     gap: 50px;
-    z-index: 1000;
+    z-index: 9000;
   }
   .respo-list a {
     display: flex;
