@@ -16,10 +16,10 @@ index_settings = {
             "content": {
                 "properties": {
                     "tilte": {"type": "text"},
-                    "fullText": {"type": "text"},
-                    "abstruct": {"type": "text"},
+                    # "fullText": {"type": "text"},
+                    "abstract": {"type": "text"},
                     "KeyWords": {"type": "text"},
-                    "autors": {"type": "text"},
+                    "authors": {"type": "text"},
                     "institution": {"type": "text"},
                     "refrences": {"type": "text"}
                 }
@@ -28,8 +28,8 @@ index_settings = {
     }
 }
 
-es.indices.create(index='articls4', body=index_settings) # type: ignore
+es.indices.create(index='articls5', body=index_settings) # type: ignore
 # Obtient des informations sur l'index créé
-index_info = es.indices.get(index="articls4")
+index_info = es.indices.get(index="articls5")
 
 print(index_info)

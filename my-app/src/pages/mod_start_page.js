@@ -21,7 +21,7 @@ const ModPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full m-0 bg-[#06141D] text-white">
+    <div className="min-h-screen w-full m-0  text-white">
       <Navbar_mod></Navbar_mod>
       <ArticleContainer articleData={articleData} />
     </div>

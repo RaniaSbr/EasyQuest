@@ -15,7 +15,7 @@ import ModPage from "./pages/mod_start_page.js";
 import Moderators from "./pages/moderators.js"
 import ModeratorForm from "./Components/InserModerateur.js";
 import ArticleUploader from "./pages/UploadArticle.js"
-
+import SearchResult from "./pages/SearchResult.js";
 function App() {
   return (
     
@@ -30,7 +30,7 @@ function App() {
           <Route path="/Favorites" element={<Favorites />}></Route>
           <Route path="/Login" element={<Login_page />}></Route>
           <Route path="/Register" element={<Register_page />}></Route>
-          <Route path="/Search_result" element={<Search_result />}></Route>
+          <Route path="/Search_result" element={<SearchResult/>}></Route>
           <Route path="/ModPage" element={<ModPage />}></Route>
         </Routes>
       </Router>

@@ -7,5 +7,6 @@ urlpatterns = [
     path("search-articles-autors/",views.search_articles_autors),
     path("search-articles-keywords/",views.search_articles_keywords),
     path("search-articles-institution/",views.search_articles_institution),
-    path("search-articles-refrences/",views.search_articles_refrences)
+    path("search-articles-refrences/",views.search_articles_refrences),
+    path("search-api/",views.search_api),
 ]

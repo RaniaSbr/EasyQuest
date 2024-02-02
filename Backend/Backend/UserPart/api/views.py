@@ -116,11 +116,11 @@ def sign_up(request):
 
    
     if not first_name or not last_name or not email or not password:
-        return Response({'message': 'All fields are required'}, status=400)
+        return Response({'error': 'All fields are required'}, status=400)
 
     
     if User.objects.filter(email=email).exists():
-        return Response({'message': 'User with this email already exists'}, status=400)
+        return Response({'error': 'User with this email already exists'}, status=400)
 
     
     user = User.objects.create_user(username=email, email=email, password=password,first_name=first_name, last_name=last_name)
