@@ -1,21 +1,9 @@
 from django.urls import path
-<<<<<<< HEAD
-<<<<<<< HEAD
 from .views import *
-=======
-from .views import MetaDataListCreateView, ReferenceListCreateView, AuthorListCreateView, KeywordListCreateView, \
-    InstitutionListCreateView, ArticleListCreateView
->>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
-=======
-from .views import MetaDataListCreateView, ReferenceListCreateView, AuthorListCreateView, \
-    InstitutionListCreateView, ArticleListCreateView, search_api
->>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
 
 urlpatterns = [
     path('references/', ReferenceListCreateView.as_view(), name='reference-list-create'),
     path('authors/', AuthorListCreateView.as_view(), name='author-list-create'),
-<<<<<<< HEAD
-<<<<<<< HEAD
     path('institutions/', InstitutionListCreateView.as_view(), name='institution-list-create'),
     path('metadata/', MetaDataListCreateView.as_view(), name='metadata-list-create'),
     path('articles/', ArticleListCreateView.as_view(), name='article-list-create'),
@@ -32,16 +20,4 @@ urlpatterns = [
     path('up_article/serve-unpublished-article-pdf/<int:pk>/',
          UnPublishedArticleDetailView.as_view({'get': 'serve_unpublished_article_pdf'})
          , name='serve_unpublished_article_pdf'),
-=======
-    path('keywords/', KeywordListCreateView.as_view(), name='keyword-list-create'),
-    path('institutions/', InstitutionListCreateView.as_view(), name='institution-list-create'),
-    path('metadata/', MetaDataListCreateView.as_view(), name='metadata-list-create'),
-    path('articles/', ArticleListCreateView.as_view(), name='article-list-create'),
->>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
-=======
-    path('institutions/', InstitutionListCreateView.as_view(), name='institution-list-create'),
-    path('metadata/', MetaDataListCreateView.as_view(), name='metadata-list-create'),
-    path('articles/', ArticleListCreateView.as_view(), name='article-list-create'),
-    path('search_api/', search_api, name='filter'),
->>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
 ]

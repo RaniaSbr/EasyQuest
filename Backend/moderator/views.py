@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.core.exceptions import ObjectDoesNotExist
 from Backend.util import *
 from .serializers import *
@@ -6,33 +5,11 @@ import secrets
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-=======
-from rest_framework import generics
-from rest_framework.response import Response
-from .serializers import ModeratorSerializer
-from .models import Moderator
-from rest_framework import status
-from .util import *
->>>>>>> a1106402 (added Moderator app  and relevant api change)
 
 request_data_json = ['first_name', 'last_name', 'email', 'password']
 
 
-<<<<<<< HEAD
 class ModeratorManager(viewsets.ModelViewSet):
-=======
-class ModeratorListCreateView(generics.ListCreateAPIView):
-    queryset = Moderator.objects.all()
-    serializer_class = ModeratorSerializer
-
-
-class ModeratorUpdateView(generics.RetrieveDestroyAPIView):
-    queryset = Moderator.objects.all()
-    serializer_class = ModeratorSerializer
-
-
-class ModeratorCreate(generics.CreateAPIView):
->>>>>>> a1106402 (added Moderator app  and relevant api change)
     queryset = Moderator.objects.all()
     serializer_class = ModeratorSerializer
 
@@ -49,11 +26,7 @@ class ModeratorCreate(generics.CreateAPIView):
         email = request.data.get(request_data_json[2])
         if not EmailValidator.is_valid_email(email):
             return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)
-<<<<<<< HEAD
         password = secrets.token_urlsafe(8)
-=======
-        password = request.data.get(request_data_json[3])
->>>>>>> a1106402 (added Moderator app  and relevant api change)
         pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
         if pass_error:
             return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)
@@ -64,7 +37,6 @@ class ModeratorCreate(generics.CreateAPIView):
         headers = self.get_success_headers(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-<<<<<<< HEAD
 
     @staticmethod
     def get_mod_list(request):
@@ -102,5 +74,3 @@ class ModeratorCreate(generics.CreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-=======
->>>>>>> a1106402 (added Moderator app  and relevant api change)

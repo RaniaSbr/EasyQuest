@@ -1,7 +1,4 @@
-
 import os
-
-from dotenv import load_dotenv
 from elasticsearch.exceptions import *
 from elasticsearch_dsl import Search, connections
 
@@ -10,41 +7,19 @@ from ..Exceptions import DataQueryInputIsNotList
 from ..constants import ARTICLE_KEYS
 from Backend.util import ElasticSearchUtil
 
-from elasticsearch_dsl import Search, connections
-from .filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
-from elasticsearch.exceptions import *
-import os
-
-
-load_dotenv()
-
-from dotenv import load_dotenv
-from elasticsearch.exceptions import *
-from elasticsearch_dsl import Search, connections
-
-from .filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
-from ..Exceptions import DataQueryInputIsNotList
-from ..constants import ARTICLE_KEYS
-
-
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 class FilterUtil:
     @staticmethod
     def apply_filter(filters_json):
         ElasticSearchUtil.get_elasticsearch_connection()
 
-
-        search = Search(index=ARTICLE_INDEX)
+        article_index = os.environ.get("ARTICLE_INDEX")
+        search = Search(index=article_index)
 
         keywords_filter = KeywordsFilter()
         authors_filter = AuthorsFilter()
         institutions_filter = InstitutionsFilter()
         date_range_filter = DateRangeFilter()
-
         if filters_json.get(ARTICLE_KEYS[2], []):
             search = keywords_filter.filter(search, filters_json.get(ARTICLE_KEYS[2], []))
         if filters_json.get(ARTICLE_KEYS[1], []):
@@ -55,6 +30,7 @@ class FilterUtil:
 
         try:
             response = search.execute()
+
             return response
         except ConnectionError as connection_error:
             print(f"ConnectionError: {connection_error}")

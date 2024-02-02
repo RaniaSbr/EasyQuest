@@ -82,7 +82,6 @@ const ModPage = () => {
         <CoolButton color="lightStartD" icon={faPen} text="Edit" />
       </div>
 
->>>>>>> MAHRAZABDELRAHMEN
     </div>
   );
 };

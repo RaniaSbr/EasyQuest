@@ -1,15 +1,7 @@
 from django.db import models
 
-<<<<<<< HEAD
-=======
-from Backend.article.extraction.test.cermine_xml_sample import EXPECTED_OUTPUT
-
 
 class Author(models.Model):
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
     """
     Represents an Author of a reearch article.
 
@@ -42,27 +34,11 @@ class Institution(models.Model):
     address = models.TextField(default="None")
     post_code = models.CharField(max_length=10, default="None")
     country = models.CharField(max_length=255, default="None")
-=======
-    class Meta:
-        app_label = 'article'
-    name = models.CharField(max_length=80, null=True, blank=True)
->>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
     objects = models.Manager()
-=======
-        affiliations (TextField): The affiliations of the author.
-    """
-    objects = models.Manager()
-    name = models.CharField(max_length=255, default="None")
-    affiliations = models.TextField(default="None")
-
-    class Meta:
-        app_label = 'article'
->>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
 
     def __str__(self):
         return self.name
 
-<<<<<<< HEAD
     class Meta:
         app_label = 'article'
 
@@ -163,26 +139,6 @@ class UnPublishedArticle(BaseArticle):
     """
     Represents a research article that is still not unpublished to the users.
     """
-=======
-class Article(models.Model):
-    """
-    Represents a research article.
-
-    Attributes:
-        meta_data (OneToOneField): One-to-one relationship with MetaData model.
-        blob (TextField): The blob data for the article.
-    """
-    objects = models.Manager()
-    meta_data = models.OneToOneField(MetaData, on_delete=models.CASCADE, default=EXPECTED_OUTPUT)
-    blob = models.TextField(default="None")
->>>>>>> MAHRAZABDELRAHMEN
 
     class Meta:
         app_label = 'article'
-<<<<<<< HEAD
-    content = models.OneToOneField(MetaData, on_delete=models.SET_NULL, null=True)
-    objects = models.Manager()
-
->>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
-=======
->>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
