@@ -1,5 +1,4 @@
 import json
-
 from .models import UnPublishedArticle, Author, Institution, Reference, MetaData
 import logging
 from datetime import datetime

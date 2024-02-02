@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.urls import path, include
 from .views import *
 from rest_framework.routers import DefaultRouter
@@ -13,13 +12,4 @@ urlpatterns = [
          name='moderateur-show-password'),
     path('ModerateurManager/update/<int:pk>/', ModeratorManager.as_view({'put': 'update'}), name='moderateur-update'),
     path('', include(router.urls)),
-=======
-from django.urls import path
-from .views import ModeratorListCreateView, ModeratorUpdateView, ModeratorCreate
-
-urlpatterns = [
-    path('mods/', ModeratorListCreateView.as_view(), name="moderator_list_create_view"),
-    path('<int:pk>/', ModeratorUpdateView.as_view(), name='moderator-update'),
-    path('create/', ModeratorCreate.as_view(), name="create"),
->>>>>>> MAHRAZABDELRAHMEN
 ]

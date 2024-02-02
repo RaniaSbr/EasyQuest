@@ -18,7 +18,7 @@ class ArticleDocument(Document):
         }),
         'references': fields.ObjectField(properties={
             'raw_text': fields.TextField(),
-         }),
+        }),
         'institutions': fields.ObjectField(properties={
             'name': fields.KeywordField(),
         })
@@ -44,7 +44,7 @@ class PublishedArticleDocument(Document):
         }),
         'references': fields.ObjectField(properties={
             'raw_text': fields.TextField(),
-         }),
+        }),
         'institutions': fields.ObjectField(properties={
             'name': fields.KeywordField(),
         })
