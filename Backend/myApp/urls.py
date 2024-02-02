@@ -1,7 +1,7 @@
 # myApp/urls.py
 
 from django.urls import path
-from .views import ModViewSet, ModerateurManager ,UploadArticlesView ,ViewArticles
+from .views import ModViewSet, ModerateurManager ,UploadArticlesView ,ViewArticles ,RemoveAllArticlesView
 
 urlpatterns = [
     # Other URL patterns...
@@ -13,4 +13,5 @@ urlpatterns = [
     path('ModerateurManager/update/<int:pk>/', ModerateurManager.as_view({'put': 'update'}), name='moderateur-update'),
     path('upload/', UploadArticlesView.as_view(), name='upload_articles'),    
     path('view-articles/', ViewArticles.as_view(), name='view_articles'),
+    path('remove_all_articles/', RemoveAllArticlesView.as_view(), name='remove_all_articles'),
 ]

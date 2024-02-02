@@ -1,4 +1,5 @@
 
+from urllib.parse import unquote
 from .models import Moderateur
 from rest_framework import viewsets 
 from django.contrib.auth.hashers import make_password
@@ -163,7 +164,7 @@ class UploadArticlesView(View):
 
 '''
 
-
+'''
 from django.http import JsonResponse
 from django.views import View
 from .models import Article  
@@ -205,6 +206,81 @@ class UploadArticlesView(View):
         except Exception as e:
             # Gérer les erreurs et renvoyer un message d'erreur
             return JsonResponse({'error': str(e)}, status=400)
+'''
+
+from django.http import JsonResponse
+from django.views import View
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseDownload
+from io import BytesIO
+from urllib.parse import unquote
+
+from .models import Article
+
+class UploadArticlesView(View):
+    def get(self, request):
+        encoded_url = request.GET.get('url')
+
+        try:
+            # Decode the URL
+            drive_folder_url = unquote(encoded_url)
+
+            # Authenticate using your service account key
+            credentials = service_account.Credentials.from_service_account_file('Service.json')
+
+            # Build the Google Drive API service
+            drive_service = build('drive', 'v3', credentials=credentials)
+
+            # Extract folder ID from the folder URL using regex
+            import re
+            match = re.search(r'/drive/folders/(.*?)(?:\?|$)', drive_folder_url)
+
+            if not match:
+                raise Exception("Invalid Google Drive folder URL")
+
+            folder_id = match.group(1)
+
+            # Get files in the folder
+            files = drive_service.files().list(q=f"'{folder_id}' in parents").execute().get('files', [])
+
+            if not files:
+                raise Exception("No files found in the Google Drive folder")
+
+            # Download and store each PDF file in the Article model
+            for i, file in enumerate(files, start=1):
+                print(f"Downloading PDF file {i}")
+                pdf_content = self.download_file(drive_service, file['id'])
+
+                # Construct the link using webViewLink
+                pdf_url = f"https://drive.google.com/uc?id={file['id']}"
+
+                # Store the file content in the Article model
+                Article.objects.create(
+                    title=f"Replace with actual logic for title {i}",
+                    content=pdf_content,
+                    pdf_url=pdf_url
+                )
+
+                print(f"PDF file {i} downloaded")
+
+            return JsonResponse({'message': 'Upload réussi!'})
+
+        except Exception as e:
+            # Print the full exception message for debugging
+            print("Error:", e)
+            return JsonResponse({'error': str(e)}, status=400)
+
+    def download_file(self, drive_service, file_id):
+        request = drive_service.files().get_media(fileId=file_id)
+        file_content = BytesIO()
+        downloader = MediaIoBaseDownload(file_content, request)
+        done = False
+
+        while not done:
+            status, done = downloader.next_chunk()
+
+        return file_content.getvalue()
 
 
 from django.http import JsonResponse
@@ -236,4 +312,16 @@ class ViewArticles(View):
         except Exception as e:
             # Handle errors and return an error response
             return JsonResponse({'error': str(e)}, status=500)
+        
+        
+class RemoveAllArticlesView(View):
+    def get(self, request):
+        try:
+            # Delete all articles from the database
+            Article.objects.all().delete()
 
+            return JsonResponse({'message': 'All articles removed successfully!'})
+
+        except Exception as e:
+            # Handle errors and return an error response
+            return JsonResponse({'error': str(e)}, status=500)
