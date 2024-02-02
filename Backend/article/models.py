@@ -1,5 +1,10 @@
 from django.db import models
 
+from Backend.article.extraction.test.cermine_xml_sample import EXPECTED_OUTPUT
+
+
+from Backend.article.extraction.test.cermine_xml_sample import EXPECTED_OUTPUT
+
 
 class Author(models.Model):
     """

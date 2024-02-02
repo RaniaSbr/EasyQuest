@@ -1,17 +1,9 @@
-<<<<<<< HEAD
 import { React, useEffect } from "react";
 import { Document, Page, Text, View, StyleSheet, Line } from "@react-pdf/renderer";
 import { Font } from '@react-pdf/renderer';
 
 const PdfMetaData = ({ meta_data }) => {
     const {title, keywords, references, abstract, authors, institutions, url} = meta_data;
-=======
-import React from "react";
-import { Document, Page, Text, View, StyleSheet, Line } from "@react-pdf/renderer";
-import { Font } from '@react-pdf/renderer';
-
-const PdfMetaData = ({ title, keywords, references, abstract, authors, institutions, url }) => {
->>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
     return (
         <Document >
             <Page style={styles.page}>
@@ -22,11 +14,7 @@ const PdfMetaData = ({ title, keywords, references, abstract, authors, instituti
                     <Line style={{ marginTop: 20, marginBottom: 5, color: "#000" }} />
                     <Text style={{ ...styles.text, textAlign: 'center' }}>
                         <Text style={styles.subtitle}>keywords</Text>
-<<<<<<< HEAD
                         {'\n'} {keywords}</Text>
-=======
-                        {'\n'} {keywords.join(', ')}</Text>
->>>>>>> 2d5912ec (added extraction and ui prototype for article editing)
                     <Text style={styles.text}>
                         <Text style={styles.subtitle}>Abstract</Text>
                         {'\n'} {abstract}</Text>

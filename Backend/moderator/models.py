@@ -1,8 +1,15 @@
 import uuid
+<<<<<<< HEAD
 from django.contrib.auth.hashers import make_password, get_random_string
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION
+=======
+from sqlite3 import IntegrityError
+from django.contrib.auth.hashers import make_password, get_random_string
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
+>>>>>>> MAHRAZABDELRAHMEN
 
 """
 Represents A Util for handling Moderator class attributes.
@@ -39,6 +46,44 @@ class ModAttributesUtil:
 
 
 """
+<<<<<<< HEAD
+=======
+Represents a Moderator Manager Controller in the system.
+
+Class Name : ModeratorManager
+
+Methods:
+    -  create_moderator(self, email, psd=None, **extra_fields) : Creates a New Instance of a Moderator
+
+Inheritance:
+    - This class inherits from Django's `BaseUserManager` class.
+
+Usage Example: 
+    -Moderator.objects.create_moderator(email='abc@abc.com', psd='secure_password',
+                                        first_name='Issam', last_name='Man'):
+Relationships:
+- No direct relationships with other models.
+"""
+
+
+class ModeratorManager(BaseUserManager):
+    def create_moderator(self, email, psd=None, **extra_fields):
+        try:
+            if not email:
+                raise ValueError('The Email field must be set')
+
+            email = self.normalize_email(email)
+            moderator = self.model(email=email, **extra_fields)
+            moderator.set_password(psd)
+            moderator.save(using=self._db)
+            return moderator
+        except IntegrityError as e:
+
+            raise ValueError('Email address must be unique') from e
+
+
+"""
+>>>>>>> MAHRAZABDELRAHMEN
 Represents a Moderator  in the system.
 
 Class Name : Moderator
@@ -62,6 +107,7 @@ class Moderator(AbstractBaseUser):
     mod_id = models.UUIDField(default=ModAttributesUtil.generate_unique_mod_id, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     password = models.CharField(max_length=255, default=ModAttributesUtil.password)
+<<<<<<< HEAD
     objects = models.Manager()
     auth = "MODERATOR"
     USERNAME_FIELD = 'email'
@@ -73,5 +119,13 @@ class Moderator(AbstractBaseUser):
             (MODS_ADMIN_NO_USER_PERM, "mod_admin_only"),
         ]
 
+=======
+
+    objects = ModeratorManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password']
+
+>>>>>>> MAHRAZABDELRAHMEN
     def __str__(self):
         return self.email

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Black">
-<<<<<<< HEAD
     <option name="sdkName" value="Python 3.10 (EasyQuest) (3)" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (EasyQuest) (3)" project-jdk-type="Python SDK" />
-=======
+
     <option name="sdkName" value="Python 3.10 (EasyQuest)" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (EasyQuest)" project-jdk-type="Python SDK" />
->>>>>>> 0747a443 (added Article Index + Filter Function + Need to create the api)
   <component name="PyCharmProfessionalAdvertiser">
     <option name="shown" value="true" />
   </component>
