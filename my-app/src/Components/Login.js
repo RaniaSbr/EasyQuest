@@ -63,6 +63,7 @@ function Login() {
           {/* Login Footer */}
           <div className="login-footer mt-5">
             <p className="text-grey">You don't have an account? </p>
+            <p className="text-grey">Change password </p>
             <NavLink to="/Register">
               <a href="" className="">
                 <p className="text-center text-blue underline font-bold">
