@@ -116,8 +116,14 @@ class BaseArticle(models.Model):
     def get_meta_data(self):
         return self.meta_data
 
+    def set_meta_data(self, new_meta_data):
+        self.meta_data = new_meta_data
+
     def get_pdf_file(self):
         return self.pdf_file
+
+    def set_pdf_file(self, new_pdf_file):
+        self.pdf_file = new_pdf_file
 
 
 class Article(BaseArticle):

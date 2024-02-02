@@ -12,6 +12,8 @@ urlpatterns = [
     path('up_article/<int:pk>/', UnPublishedArticleDetailView.as_view({'get': 'retrieve'}), name='article-detail'),
     path('up_article/delete/<int:pk>/', UnPublishedArticleDetailView.as_view({'delete': 'destroy'}),
          name='article_delete'),
+    path('up_article/update/<int:pk>/', UnPublishedArticleDetailView.as_view({'put': 'update'}),
+         name='article_update'),
     path('unpublished_article/validate_article/<int:pk>/',
          UnPublishedArticleDetailView.as_view({'delete': 'validate'}),
          name='article_validate'),

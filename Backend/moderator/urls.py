@@ -1,10 +1,9 @@
 from django.urls import path, include
 from .views import *
 from rest_framework.routers import DefaultRouter
-from .views import ModViewSet
 
 router = DefaultRouter()
-router.register(r'create', ModViewSet, basename='moderator')
+router.register(r'create', ModeratorManager, basename='moderator')
 
 urlpatterns = [
     path('ModerateurManager/', ModeratorManager.as_view({'get': 'get_mod_list'}), name='moderateurs-list'),

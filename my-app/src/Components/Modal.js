@@ -21,3 +21,4 @@ const Modal = ({ isVisible, onMoveOn, onCancel, bodyText, moveOnText, cancelText
 };
 
 export default Modal;
+

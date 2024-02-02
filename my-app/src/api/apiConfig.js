@@ -7,6 +7,7 @@
     pdfEndpoint: '/article/up_article/serve-unpublished-article-pdf/',
     deleteArticleEndPoint:'/article/up_article/delete/',
     validateArticleEndPoint:'/article/up_article/validate/',
+    updateArticleEndPoint:'/article/up_article/update/'
   };
   
   export default apiConfig;

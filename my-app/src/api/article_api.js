@@ -19,6 +19,22 @@ const cleanUpData = (originalData) => {
 };
 
 class ArticleAPI {
+
+    static async handleUpload(url){
+        try {
+          // Envoyer l'URL au backend Django pour le traitement en utilisant une requête GET
+          const response = await axios.get(`${apiConfig.baseUrl}${apiConfig.articleUploadEndPoint}`, {
+            params: { url },
+          });
+    
+          // Afficher un message de succès ou faire d'autres actions nécessaires
+          console.log('Upload réussi!', response.data);
+        } catch (error) {
+          console.error('Erreur lors de l\'upload', error);
+          // Gérer les erreurs et afficher un message à l'utilisateur si nécessaire
+        }
+      };
+
     static async fetchArticles() {
         try {
             const response = await fetch(
@@ -34,7 +50,7 @@ class ArticleAPI {
             console.error(error);
         }
     }
-    static async fetchArticle(currentPage) {
+    static async fetchArticle(currentPage, cleanIt) {
         try {
             const response = await axios.get(
                 `${apiConfig.baseUrl}${apiConfig.articleEndpoint}${currentPage}`
@@ -44,13 +60,15 @@ class ArticleAPI {
             }
 
             const data = response.data;
-            return cleanUpData(data);
+            if ( cleanIt ) return cleanUpData(data);
+            return data;
         } catch (error) {
             console.error("Error fetching article:", error);
             throw error;
         }
     }
 
+    
     static async deleteArticle(currentPage) {
         try {
             const response = await axios.delete(
@@ -58,7 +76,7 @@ class ArticleAPI {
             );
             if (response.status != 301) {
                 console.log(response.status);
-                
+
             }
 
         } catch (error) {
@@ -73,7 +91,7 @@ class ArticleAPI {
             );
             if (response.status != 200) {
                 console.log(response.status);
-                
+
             }
 
         } catch (error) {
@@ -81,7 +99,23 @@ class ArticleAPI {
             throw error;
         }
     }
+    static async updateArticle(currentPage, meta_data) {
+        console.log("link : " + `${apiConfig.baseUrl}${apiConfig.updateArticleEndPoint}${currentPage}` + '/');
+        try {
+            const response = await axios.put(
+                `${apiConfig.baseUrl}${apiConfig.updateArticleEndPoint}${currentPage}/`,
+                { 'meta_data': meta_data }
+            );
+            if (response.status != 200) {
+                console.log(response.status);
 
+            }
+
+        } catch (error) {
+            console.error("Error Updating article:", error);
+            throw error;
+        }
+    }
     static async fetchPdfData(pdfId) {
         try {
             const response = await axios.get(
@@ -94,7 +128,7 @@ class ArticleAPI {
             const data = new Blob([response.data]);
 
             const dataUrl = URL.createObjectURL(data);
-            
+
             return dataUrl;
         } catch (error) {
             console.error("Error fetching PDF:", error);

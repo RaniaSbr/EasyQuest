@@ -1,30 +1,32 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import ArticleAPI from '../api/article_api';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ArticleUploader = () => {
   const [url, setUrl] = useState('');
-
+  const notify = () => toast.error();
   const handleUrlChange = (e) => {
     setUrl(e.target.value);
   };
 
-  const handleUpload = async () => {
-    try {
-      // Envoyer l'URL au backend Django pour le traitement en utilisant une requête GET
-      const response = await axios.get('http://localhost:8000/article/upload/', {
-        params: { url },
-      });
+  useEffect(() => {
+    const getData = async () =>{
+      try {
+        await ArticleAPI.handleUpload(url);
+        notify();
+        toast.error(">--UPLOAD SUCCESS!");
+      } catch (error) {
+        notify();
+        toast.error(">--ERROR HAPPENED  : " + error);
+      }
 
-      // Afficher un message de succès ou faire d'autres actions nécessaires
-      console.log('Upload réussi!', response.data);
-    } catch (error) {
-      console.error('Erreur lors de l\'upload', error);
-      // Gérer les erreurs et afficher un message à l'utilisateur si nécessaire
     }
-  };
+  },)
 
   return (
     <div>
+      <ToastContainer theme='dark' position="bottom-center" ></ToastContainer>
       <label>URL du PDF:</label>
       <input type="text" value={url} onChange={handleUrlChange} />
       <button onClick={handleUpload}>Uploader</button>

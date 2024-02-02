@@ -53,7 +53,7 @@ class ReferencesExtractor(GrobidClient, IExtractData):
                 reference_data = {
                     'raw_text':  return_valid_text_from_data(ref.find('note')),
                     'authors': authors_full_names,
-                    'title': return_valid_text_from_data(ref.find('title')),
+                    'article_title': return_valid_text_from_data(ref.find('title')),
                     'reference_id': return_valid_text_from_data(ref.find('idno')),
                     'volume': return_valid_text_from_data(ref.find('biblScope', {'unit': 'volume'})),
                     'published_date': return_valid_text_from_data(ref.find('date', {'type': 'published'})),
@@ -97,7 +97,7 @@ class HeaderExtractor(GrobidClient, IExtractData):
                 college_json = {
                     "college": {
                         "department": department,
-                        "institution": institution,
+                        "name": institution,
                         "post_code": post_code,
                         "settlement": settlement,
                         "country": country
@@ -109,8 +109,8 @@ class HeaderExtractor(GrobidClient, IExtractData):
             keywords_list = [return_valid_text_from_data(keyword) for keyword in keywords]
 
             return {
-                'article_title': article_title,
-                'authors_full_names': authors_full_names,
+                'title': article_title,
+                'authors': authors_full_names,
                 'abstract': abstract,
                 'institutions': unique_affiliations,
                 'keywords_list': keywords_list,

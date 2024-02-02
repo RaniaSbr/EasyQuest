@@ -1,5 +1,9 @@
 import re
 from enum import Enum
+from dotenv import load_dotenv
+from elasticsearch_dsl import connections
+import os
+from elasticsearch.exceptions import *
 
 
 class EmailValidator:
@@ -46,3 +50,28 @@ class PasswordValidator:
             return PasswordError.COMMON_PATTERN
 
         return None
+
+
+class ElasticSearchUtil:
+    @staticmethod
+    def get_elasticsearch_connection():
+        load_dotenv()
+        url = os.environ.get('URL')
+        port = os.environ.get('PORT')
+        user_name = os.environ.get("USER_NAME")
+        user_pass = os.environ.get("USER_PASSWORD")
+        os.environ.get("ARTICLE_INDEX")
+
+        try:
+            connections.create_connection(
+                hosts=[f'{url}:{port}'],
+                alias='default',
+                verify_certs=False,
+                http_auth=(user_name, user_pass)
+            )
+        except ConnectionError as ce:
+            print(f"ConnectionError: {ce}")
+        except AuthenticationException as ae:
+            print(f"AuthenticationException: {ae}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")

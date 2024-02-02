@@ -17,25 +17,30 @@ import Modal from "../Components/Modal";
 import ArticleAPI from "../api/article_api";
 import { useNavigate } from "react-router-dom";
 import BlockScreen from "../Components/block_screen";
-import { set } from "react-hook-form";
+
 const ModEditPage = () => {
   const navigator = useNavigate();
   const notify = () => toast.error();
   const [jsonData, setJsonData] = useState(null);
+  const [rawJsonData, setRawJsonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [blockscreen, setBlockScreen] = useState(false);
-  const  articleId  = useParams();
+  const articleId = useParams();
   const [showDeleteModal, setShowModal] = useState(false);
   const [showValidateModal, setShowValidateModal] = useState(false);
-  const numericArticleId = parseInt(articleId["articleId"], 10) // Assuming the base is 10
+  const [showEditateModal, setShowEditModal] = useState(false);
+  const numericArticleId = parseInt(articleId["articleId"], 10) 
 
   useEffect(() => {
     const getData = async () => {
       try {
-        
-        const data = await ArticleAPI.fetchArticle(numericArticleId);
+
+        const data = await ArticleAPI.fetchArticle(numericArticleId, true);
+        const rawData = await ArticleAPI.fetchArticle(numericArticleId, false);
+        setRawJsonData(rawData);
         setJsonData(data);
         setLoading(false);
+
       } catch (error) {
         notify();
         toast.error("ERROR HAPPENED  : " + error);
@@ -44,24 +49,27 @@ const ModEditPage = () => {
 
     getData();
   }, [articleId]);
-
   const changeVisibility = () => {
     setShowModal(!showDeleteModal);
   };
   const changeValidateVisibility = () => {
     setShowValidateModal(!showValidateModal);
   };
+  const changeEditVisibility = () => {
+    console.log("THE KEY IS : ", numericArticleId);
+    setShowEditModal(!showEditateModal);
+  };
   if (loading) {
-    
-    return <ToastContainer position="bottom-center" autoClose={false} theme="dark"/>;
+
+    return <ToastContainer position="bottom-center" autoClose={false} theme="dark" />;
   }
   return (
     <div className="min-h-screen w-full m-0 bg-[#06141D] text-white">
       <Navbar_mod></Navbar_mod>
       <BlockScreen bodyText={"Please Wait"} isVisible={blockscreen}></BlockScreen>
-      <ToastContainer position="bottom-center" autoClose={false} theme="dark"/>
+      <ToastContainer position="bottom-center" autoClose={false} theme="dark" />
       <div className=" ml-72 mt-16 flex items-center">
-        
+
         <Modal
           onMoveOn={async () => {
             try {
@@ -71,14 +79,14 @@ const ModEditPage = () => {
               navigator('/ModPage/');
               setBlockScreen(false);
               changeVisibility();
-              
+
             } catch (error) {
               console.error("Error during MoveOn:", error);
               notify();
               toast.error("ERROR HAPPENED  : " + error);
             }
           }}
-          
+
           moveOnColor="red"
           moveOnIcon={faTrashCan}
           onCancel={changeVisibility}
@@ -91,23 +99,23 @@ const ModEditPage = () => {
         ></Modal>
         <Modal
           onMoveOn={
-              async () => {
-                try {
-                  setBlockScreen(true);
-                  changeValidateVisibility();
-                  await ArticleAPI.validateArticle(numericArticleId);
-                  notify();
-                  toast.success("SUCCESS: Published Article");
-                  navigator('/ModPage/');
-                  setBlockScreen(false);
-                  changeValidateVisibility();
-                  
-                } catch (error) {
-                  console.error("Error during MoveOn:", error);
-                  notify();
-                  toast.error("ERROR HAPPENED  : " + error);
-                }
+            async () => {
+              try {
+                setBlockScreen(true);
+                changeValidateVisibility();
+                await ArticleAPI.validateArticle(numericArticleId);
+                notify();
+                toast.success("SUCCESS: Published Article");
+                navigator('/ModPage/');
+                setBlockScreen(false);
+                changeValidateVisibility();
+
+              } catch (error) {
+                console.error("Error during MoveOn:", error);
+                notify();
+                toast.error("ERROR HAPPENED  : " + error);
               }
+            }
           }
           moveOnColor="lightStartE"
           moveOnIcon={faCheck}
@@ -143,7 +151,7 @@ const ModEditPage = () => {
           icon={faTrashCan}
           text="Delete"
         />
-        <CoolButton color="lightStartD" icon={faPen} text="Edit" />
+        <CoolButton color="lightStartD" icon={faPen} func={() => {navigator(`/edit-article-form/${numericArticleId}`)}} text="Edit" />
       </div>
     </div>
   );
