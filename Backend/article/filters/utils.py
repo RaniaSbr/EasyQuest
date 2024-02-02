@@ -4,8 +4,7 @@ from elasticsearch_dsl import Search, connections
 
 from .filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
 from ..Exceptions import DataQueryInputIsNotList
-from ..constants import
- ARTICLE_KEYS
+from ..constants import ARTICLE_KEYS
 from Backend.util import ElasticSearchUtil
 
 =======
