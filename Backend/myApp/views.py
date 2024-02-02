@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-
 import requests
 from Backend.util import ElasticSearchUtil
 from article.documents import ArticleDocument
@@ -9,7 +8,6 @@ from django.core.files import File
 from django.core.files.base import ContentFile
 from django.http import JsonResponse
 from django.views import View
-from elasticsearch_dsl import Q
 from article.filters.filters import AuthorsFilter
 
 

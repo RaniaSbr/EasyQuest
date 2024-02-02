@@ -21,18 +21,22 @@ function App() {
 
 
 
-      <Router>
-        <Routes>
-         <Route path="/" element={ <Moderators/>}></Route>
-         <Route path="/Profile" element={<Profile />}></Route>
-          <Route path="/Settings" element={<Settings />}></Route>{" "}
-          <Route path="/Favorites" element={<Favorites />}></Route>
-          <Route path="/Login" element={<Login_page />}></Route>
-          <Route path="/Register" element={<Register_page />}></Route>
-          <Route path="/Search_result" element={<Search_result />}></Route>
-          <Route path="/ModPage" element={<ModPage />}></Route>
-        </Routes>
-      </Router>
+
+    <Router>
+      <Routes>
+        <Route path="/edit-article/:articleId" element={<ModEditPage></ModEditPage>} />
+        <Route path="/edit-article-form/:articleId" element={<ModalEditJSON/>} />
+        <Route path="/" element={<Moderators />}></Route>
+        <Route path="/Profile" element={<Profile />}></Route>
+        <Route path="/Settings" element={<Settings />}></Route>
+        <Route path="/Favorites" element={<Favorites />}></Route>
+        <Route path="/Login" element={<Login_page />}></Route>
+        <Route path="/Register" element={<Register_page />}></Route>
+        <Route path="/Search_result" element={<Search_result />}></Route>
+        <Route path="/ModPage" element={<ModPage />}></Route>
+      
+      </Routes>
+    </Router>
 
 
   );
