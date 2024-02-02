@@ -1,12 +1,11 @@
 
-import React, { useState } from 'react'
+import React  from 'react'
 import '../Styles/Article_Container.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
 const ArticleContainer = ({ articleData }) => {
   const { title, authors,  url, institutions, date, id } = articleData ;
-  const [clicked, setCliked] = useState(false);
   const navigate = useNavigate();
   const handleEditClick = (articleId) => {
     navigate(`/edit-article/${articleId}`);

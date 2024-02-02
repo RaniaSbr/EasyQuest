@@ -1,17 +1,15 @@
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status
-from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
-
 from Backend.util import *
 from .serializers import *
+import secrets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import action
 
 request_data_json = ['first_name', 'last_name', 'email', 'password']
 
 
-class ModViewSet(viewsets.ModelViewSet):
-
+class ModeratorManager(viewsets.ModelViewSet):
     queryset = Moderator.objects.all()
     serializer_class = ModeratorSerializer
 
@@ -28,7 +26,7 @@ class ModViewSet(viewsets.ModelViewSet):
         email = request.data.get(request_data_json[2])
         if not EmailValidator.is_valid_email(email):
             return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)
-        password = request.data.get(request_data_json[3])
+        password = secrets.token_urlsafe(8)
         pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
         if pass_error:
             return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)
@@ -40,13 +38,8 @@ class ModViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-
-class ModeratorManager(viewsets.ModelViewSet):
-    queryset = Moderator.objects.all()
-    serializer_class = ModeratorSerializer
-
     @staticmethod
-    def get_mod_list():
+    def get_mod_list(request):
         moderators = Moderator.objects.all()
         serializer = ModeratorSerializer(moderators, many=True)
         return Response(serializer.data)

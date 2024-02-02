@@ -63,6 +63,7 @@ class Moderator(AbstractBaseUser):
     created_at = models.DateTimeField(auto_now_add=True)
     password = models.CharField(max_length=255, default=ModAttributesUtil.password)
     objects = models.Manager()
+    auth = "MODERATOR"
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password']
 

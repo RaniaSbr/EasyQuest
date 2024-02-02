@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ArticleContainer from "../Components/Article_Container";
 import Navbar_mod from "../Components/Navbar_moderateur";
 import ArticleAPI from "../api/article_api";
+
 const cleanUpData = (originalData) => {
   const cleanedData = {
     title: originalData.meta_data.title,
@@ -19,7 +20,9 @@ const cleanUpData = (originalData) => {
   return cleanedData;
 };
 
+
 const ModPage = () => {
+
   const notify = () => toast.error();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,13 +40,17 @@ const ModPage = () => {
 
     getData();
   }, []);
+ 
+
+
   if (loading) {
-    return <ToastContainer position="bottom-center" autoClose={false} theme="dark"/>;
+    return <ToastContainer position="bottom-center" autoClose={false} theme="dark" />;
   }
   if (articles == undefined) {
     return (
       <div className="min-h-screen w-full m-0 bg-[#06141D] text-white text-center">
         <Navbar_mod></Navbar_mod>
+        
         <div className=" text-lightgrey text-2xl">CONNECTION TO SERVER FAILED</div>
       </div>
     );
@@ -51,6 +58,11 @@ const ModPage = () => {
   return (
     <div className="min-h-screen w-full m-0 bg-[#06141D] text-white">
       <Navbar_mod></Navbar_mod>
+      <label className='text-white'>Select Reference:</label>
+
+
+
+
       {articles.map((article) => {
         var data = cleanUpData(article);
 

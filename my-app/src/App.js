@@ -14,6 +14,8 @@ import "./index.css";
 import ModPage from "./pages/mod_start_page.js";
 import ModEditPage from "./pages/mod_edit_page.js";
 import YourForm from "./pages/Editor.js";
+import Moderators from "./pages/moderators.js";
+import ModalEditJSON from "./Components/model_edit_json.js";
 function App() {
   return (
 
@@ -23,7 +25,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/edit-article/:articleId" element={<ModEditPage></ModEditPage>} />
-        <Route path="/" element={<YourForm />}></Route>
+        <Route path="/edit-article-form/:articleId" element={<ModalEditJSON/>} />
+        <Route path="/" element={<Moderators />}></Route>
         <Route path="/Profile" element={<Profile />}></Route>
         <Route path="/Settings" element={<Settings />}></Route>
         <Route path="/Favorites" element={<Favorites />}></Route>

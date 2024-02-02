@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
+
+from .controller import CreateArticleUtil
 from .models import *
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
@@ -89,6 +91,16 @@ class UnPublishedArticleDetailView(viewsets.ModelViewSet):
                 article = UnPublishedArticle.objects.get(pk=pk)
                 article.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                article = get_object_or_404(UnPublishedArticle, pk=pk)
+                data = request.data.get('meta_data', article.get_meta_data())
+                CreateArticleUtil.create_article_from_object(data, article.get_pdf_file())
+                return Response(status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
