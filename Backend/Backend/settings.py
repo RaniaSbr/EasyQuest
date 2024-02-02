@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 """
 Django settings for Backend project.
 
@@ -75,13 +74,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Backend.wsgi.application'
-<<<<<<< HEAD
 
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'https://localhost:9200/',
         'http_auth': ('elastic', 'you code'),
-=======
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'https://localhost:9200/',
@@ -94,7 +91,7 @@ ELASTICSEARCH_DSL = {
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'https://localhost:9200/',
-        'http_auth': ('elastic', 'DuF83ML=V2nOIp0hVDpj'),
+        'http_auth': ('elastic', 'you code'),
         'verify_certs': False,  # Disable certificate verification (not recommended for production)
     }
 }
@@ -151,10 +148,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Add your React app's origin
 ]
-<<<<<<< HEAD
->>>>>>> a1106402 (added Moderator app  and relevant api change)
-=======
-<<<<<<< HEAD
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
@@ -166,4 +159,3 @@ EMAIL_USE_TLS = True
 # Your Gmail email and app password
 EMAIL_HOST_USER = 'kazmaho35@gmail.com'
 EMAIL_HOST_PASSWORD = 'jyhu wbmo orul vuqa '
->>>>>>> c022d463 (Backend added)
