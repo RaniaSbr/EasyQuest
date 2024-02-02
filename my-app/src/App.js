@@ -7,6 +7,11 @@ import Settings from "./pages/Settings";
 import Favorites from "./pages/Favorites";
 import ModeratorList from "./Components/modList.js";
 import Search_result from "./pages/Search_result.js";
+<<<<<<< HEAD
+=======
+import YourFormComponent from "./Components/form.js";
+import ModManagement from "./pages/mod_management.js"
+>>>>>>> MAHRAZABDELRAHMEN
 import Login_page from "./pages/Login_page";
 import Register_page from "./pages/Register_page";
 import { BrowserRouter as Router, Routes, Route, Switch } from "react-router-dom";
@@ -19,6 +24,7 @@ import ModalEditJSON from "./Components/model_edit_json.js";
 function App() {
   return (
 
+<<<<<<< HEAD
 
 
 
@@ -37,6 +43,21 @@ function App() {
       
       </Routes>
     </Router>
+=======
+      <Router>
+        <Routes>
+          <Route path="/" element={<YourFormComponent/>}></Route>
+         <Route path="/Profile" element={<Profile />}></Route>
+          <Route path="/Settings" element={<Settings />}></Route>{" "}
+          <Route path="/Favorites" element={<Favorites />}></Route>
+          <Route path="/Login" element={<Login_page />}></Route>
+          <Route path="/Register" element={<Register_page />}></Route>
+          <Route path="/Search_result" element={<Search_result />}></Route>
+          <Route path="/ModPage" element={<ModPage />}></Route>
+          <Route path="/ModManagement" element={<ModManagement />}></Route>
+        </Routes>
+      </Router>
+>>>>>>> MAHRAZABDELRAHMEN
 
 
   );

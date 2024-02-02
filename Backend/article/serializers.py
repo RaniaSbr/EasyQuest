@@ -1,6 +1,10 @@
 # serializers.py
 from rest_framework import serializers
+<<<<<<< HEAD
 from .models import *
+=======
+from .models import Reference, Author, Institution, MetaData, Article
+>>>>>>> MAHRAZABDELRAHMEN
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
@@ -32,6 +36,7 @@ class MetaDataSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+<<<<<<< HEAD
     meta_data = MetaDataSerializer()
 
     class Meta:
@@ -45,3 +50,10 @@ class UnPublishedArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = UnPublishedArticle
         fields = '__all__'
+=======
+    content = MetaDataSerializer()
+
+    class Meta:
+        model = Article
+        fields = ['id', 'content']
+>>>>>>> MAHRAZABDELRAHMEN

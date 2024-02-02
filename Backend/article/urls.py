@@ -1,5 +1,10 @@
 from django.urls import path
+<<<<<<< HEAD
 from .views import *
+=======
+from .views import MetaDataListCreateView, ReferenceListCreateView, AuthorListCreateView, \
+    InstitutionListCreateView, ArticleListCreateView, search_api
+>>>>>>> MAHRAZABDELRAHMEN
 
 urlpatterns = [
     path('references/', ReferenceListCreateView.as_view(), name='reference-list-create'),
@@ -7,6 +12,7 @@ urlpatterns = [
     path('institutions/', InstitutionListCreateView.as_view(), name='institution-list-create'),
     path('metadata/', MetaDataListCreateView.as_view(), name='metadata-list-create'),
     path('articles/', ArticleListCreateView.as_view(), name='article-list-create'),
+<<<<<<< HEAD
     path('up_articles/', UnPublishedArticleListCreateView.as_view(), name='up_article-list-create'),
     path('search_api/', search_api, name='filter'),
     path('up_article/<int:pk>/', UnPublishedArticleDetailView.as_view({'get': 'retrieve'}), name='article-detail'),
@@ -20,4 +26,7 @@ urlpatterns = [
     path('up_article/serve-unpublished-article-pdf/<int:pk>/',
          UnPublishedArticleDetailView.as_view({'get': 'serve_unpublished_article_pdf'})
          , name='serve_unpublished_article_pdf'),
+=======
+    path('search_api/', search_api, name='filter'),
+>>>>>>> MAHRAZABDELRAHMEN
 ]

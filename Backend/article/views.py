@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
@@ -11,6 +12,13 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .filters.utils import FilterUtil
 from django.db import transaction
+=======
+from rest_framework import generics
+from .models import Reference, Author, Institution, MetaData, Article
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from .filters.utils import FilterUtil
+>>>>>>> MAHRAZABDELRAHMEN
 from datetime import datetime
 from .serializers import (
     ReferenceSerializer,
@@ -18,6 +26,7 @@ from .serializers import (
     InstitutionSerializer,
     MetaDataSerializer,
     ArticleSerializer,
+<<<<<<< HEAD
     UnPublishedArticleSerializer
 )
 from Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION
@@ -26,37 +35,60 @@ from Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION
 class ReferenceListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
     permission_required = MODS_ADMIN_NO_USER_PERM
     raise_exception = True
+=======
+)
+
+
+class ReferenceListCreateView(generics.ListCreateAPIView):
+>>>>>>> MAHRAZABDELRAHMEN
     queryset = Reference.objects.all()
     serializer_class = ReferenceSerializer
 
 
+<<<<<<< HEAD
 class AuthorListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
     permission_required = MODS_ADMIN_NO_USER_PERM
     raise_exception = True
+=======
+class AuthorListCreateView(generics.ListCreateAPIView):
+>>>>>>> MAHRAZABDELRAHMEN
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
 
+<<<<<<< HEAD
 class InstitutionListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
     permission_required = MODS_ADMIN_NO_USER_PERM
     raise_exception = True
+=======
+class InstitutionListCreateView(generics.ListCreateAPIView):
+>>>>>>> MAHRAZABDELRAHMEN
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
 
 
+<<<<<<< HEAD
 class MetaDataListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
     permission_required = MODS_ADMIN_NO_USER_PERM
     raise_exception = True
+=======
+class MetaDataListCreateView(generics.ListCreateAPIView):
+>>>>>>> MAHRAZABDELRAHMEN
     queryset = MetaData.objects.all()
     serializer_class = MetaDataSerializer
 
 
+<<<<<<< HEAD
 class ArticleListCreateView(generics.ListAPIView):
     raise_exception = True
+=======
+class ArticleListCreateView(generics.ListCreateAPIView):
+>>>>>>> MAHRAZABDELRAHMEN
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
 
+<<<<<<< HEAD
 class UnPublishedArticleDetailView(viewsets.ModelViewSet):
     queryset = UnPublishedArticle.objects.all()
     serializer_class = UnPublishedArticleSerializer
@@ -157,6 +189,8 @@ class ArticleManager(PermissionRequiredMixin, viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+=======
+>>>>>>> MAHRAZABDELRAHMEN
 @require_GET
 def search_api(request):
     """

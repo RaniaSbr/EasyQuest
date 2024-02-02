@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> MAHRAZABDELRAHMEN
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(BASE_DIR)
@@ -42,7 +45,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'myApp',
     'article',
+<<<<<<< HEAD
     'email_provider'
+=======
+>>>>>>> MAHRAZABDELRAHMEN
 ]
 
 MIDDLEWARE = [
@@ -75,10 +81,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Backend.wsgi.application'
+<<<<<<< HEAD
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'https://localhost:9200/',
         'http_auth': ('elastic', 'IZf+4ZnWoa18MqqGl4XX'),
+=======
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'https://localhost:9200/',
+        'http_auth': ('elastic', 'you code'),
+>>>>>>> MAHRAZABDELRAHMEN
         'verify_certs': False,  # Disable certificate verification (not recommended for production)
     }
 }
@@ -148,6 +162,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Add your React app's origin
 ]
+<<<<<<< HEAD
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
@@ -159,3 +174,5 @@ EMAIL_USE_TLS = True
 # Your Gmail email and app password
 EMAIL_HOST_USER = 'kazmaho35@gmail.com'
 EMAIL_HOST_PASSWORD = 'jyhu wbmo orul vuqa '
+=======
+>>>>>>> MAHRAZABDELRAHMEN

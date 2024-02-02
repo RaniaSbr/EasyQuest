@@ -12,8 +12,12 @@ module.exports = {
       dark: "#222831",
       lightStartD: "#D3D7E3",
       lightStartE: "#EEEEEE",
+<<<<<<< HEAD
       red: "#E0115F",
       validate_green:'#00ff40',
+=======
+      red:"#D70040",
+>>>>>>> MAHRAZABDELRAHMEN
     },
     fontSize: {
       sm: "0.8rem",

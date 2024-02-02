@@ -56,8 +56,10 @@ const ModPage = () => {
     );
   }
   return (
+
     <div className="min-h-screen w-full m-0 bg-[#06141D] text-white">
       <Navbar_mod></Navbar_mod>
+<<<<<<< HEAD
       <label className='text-white'>Select Reference:</label>
 
 
@@ -77,8 +79,29 @@ const ModPage = () => {
           );
         }
       })}
+=======
+      
+      <h1 onMouseOver={(event) => randomizeText(event.target)} className="font-bold text-white md:text-10xl relative">
+        EASY QUEST
+      </h1>
+      <div className=" ml-72 mt-16 flex items-center">
+        <iframe
+          title="PDF Viewer"
+          src={'./Assets/MiniProjet.pdf'}
+          className="w-128 h-128 b-2 overflow-y-hidden bg-lightStartD rounded"
+        />
+        <div className=" ml-40 h-128 relative w-0.5  bg-blue"></div>
+        <PDFViewer className="ml-40 w-128 h-128 b-2 overflow-y-hidden bg-lightStartD rounded"><PdfMetaData  {...jsonData} /></PDFViewer>
+      </div>
+      <div className="flex justify-center mt-8">
+        <h1 id="info" className=" text-2xl"></h1>
+        <CoolButton color="green" icon={faCheckCircle} text="Validate" />
+        <CoolButton color="red" icon={faTrashCan} text="Delete" />
+        <CoolButton color="lightStartD" icon={faPen} text="Edit" />
+      </div>
+
+>>>>>>> MAHRAZABDELRAHMEN
     </div>
   );
 };
-
 export default ModPage;
