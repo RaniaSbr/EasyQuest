@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "../Styles/Login.css";
 import { NavLink } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
 function Register() {
   const [EmailVal, setEmailVal] = useState();
   const [PassVal, setPassVal] = useState();
@@ -13,6 +15,52 @@ function Register() {
   const [confirmError, setConfirmError] = useState("");
   const [lastError, setLastError] = useState("");
   const [firstError, setFirstError] = useState("");
+  const notify = () => toast.error();
+  
+  const signUp=async()=> {
+  
+  var firstName = "document.getElementById('first').value";
+  var lastName = "document.getElementById('last').value";
+  var email = "document.getElementById('emil2').value";
+  var password = "document.getElementById('pwd2').value";
+  var firstName = document.getElementById('first').value;
+  var lastName = document.getElementById('last').value;
+  var email = document.getElementById('emil2').value;
+  var password = document.getElementById('pwd2').value;
+
+  await fetch('http://127.0.0.1:8000/api/sign-up/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          password: password
+      })
+  })
+  .then(response => {
+      return response.json();
+  })
+  .then(data => {
+    if(data.error){
+      
+      // afficher le message dans le cas au il y a une erreur dans les informations qui sont envoyer (manque des informations /email deja existe ..)
+      notify(); toast.error(data.error);
+      
+    }else{
+        // le cas au tous marche bien  
+        // ici il faut faire le redirect vers une autre page 
+      alert(data.message);
+      }
+       
+  })
+  .catch(error => {
+    
+      console.error('Error:', error);
+  });
+}
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -27,9 +75,11 @@ function Register() {
   };
 
   return (
+
     <div className="login  m-w-[100vw] m-h-[90vh] truncate grid content-center justify-items-center ">
       <div className="login-container flex items-center justify-center h-[110vh] sm:w-3/5 md:w-2/5 w-4/5 rounded-2xl my-8 ">
         <div className="left-login grid  content-center justify-items-center  rounded-3xl text-black bg-lightgrey  h-full m-2xl w-full  outline-0 ">
+        <ToastContainer></ToastContainer>
           <form
             className="text-black grid content-center justify-items-center grid-cols-1  w-full h-full"
             onSubmit={handleSubmit}
@@ -130,8 +180,8 @@ function Register() {
               />
             </div>{" "}
             <div className="grid content-center justify-items-center w-full h-20">
-              <NavLink to="/">
-                <button
+             
+                <button onClick={() => { try{ console.log("h"); signUp(); console.log("hl"); }catch (error) {notify(); toast.error("ERROR HAPPENED  : " + error);}}}
                   type="submit"
                   id="sub_button"
                   className="login-button  bg-grey px-[8rem] py-[0.5rem] cursor-pointer"
@@ -139,7 +189,7 @@ function Register() {
                   {" "}
                   Sign up
                 </button>
-              </NavLink>
+            
             </div>{" "}
           </form>
 

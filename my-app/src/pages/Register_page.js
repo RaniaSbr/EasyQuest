@@ -1,10 +1,10 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
+import GenericNavBar from "../Components/generic_nav_bar";
 import Register from "../Components/Register";
 function Register_page(params) {
   return (
     <div className="Register_Page">
-      <Navbar></Navbar>
+      <GenericNavBar></GenericNavBar>
       <Register></Register>
     </div>
   );

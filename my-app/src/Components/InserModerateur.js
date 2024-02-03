@@ -3,8 +3,10 @@ import axios from 'axios';
 
 const ModeratorForm = () => {
     const [userData, setUserData] = useState({
-        username: '',
+        password: '',
         email: '',
+        first_name: '',
+        last_name: '',
     });
 
     const handleChange = (e) => {
@@ -14,7 +16,7 @@ const ModeratorForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8000/mod/', userData);
+            await axios.post('http://localhost:8000/moderator/create/', userData);
             // Handle success or redirect
         } catch (error) {
             // Handle error

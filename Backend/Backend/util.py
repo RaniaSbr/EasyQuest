@@ -43,12 +43,8 @@ class PasswordValidator:
         if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
             return PasswordError.NO_SPECIAL_CHAR
 
-        common_patterns = ["123456", "123456789", "password", "12345", "qwerty", "123", "1q2w3e", "12345678",
+        common_patterns = ["123456", "123456789", "password", "12345", "qwerty", "1q2w3e", "12345678",
                            "111111", "1234567890", first_name, last_name, email_name]
-        for pattern in common_patterns:
-            print(pattern)
-        if any(pattern.lower() in password.lower() for pattern in common_patterns):
-            return PasswordError.COMMON_PATTERN
 
         return None
 
