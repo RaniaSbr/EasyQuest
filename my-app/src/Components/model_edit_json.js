@@ -42,7 +42,6 @@ const ModalEditJSON = ({ }) => {
 
     const handleReferenceChange = (field, value) => {
         const updatedReferences = [...editedData.meta_data.references];
-        console.log("ref is gjfgj : ", updatedReferences);
         updatedReferences[selectedReferenceIndex] = {
             ...updatedReferences[selectedReferenceIndex],
             [field]: value
@@ -63,7 +62,6 @@ const ModalEditJSON = ({ }) => {
         };
         
         editedData.meta_data.institutions = updatedColleges;
-        console.log(editedData.meta_data.institutions)
     };
 
     const handleAuthorChange = (value) => {
@@ -77,6 +75,7 @@ const ModalEditJSON = ({ }) => {
 
 
     const handleInputChange = (field, value) => {
+        
         setEditedData(prevData => ({
             ...prevData,
             meta_data: {
@@ -84,6 +83,11 @@ const ModalEditJSON = ({ }) => {
                 [field]: value,
             },
         }));
+        if ( field == "keywords"){ 
+            
+            editedData.meta_data.keywords = value;
+            console.log("THIS IS : ", editedData.meta_data.keywords);
+        }
     };
 
     const handleReferenceSelect = (index) => {
@@ -224,7 +228,7 @@ const ModalEditJSON = ({ }) => {
                     onClick={async () => {
                         try {
                             changeBlockVis();
-                            await ArticleAPI.updateArticle(articleID, editedData.meta_data);
+                            await ArticleAPI.updateArticle(articleID, editedData);
                             navigator('/ModPage/');
                             changeBlockVis();
                         } catch (error) {

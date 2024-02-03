@@ -13,6 +13,7 @@ class ArticleDocument(Document):
         'doi': fields.TextField(),
         'title': fields.TextField(),
         'pub_date': fields.TextField(),
+        'keywords': fields.TextField(),
         'authors': fields.ObjectField(properties={
             'name': fields.TextField(),
         }),

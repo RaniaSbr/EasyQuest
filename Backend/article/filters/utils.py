@@ -11,7 +11,8 @@ from Backend.util import ElasticSearchUtil
 class FilterUtil:
     @staticmethod
     def apply_filter(filters_json):
-        ElasticSearchUtil.get_elasticsearch_connection()
+        elasticsearch_instance = ElasticSearchUtil()
+        elasticsearch_instance.get_elasticsearch_connection()
 
         article_index = os.environ.get("ARTICLE_INDEX")
         search = Search(index=article_index)

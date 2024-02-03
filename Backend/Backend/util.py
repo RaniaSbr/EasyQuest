@@ -80,7 +80,10 @@ class ElasticSearchUtil:
 
     def create_elasticsearch_instance(self):
         try:
-            es = Elasticsearch([f'http://{self.user_name}:{self.user_pass}@{self.url}:{self.port}'])
+
+            es = Elasticsearch(verify_certs=False, basic_auth=(self.user_name, self.user_pass),
+                               hosts=[f'{self.url}:{self.port}'])
+
             return es
         except Exception as e:
-            raise ConnectionError(f"An unexpected error occurred while creating Elasticsearch instance: {e}")
+            raise ConnectionError(f"An unexpected error occurred while creating Elasticsearch instance")
