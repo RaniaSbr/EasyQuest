@@ -63,7 +63,8 @@ class UploadArticlesView(View):
 
     def get(self, request):
         try:
-            ElasticSearchUtil.get_elasticsearch_connection()
+            elasticsearch_instance = ElasticSearchUtil()
+            elasticsearch_instance.get_elasticsearch_connection()
 
             url = request.GET.get('url')
 

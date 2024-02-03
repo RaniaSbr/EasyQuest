@@ -2,6 +2,7 @@ import re
 from enum import Enum
 from dotenv import load_dotenv
 from elasticsearch_dsl import connections
+from elasticsearch import Elasticsearch
 import os
 from elasticsearch.exceptions import *
 
@@ -53,21 +54,22 @@ class PasswordValidator:
 
 
 class ElasticSearchUtil:
-    @staticmethod
-    def get_elasticsearch_connection():
+    def __init__(self):
         load_dotenv()
-        url = os.environ.get('URL')
-        port = os.environ.get('PORT')
-        user_name = os.environ.get("USER_NAME")
-        user_pass = os.environ.get("USER_PASSWORD")
-        os.environ.get("ARTICLE_INDEX")
 
+        self.url = os.environ.get('URL')
+        self.port = os.environ.get('PORT')
+        self.user_name = os.environ.get("USER_NAME")
+        self.user_pass = os.environ.get("USER_PASSWORD")
+        self.article_index = os.environ.get("ARTICLE_INDEX")
+
+    def get_elasticsearch_connection(self):
         try:
             connections.create_connection(
-                hosts=[f'{url}:{port}'],
+                hosts=[f'{self.url}:{self.port}'],
                 alias='default',
                 verify_certs=False,
-                http_auth=(user_name, user_pass)
+                http_auth=(self.user_name, self.user_pass)
             )
         except ConnectionError as ce:
             print(f"ConnectionError: {ce}")
@@ -75,3 +77,10 @@ class ElasticSearchUtil:
             print(f"AuthenticationException: {ae}")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
+
+    def create_elasticsearch_instance(self):
+        try:
+            es = Elasticsearch([f'http://{self.user_name}:{self.user_pass}@{self.url}:{self.port}'])
+            return es
+        except Exception as e:
+            raise ConnectionError(f"An unexpected error occurred while creating Elasticsearch instance: {e}")
