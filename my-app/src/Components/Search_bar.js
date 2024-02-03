@@ -5,7 +5,7 @@ import "../Styles/Search_bar.css";
 const Search_bar = ({ backgroundColor }) => {
   return (
     <div className="bar-search">
-      <NavLink to="/Search_result">
+      <NavLink to="/SearchRes">
         {" "}
         <img
           src="./Assets/search.png"

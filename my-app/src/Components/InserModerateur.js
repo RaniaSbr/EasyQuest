@@ -1,4 +1,3 @@
-// src/components/ModeratorForm.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -30,8 +29,6 @@ const ModeratorForm = () => {
 
             <label>Email: </label>
             <input type="email" name="email" onChange={handleChange} required />
-
-            {/* No need for manual password input */}
 
             <button type="submit">Submit</button>
         </form>

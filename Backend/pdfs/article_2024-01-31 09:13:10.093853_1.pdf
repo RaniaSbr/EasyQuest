@@ -1,0 +1,22 @@
+
+      <?xml version="1.0" encoding="utf-8"?>
+      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+      <html>
+        <head>
+          <title>503 No healthy backends</title>
+          <style type="text/css">
+            #page {width: 416px; padding: 10px; margin: 200px auto; border: 1px solid grey; background-color: #DFDFDF;}
+            body {background-color: #CCC; margin: auto;
+                  font-family: Helvetica, Ariel, sans-serif;}
+          </style>
+          </head>
+        <!-- SERIOUS SYNTH ERROR -->
+        <body>
+          <div id="page">
+            <h1>Page Could Not Be Loaded</h1>
+            <p>We're very sorry, but the page could not be loaded properly. This should be fixed very soon, and we apologize for any inconvenience.</p>
+          </div>
+        </body>
+      </html>
+    

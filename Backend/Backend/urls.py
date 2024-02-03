@@ -1,13 +1,10 @@
-# yourprojectname/urls.py
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('myApp.urls')),  # Replace 'myApp' with the actual name of your app
-    path('', include('myApp.urls')),      # Add this line for the root URL
-
+    path('moderator/', include('moderator.urls')),
+    path('article/', include('article.urls')),
+    path('myapp/', include('myApp.urls')),
+    path('email/', include('email_provider.urls')),
 ]
-
-
-
