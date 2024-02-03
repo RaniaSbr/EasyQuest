@@ -154,7 +154,6 @@ def search_articles_keywords(request):
             print(f"Failed to convert _id {hit['_id']} to int. Skipping.")
             non_integer_ids.append(hit['_id'])
 
-    print(type(article_ids))
     articles = Article.objects.filter(pk__in=article_ids)
     serializer = ArticleSerializer(articles, many=True)
     articles_count = articles.count()

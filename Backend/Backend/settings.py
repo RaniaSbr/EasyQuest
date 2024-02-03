@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'myApp',
     'article',
-    'email_provider'
+    'email_provider',
+    'UserPart',
 ]
 
 MIDDLEWARE = [
