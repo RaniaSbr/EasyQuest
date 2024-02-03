@@ -1,24 +1,21 @@
-import { NavLink } from "react-router-dom";
-import React from 'react';
+import React, { useState } from 'react';
 import "../Styles/Search_bar.css";
-import { toast, ToastContainer } from "react-toastify";
-import{ useState } from "react";
-import SearchResult from "../pages/SearchResult"
-const Search_bar = ({ backgroundColor }) => {
-  const [query, setQuery] = useState("");
-  const [keywords, setKeywords] = useState("");
-  const [authors, setAuthors] = useState("");
-  const [institutions, setInstitutions] = useState("");
+import SearchResult from "../pages/SearchResult";
 
+const Search_bar = ({ backgroundColor  }) => {
+  const [query, setQuery] = useState("");
+  const keywords = "";
+  const authors = "";
+  const institutions = "";
   const handleSearch = () => {
-    // Appeler la fonction SearchResult avec les données de recherche
-    SearchResult(query, keywords, authors, institutions);
+    SearchResult({query, keywords, authors, institutions });
   };
 
   return (
     <div className="bar-search">
       <img src="./Assets/search.png" alt="Recherche" className="search-icon" />
       <input
+        id='query_r'
         type="search"
         placeholder="Rechercher des articles scientifiques ..."
         style={{ backgroundColor: backgroundColor }}

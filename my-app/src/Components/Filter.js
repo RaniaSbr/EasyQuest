@@ -6,22 +6,20 @@ import "../Styles/Article.css";
 import SearchResult from "../pages/SearchResult";
 
 function Filter() {
-  try {
-  var KeyWords = document.getElementById('keywords').value;
-  var Authors = document.getElementById('authors').value;
-  var Institutions = document.getElementById('institutions').value;
-  } catch (error) {
-  var KeyWords = null;
-  var Authors = null;
-  var Institutions = null;
-  }
-  
-
-  
   const [date, setDate] = useState(new Date());
   const [filterVisible, setFilterVisible] = useState();
   const [showCalendar, setShowCalendar] = useState(false);
   const [showCalendar2, setShowCalendar2] = useState(false);
+  const [keywords, setKeywords] = useState("");
+  const [authors, setAuthors] = useState("");
+  const [institutions, setInstitutions] = useState("");
+ 
+  const handleSearch = async() => {
+    var ai = document.getElementById('query_r').value;
+    SearchResult(ai, keywords, authors, institutions);
+  };
+
+  
   const toggleFiltervisible = (event) => {
     setFilterVisible(!filterVisible);
   };
@@ -128,7 +126,7 @@ function Filter() {
             </div>
           </div>
           <div className="search-filter flex items-center justify-center mt-10">
-            <button onClick= { SearchResult(KeyWords,Authors,Institutions) }
+            <button onClick= { handleSearch }
             className="bg-blue w-[80%] md:w-[50%] lg:w-[30%]  py-2 rounded-2xl">
               {" "}
               <p className="text-xl">Search</p>

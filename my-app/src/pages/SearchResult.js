@@ -2,48 +2,38 @@ import Navbar from "../Components/Navbar";
 import Search_bar from "../Components/Search_bar";
 import Article from "../Components/Article";
 import Filter from "../Components/Filter";
-import KeyWords from "../Components/Filter";
-import Authors from "../Components/Filter";
-import Institutions from "../Components/Filter";
 import React, { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-function SearchResult(query,keywords,authors,institutions) {
-  
-var API ='http://127.0.0.1:8000/api/search-articles/?q=';
 
-if (keywords& !authors & !institutions) {
+function SearchResult(props) {
+  const { query, keywords, authors, institutions } = props;
+  const [Articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  console.log(query)
+  useEffect(() => {
+    const fetchData = async () => {
+    let API;
+
+if (keywords&& !authors && !institutions) {
   API ='http://127.0.0.1:8000/api/search-articles-keywords/?q=';
 } else{
 
-  if (!keywords & authors & !institutions) {
+  if (!keywords && authors && !institutions) {
     API ='http://127.0.0.1:8000/api/search-articles-autors/?q=';
   } else {
 
-    if (!keywords & !authors & institutions) {
+    if (!keywords && !authors && institutions) {
       API ='http://127.0.0.1:8000/api/search-articles-institution/?q=';
     }else{
       API ='http://127.0.0.1:8000/api/search-articles/?q=';
     }
   }
-  
 }
-
-  var searchQuery = query;
-  const [Articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-  const tokenValue = getCookie('token');
-
-   fetch(API + searchQuery)
+   fetch(API + query)
     .then(response => response.json())
     .then(data => {
-
-
     var articlesCount = data.articles_count;
     var results = data.results;
     var message = data.message;
-    
-
       if (articlesCount === 0) {
           document.getElementById('message').innerText = message;
       } else {
@@ -62,32 +52,9 @@ if (keywords& !authors & !institutions) {
     .catch(error => {
       console.error('Erreur lors de la récupération des articles:', error);
     });
-  }, []);
-
-  function getCookie(name) {
-    const cookieName = name + '=';
-    const cookieArray = document.cookie.split(';');
-  
-    for (let i = 0; i < cookieArray.length; i++) {
-      let cookie = cookieArray[i].trim();
-      if (cookie.indexOf(cookieName) === 0) {
-        return cookie.substring(cookieName.length, cookie.length);
-      }
-    }
-    return null;
-  } 
-
-
-
-
-
-
-
-
-
-
-
-
+  };
+  fetchData();
+  }, [query, keywords, authors, institutions]);
   // const articleData = {
   //   date: "12/12/2023",
   //   title:
@@ -109,7 +76,6 @@ if (keywords& !authors & !institutions) {
     <div className="SeearchResult_Page grid content-center gap-10 justify-items-center ">
       <Navbar></Navbar>
       <div className="w-[90vw] flex items-center justify-start ">
-        {" "}
         <Search_bar backgroundColor="white"></Search_bar>
         <button >Click Here</button>
       </div>
