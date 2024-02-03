@@ -63,6 +63,7 @@ class CreateArticleUtil:
                 meta_data=meta_data_instance,
                 pdf_file=article_file
             )
+
             article_instance.save()
 
             return {'success': True, 'message': 'Article created successfully'}
@@ -81,6 +82,7 @@ class CreateArticleUtil:
 
         return MetaData.objects.create(
             doi=json_data.get('doi', ''),
+            keywords=json_data.get('keywords', ''),
             title=json_data.get('title', ''),
             pub_date=datetime.today(),
             abstract=json_data.get('abstract', '')

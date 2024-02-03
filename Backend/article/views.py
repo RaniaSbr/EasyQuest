@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
 from .controller import CreateArticleUtil
+from .documents import ArticleDocument
 from .models import *
 from django.db import transaction
 from dotenv import load_dotenv
@@ -23,14 +24,15 @@ from Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Q
+from elasticsearch_dsl import Q
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Document, Text, Date
 from elasticsearch_dsl.field import Object, Keyword
 from Backend.util import ElasticSearchUtil
 
 load_dotenv()
-article_index = os.environ.get("ARTICLE_TEST_INDEX")
+ARTICLE_INDEX = os.environ.get("ARTICLE_TEST_INDEX")
+
 
 @api_view(['GET'])
 def get_articles(request):
@@ -93,17 +95,21 @@ def search_articles(request):
 
 @api_view(['GET'])
 def search_articles_author(request):
-    query = request.GET.get('q', '')
+    query = request.GET.get('author', 'q')
     elasticsearch_instance = ElasticSearchUtil()
     es = elasticsearch_instance.create_elasticsearch_instance()
+
     body = {
         "query": {
             "match": {
-                "meta_data.authors": query
+                "meta_data.authors.name": {
+                    "query": query,
+                    "fuzziness": "AUTO"
+                 }
             }
         }
     }
-    result = es.search(index='article', body=body)  # type: ignore
+    result = es.search(index='article', body=body)
     article_ids = []
     non_integer_ids = []
     for hit in result['hits']['hits']:
@@ -125,17 +131,18 @@ def search_articles_author(request):
 @api_view(['GET'])
 def search_articles_keywords(request):
     elasticsearch_instance = ElasticSearchUtil()
+    es = elasticsearch_instance.create_elasticsearch_instance()
     elasticsearch_instance.get_elasticsearch_connection()
-    query = request.GET.get('q', '')
-    es = Elasticsearch("http://elastic:ar*==+FV5XfBWpjwDy1p@localhost:9200")
+    query = request.GET.get('keywords', '')
+
     body = {
         "query": {
             "match": {
-                "meta_data.KeyWords": query
+                "meta_data.keywords": query  # Replace with the keywords you want to search
             }
         }
     }
-    result = es.search(index='articls4', body=body)  # type: ignore
+    result = es.search(index='article', body=body)  # type: ignore
 
     article_ids = []
     non_integer_ids = []
@@ -147,7 +154,7 @@ def search_articles_keywords(request):
             print(f"Failed to convert _id {hit['_id']} to int. Skipping.")
             non_integer_ids.append(hit['_id'])
 
-    print(non_integer_ids)
+    print(type(article_ids))
     articles = Article.objects.filter(pk__in=article_ids)
     serializer = ArticleSerializer(articles, many=True)
     articles_count = articles.count()
@@ -200,7 +207,6 @@ def search_articles_references(request):
         }
     }
     result = es.search(index='articls4', body=body)  # type: ignore
-    print(result)
     article_ids = []
     non_integer_ids = []
     for hit in result['hits']['hits']:
@@ -342,7 +348,9 @@ class UnPublishedArticleDetailView(viewsets.ModelViewSet):
             with transaction.atomic():
                 article = get_object_or_404(UnPublishedArticle, pk=pk)
                 data = request.data.get('meta_data', article.get_meta_data())
+
                 CreateArticleUtil.create_article_from_object(data, article.get_pdf_file())
+                article.delete()
                 return Response(status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -350,7 +358,6 @@ class UnPublishedArticleDetailView(viewsets.ModelViewSet):
     @staticmethod
     def serve_unpublished_article_pdf(request, pk):
         unpublished_article = get_object_or_404(UnPublishedArticle, pk=pk)
-        print(unpublished_article)
         return FileResponse(unpublished_article.get_pdf_file(), as_attachment=True)
 
     def retrieve(self, request, pk=None, *args):

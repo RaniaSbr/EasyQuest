@@ -2,6 +2,12 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    path('get-articles/',get_articles),
+    path("search-articles/",search_articles),
+    path("search-articles-authors/", search_articles_author),
+    path("search-articles-keywords/", search_articles_keywords),
+    path("search-articles-institution/", search_articles_institution),
+    path("search-articles-references/", search_articles_references),
     path('references/', ReferenceListCreateView.as_view(), name='reference-list-create'),
     path('authors/', AuthorListCreateView.as_view(), name='author-list-create'),
     path('institutions/', InstitutionListCreateView.as_view(), name='institution-list-create'),

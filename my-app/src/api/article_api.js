@@ -1,6 +1,7 @@
 import axios from "axios";
 import apiConfig from "./apiConfig";
 const cleanUpData = (originalData) => {
+    console.log("data jey : ", originalData.meta_data.keyword);
     const cleanedData = {
         title: originalData.meta_data.title,
         keywords: originalData.meta_data.keywords,
