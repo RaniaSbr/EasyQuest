@@ -7,7 +7,9 @@ from .models import Moderator
 class ModeratorBackend(ModelBackend):
     def authenticate(self, request, email=None, password=None, **kwargs):
         try:
+            print('dkhel ')
             moderator = Moderator.objects.get(email=email)
+            print(moderator.password)
         except ObjectDoesNotExist:
             return None
 

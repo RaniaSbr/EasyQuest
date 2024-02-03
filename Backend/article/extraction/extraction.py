@@ -80,13 +80,19 @@ class HeaderExtractor(GrobidClient, IExtractData):
                 return response
 
         if response.status_code == 200:
+            print(type(response.text))
             soup = BeautifulSoup(response.text, 'xml')
+            print('9bel artcile ')
             article_title = return_valid_text_from_data(soup.find('title', type='main'))
+            print('9bel auth ')
             authors = soup.find_all('persName')
+            print('9bel auth fln ')
             authors_full_names = [(f"{return_valid_text_from_data(author.forename)}"
                                    f" {return_valid_text_from_data(author.surname)}") for author in authors]
+            print('9bel abstra ')
             abstract = return_valid_text_from_data(soup.find('abstract'))
             institutions_list = []
+            print('9bel for ')
             for affiliation in soup.find_all('affiliation'):
                 department = return_valid_text_from_data(affiliation.find('orgName', {'type': 'department'}))
                 institution = return_valid_text_from_data(affiliation.find('orgName', {'type': 'institution'}))
@@ -104,7 +110,9 @@ class HeaderExtractor(GrobidClient, IExtractData):
                     }
                 }
                 institutions_list.append(college_json)
+            print('9bel unique ')
             unique_affiliations = list({json.dumps(obj, sort_keys=True) for obj in institutions_list})
+            print('mor unique ')
             keywords = soup.find_all('keywords')
             keywords_list = [return_valid_text_from_data(keyword) for keyword in keywords]
 
@@ -144,22 +152,32 @@ class PdfExtractionUtil:
 
         Note: The extracted information is stored in self.json_output.
         """
+     
         extractor = self.document_extractor(grobid_base_url)
+        
         self.json_output = extractor.process_document(self.pdf_path)
-
+        print('mor extractor2')
 
 class PdfController:
     @staticmethod
     def process_and_store_pdf(pdf_path, blob):
+        print('create util1111')
         server = "http://localhost:8070"
+        print(' mor server')
         extraction_classes = [HeaderExtractor, ReferencesExtractor]
         final_json = {}
         for data in extraction_classes:
+            print('dkhel for')
             pdf_util = PdfExtractionUtil(pdf_path, document_extractor=data)
+            print(' 9bel util.run')
+
             pdf_util.run(server)
+            print('util.run')
             extracted_data = pdf_util.json_output
             final_json = final_json.copy()
             final_json.update(extracted_data)
+        
+        print('create util')
         from article.controller import CreateArticleUtil
         CreateArticleUtil.create_article_from_json(final_json, blob)
         return final_json

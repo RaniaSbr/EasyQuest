@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_elasticsearch_dsl',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders',
     'rest_framework',
     'myApp',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
 
@@ -85,7 +87,7 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'https://localhost:9200/',
-        'http_auth': ('elastic', 'IZf+4ZnWoa18MqqGl4XX'),
+        'http_auth': ('elastic', 'mJ+aOdFdiIQITe1H-zmA'),
         'verify_certs': False,  # Disable certificate verification (not recommended for production)
     }
 }

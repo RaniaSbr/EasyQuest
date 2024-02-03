@@ -1,4 +1,3 @@
-from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ObjectDoesNotExist
 from Backend.util import *
 from .serializers import *
@@ -6,6 +5,7 @@ import secrets
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.contrib.auth.hashers import make_password
 
 request_data_json = ['first_name', 'last_name', 'email']
 
@@ -16,9 +16,7 @@ class ModeratorManager(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         empty_fields = []
-        data = request.data
         for field in request_data_json:
-            print(request_data_json)
             if not request.data.get(field):
                 empty_fields.append(field)
         if empty_fields:
@@ -30,11 +28,14 @@ class ModeratorManager(viewsets.ModelViewSet):
         if not EmailValidator.is_valid_email(email):
             return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)
         password = secrets.token_urlsafe(8)
-        pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
-        if pass_error:
-            return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)
-        hashed = make_password(password)
-        new_moderator = Moderator.objects.create(email=email, password=hashed,
+        #pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
+        #if pass_error:
+        #    return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)
+        print('ha<wlik lmpds')
+        print(password)
+        
+        
+        new_moderator = Moderator.objects.create(email=email, password= make_password(password),
                                                            first_name=first_name, last_name=last_name)
         serializer = self.get_serializer(new_moderator)
         headers = self.get_success_headers(serializer.data)
@@ -56,7 +57,7 @@ class ModeratorManager(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=True, methods=['get'])
-    def show_passwords(self, pk=None):
+    def show_passwords(self , request , pk=None):
         try:
             moderator = Moderator.objects.get(pk=pk)
             serialized_data = ModeratorSerializer(moderator).data
@@ -77,3 +78,4 @@ class ModeratorManager(viewsets.ModelViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+

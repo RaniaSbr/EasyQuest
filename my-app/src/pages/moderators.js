@@ -28,14 +28,14 @@ function Moderators(params) {
 
   const users = moderators.map((moderateur) => ({
     id: moderateur.id,
-    name: moderateur.username,
+    name: moderateur.first_name +'_'+ moderateur.last_name,
     title: moderateur.email,
   }));
 
   useEffect(() => {
     const updatedUsers = moderators.map((moderateur) => ({
       id: moderateur.id,
-      name: moderateur.username,
+      name: moderateur.first_name +'_'+ moderateur.last_name,
       title: moderateur.email,
     }));
 

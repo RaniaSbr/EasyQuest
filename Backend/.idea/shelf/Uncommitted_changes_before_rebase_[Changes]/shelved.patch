@@ -1,0 +1,1589 @@
+Index: article/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\nfrom django.core.exceptions import ObjectDoesNotExist\nfrom rest_framework import generics, status, viewsets\nfrom rest_framework.response import Response\nfrom django.contrib.auth.mixins import PermissionRequiredMixin\nfrom django.shortcuts import get_object_or_404\nfrom django.http import FileResponse\n\nfrom .controller import CreateArticleUtil\nfrom .models import *\nfrom django.http import JsonResponse\nfrom django.views.decorators.http import require_GET\nfrom .filters.utils import FilterUtil\nfrom django.db import transaction\n=======\nfrom rest_framework import generics\nfrom .models import Reference, Author, Institution, MetaData, Article\nfrom django.http import JsonResponse\nfrom django.views.decorators.http import require_GET\nfrom .filters.utils import FilterUtil\n>>>>>>> MAHRAZABDELRAHMEN\nfrom datetime import datetime\nfrom .serializers import (\n    ReferenceSerializer,\n    AuthorSerializer,\n    InstitutionSerializer,\n    MetaDataSerializer,\n    ArticleSerializer,\n<<<<<<< HEAD\n    UnPublishedArticleSerializer\n)\nfrom Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION\n\n\nclass ReferenceListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):\n    permission_required = MODS_ADMIN_NO_USER_PERM\n    raise_exception = True\n=======\n)\n\n\nclass ReferenceListCreateView(generics.ListCreateAPIView):\n>>>>>>> MAHRAZABDELRAHMEN\n    queryset = Reference.objects.all()\n    serializer_class = ReferenceSerializer\n\n\n<<<<<<< HEAD\nclass AuthorListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):\n    permission_required = MODS_ADMIN_NO_USER_PERM\n    raise_exception = True\n=======\nclass AuthorListCreateView(generics.ListCreateAPIView):\n>>>>>>> MAHRAZABDELRAHMEN\n    queryset = Author.objects.all()\n    serializer_class = AuthorSerializer\n\n\n<<<<<<< HEAD\nclass InstitutionListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):\n    permission_required = MODS_ADMIN_NO_USER_PERM\n    raise_exception = True\n=======\nclass InstitutionListCreateView(generics.ListCreateAPIView):\n>>>>>>> MAHRAZABDELRAHMEN\n    queryset = Institution.objects.all()\n    serializer_class = InstitutionSerializer\n\n\n<<<<<<< HEAD\nclass MetaDataListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):\n    permission_required = MODS_ADMIN_NO_USER_PERM\n    raise_exception = True\n=======\nclass MetaDataListCreateView(generics.ListCreateAPIView):\n>>>>>>> MAHRAZABDELRAHMEN\n    queryset = MetaData.objects.all()\n    serializer_class = MetaDataSerializer\n\n\n<<<<<<< HEAD\nclass ArticleListCreateView(generics.ListAPIView):\n    raise_exception = True\n=======\nclass ArticleListCreateView(generics.ListCreateAPIView):\n>>>>>>> MAHRAZABDELRAHMEN\n    queryset = Article.objects.all()\n    serializer_class = ArticleSerializer\n\n\n<<<<<<< HEAD\nclass UnPublishedArticleDetailView(viewsets.ModelViewSet):\n    queryset = UnPublishedArticle.objects.all()\n    serializer_class = UnPublishedArticleSerializer\n\n    @staticmethod\n    def validate(request, pk):\n        try:\n            article = get_object_or_404(UnPublishedArticle, pk=pk)\n\n            new_meta_data = article.get_meta_data()\n\n            with transaction.atomic():\n                new_meta_data.id = None\n                new_meta_data.save()\n\n                will_be_published_article = Article.objects.create(\n                    meta_data=new_meta_data,\n                    pdf_file=article.get_pdf_file()\n                )\n\n                will_be_published_article.save()\n                article.delete()\n\n            return Response(status=status.HTTP_204_NO_CONTENT)\n\n        except ObjectDoesNotExist:\n            return Response(status=status.HTTP_404_NOT_FOUND)\n\n    def destroy(self, request, pk=None, *args):\n        try:\n            with transaction.atomic():\n                article = UnPublishedArticle.objects.get(pk=pk)\n                article.delete()\n                return Response(status=status.HTTP_204_NO_CONTENT)\n        except ObjectDoesNotExist:\n            return Response(status=status.HTTP_404_NOT_FOUND)\n\n    def update(self, request, pk=None, *args, **kwargs):\n        try:\n            with transaction.atomic():\n                article = get_object_or_404(UnPublishedArticle, pk=pk)\n                data = request.data.get('meta_data', article.get_meta_data())\n                CreateArticleUtil.create_article_from_object(data, article.get_pdf_file())\n                return Response(status=status.HTTP_200_OK)\n        except ObjectDoesNotExist:\n            return Response(status=status.HTTP_404_NOT_FOUND)\n\n    @staticmethod\n    def serve_unpublished_article_pdf(request, pk):\n        unpublished_article = get_object_or_404(UnPublishedArticle, pk=pk)\n        print(unpublished_article)\n        return FileResponse(unpublished_article.get_pdf_file(), as_attachment=True)\n\n    def retrieve(self, request, pk=None, *args):\n        paper = get_object_or_404(UnPublishedArticle, pk=pk)\n        serializer = self.get_serializer(paper)\n        return Response(serializer.data)\n\n\nclass UnPublishedArticleListCreateView(generics.ListAPIView):\n    raise_exception = True\n    queryset = UnPublishedArticle.objects.all()\n    serializer_class = UnPublishedArticleSerializer\n\n\nclass ArticleManager(PermissionRequiredMixin, viewsets.ModelViewSet):\n    permission_required = MODS_PERMISSION\n    raise_exception = True\n    queryset = UnPublishedArticle.objects.all()\n    serializer_class = UnPublishedArticleSerializer\n\n    @staticmethod\n    def get_articles_list():\n        article = UnPublishedArticle.objects.all()\n        serializer = UnPublishedArticleSerializer(article, many=True)\n        return Response(serializer.data)\n\n    @staticmethod\n    def destroy(request, pk=None, *args):\n        try:\n            article = UnPublishedArticle.objects.get(pk=pk)\n            article.delete()\n            return Response(status=status.HTTP_204_NO_CONTENT)\n        except ObjectDoesNotExist:\n            return Response(status=status.HTTP_404_NOT_FOUND)\n\n    def update(self, request, pk=None, *args):\n        try:\n            article = UnPublishedArticle.objects.get(pk=pk)\n            serializer = UnPublishedArticleSerializer(article, data=request.data)\n            if serializer.is_valid():\n                serializer.save()\n                return Response(serializer.data)\n            else:\n                print(serializer.errors)  #\n                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)\n        except ObjectDoesNotExist:\n            return Response(status=status.HTTP_404_NOT_FOUND)\n\n\n=======\n>>>>>>> MAHRAZABDELRAHMEN\n@require_GET\ndef search_api(request):\n    \"\"\"\n            Function to return a filter json based on query that contains json details\n\n            Returns:\n                json: list of results\n    \"\"\"\n    keywords = request.GET.getlist('keywords', [])\n    authors = request.GET.getlist('authors', [])\n    institutions = request.GET.getlist('institutions', [])\n    start_date = request.GET.getlist('start_date', [])\n    end_date = request.GET.getlist('end_date', [])\n    date_range = [start_date, end_date]\n    date_range[0] = start_date if start_date else datetime(1970, 1, 1)\n    date_range[1] = end_date if end_date else datetime(datetime.today().year, 12, 30)\n    filters = {\n        'keywords': keywords,\n        'authors': authors,\n        'institutions': institutions,\n        'publication_date': date_range,\n    }\n    results = FilterUtil.apply_filter(filters)\n    if isinstance(results, str):\n        return {\"Exception\": results}\n    else:\n        return JsonResponse(results.to_dict())\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/views.py b/article/views.py
+--- a/article/views.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/views.py	(date 1706896465138)
+@@ -1,4 +1,3 @@
+-<<<<<<< HEAD
+ from django.core.exceptions import ObjectDoesNotExist
+ from rest_framework import generics, status, viewsets
+ from rest_framework.response import Response
+@@ -12,13 +11,6 @@
+ from django.views.decorators.http import require_GET
+ from .filters.utils import FilterUtil
+ from django.db import transaction
+-=======
+-from rest_framework import generics
+-from .models import Reference, Author, Institution, MetaData, Article
+-from django.http import JsonResponse
+-from django.views.decorators.http import require_GET
+-from .filters.utils import FilterUtil
+->>>>>>> MAHRAZABDELRAHMEN
+ from datetime import datetime
+ from .serializers import (
+     ReferenceSerializer,
+@@ -26,7 +18,6 @@
+     InstitutionSerializer,
+     MetaDataSerializer,
+     ArticleSerializer,
+-<<<<<<< HEAD
+     UnPublishedArticleSerializer
+ )
+ from Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION
+@@ -35,60 +26,37 @@
+ class ReferenceListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
+     permission_required = MODS_ADMIN_NO_USER_PERM
+     raise_exception = True
+-=======
+-)
+-
+-
+-class ReferenceListCreateView(generics.ListCreateAPIView):
+->>>>>>> MAHRAZABDELRAHMEN
+     queryset = Reference.objects.all()
+     serializer_class = ReferenceSerializer
+ 
+ 
+-<<<<<<< HEAD
+ class AuthorListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
+     permission_required = MODS_ADMIN_NO_USER_PERM
+     raise_exception = True
+-=======
+-class AuthorListCreateView(generics.ListCreateAPIView):
+->>>>>>> MAHRAZABDELRAHMEN
+     queryset = Author.objects.all()
+     serializer_class = AuthorSerializer
+ 
+ 
+-<<<<<<< HEAD
+ class InstitutionListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
+     permission_required = MODS_ADMIN_NO_USER_PERM
+     raise_exception = True
+-=======
+-class InstitutionListCreateView(generics.ListCreateAPIView):
+->>>>>>> MAHRAZABDELRAHMEN
+     queryset = Institution.objects.all()
+     serializer_class = InstitutionSerializer
+ 
+ 
+-<<<<<<< HEAD
+ class MetaDataListCreateView(PermissionRequiredMixin, generics.ListCreateAPIView):
+     permission_required = MODS_ADMIN_NO_USER_PERM
+     raise_exception = True
+-=======
+-class MetaDataListCreateView(generics.ListCreateAPIView):
+->>>>>>> MAHRAZABDELRAHMEN
+     queryset = MetaData.objects.all()
+     serializer_class = MetaDataSerializer
+ 
+ 
+-<<<<<<< HEAD
+ class ArticleListCreateView(generics.ListAPIView):
+     raise_exception = True
+-=======
+-class ArticleListCreateView(generics.ListCreateAPIView):
+->>>>>>> MAHRAZABDELRAHMEN
+     queryset = Article.objects.all()
+     serializer_class = ArticleSerializer
+ 
+ 
+-<<<<<<< HEAD
+ class UnPublishedArticleDetailView(viewsets.ModelViewSet):
+     queryset = UnPublishedArticle.objects.all()
+     serializer_class = UnPublishedArticleSerializer
+@@ -189,8 +157,6 @@
+             return Response(status=status.HTTP_404_NOT_FOUND)
+ 
+ 
+-=======
+->>>>>>> MAHRAZABDELRAHMEN
+ @require_GET
+ def search_api(request):
+     """
+Index: myApp/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\nimport os\nfrom datetime import datetime\n\nimport requests\nfrom Backend.util import ElasticSearchUtil\nfrom article.documents import ArticleDocument\nfrom article.extraction.extraction import PdfController\nfrom django.core.files import File\nfrom django.core.files.base import ContentFile\nfrom django.http import JsonResponse\nfrom django.views import View\nfrom elasticsearch_dsl import Q\nfrom article.filters.filters import AuthorsFilter\n\n\n# Define the list of fields in the request data JSON\nrequest_data_json = ['first_name', 'last_name', 'email', 'password']\n\n\nclass UploadArticlesView(View):\n\n    @staticmethod\n    def download_and_store_pdf(url):\n        try:\n            response = requests.get(url)\n\n            pdfs_directory = 'pdfs'\n            if not os.path.exists(pdfs_directory):\n                os.makedirs(pdfs_directory)\n\n            pdf_path = os.path.join(pdfs_directory, f\"article_{datetime.now()}_{1}.pdf\")\n\n            with open(pdf_path, 'wb') as pdf_file:\n                pdf_file.write(response.content)\n\n            content_file = ContentFile(response.content)\n            pdf_file = File(content_file, name=f\"article_{datetime.now()}_{1}.pdf\")\n            json_data = PdfController.process_and_store_pdf(pdf_path, pdf_file)\n\n            return json_data\n\n        except Exception as e:\n            raise Exception(f\"Error downloading and storing PDF: {str(e)}\")\n\n    @staticmethod\n    def search_and_print_results():\n        search_term = 'Daniel Levinson'\n\n        author_name_filter = AuthorsFilter()\n\n        # Create a base search using ArticleDocument\n        base_search = ArticleDocument.search()\n\n        # Apply the author name filter to the base search\n        filtered_search = author_name_filter.filter(base_search, [search_term])\n\n        # Execute the search\n        search_results = filtered_search.execute()\n\n        # Process the search results as needed\n        for hit in search_results:\n            print(\"Document ID:\", hit.meta.id)\n            print(\"Title:\", hit.meta_data.title)\n            # Add more fields as needed\n\n    def get(self, request):\n        try:\n            ElasticSearchUtil.get_elasticsearch_connection()\n\n            url = request.GET.get('url')\n\n            self.download_and_store_pdf(url)\n\n            self.search_and_print_results()\n\n            return JsonResponse({'message': 'Upload réussi!'})\n\n        except Exception as e:\n            return JsonResponse({'error': str(e)}, status=400)\n=======\nfrom django.shortcuts import render\n\nfrom rest_framework.response import Response\nfrom rest_framework.decorators import api_view\nfrom rest_framework import status\nfrom .models import YourModel\nfrom .serializers import YourModelSerializer\nfrom rest_framework import generics\n\n\nclass YourModelListCreateView(generics.ListCreateAPIView):\n    queryset = YourModel.objects.all()\n    serializer_class = YourModelSerializer\n\n\n\n@api_view(['POST'])\ndef create_your_model(request):\n    serializer = YourModelSerializer(data=request.data)\n    if serializer.is_valid():\n        serializer.save()\n        return Response(serializer.data, status=status.HTTP_201_CREATED)\n    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/myApp/views.py b/myApp/views.py
+--- a/myApp/views.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/myApp/views.py	(date 1706898260942)
+@@ -1,4 +1,3 @@
+-<<<<<<< HEAD
+ import os
+ from datetime import datetime
+ 
+@@ -70,36 +69,11 @@
+ 
+             url = request.GET.get('url')
+ 
+-            self.download_and_store_pdf(url)
+-
++            t = self.download_and_store_pdf(url)
++            print("hello this is me !")
+             self.search_and_print_results()
+ 
+             return JsonResponse({'message': 'Upload réussi!'})
+ 
+         except Exception as e:
+             return JsonResponse({'error': str(e)}, status=400)
+-=======
+-from django.shortcuts import render
+-
+-from rest_framework.response import Response
+-from rest_framework.decorators import api_view
+-from rest_framework import status
+-from .models import YourModel
+-from .serializers import YourModelSerializer
+-from rest_framework import generics
+-
+-
+-class YourModelListCreateView(generics.ListCreateAPIView):
+-    queryset = YourModel.objects.all()
+-    serializer_class = YourModelSerializer
+-
+-
+-
+-@api_view(['POST'])
+-def create_your_model(request):
+-    serializer = YourModelSerializer(data=request.data)
+-    if serializer.is_valid():
+-        serializer.save()
+-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+->>>>>>> MAHRAZABDELRAHMEN
+Index: article/filters/utils.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\n<<<<<<< HEAD\n=======\n\nfrom dotenv import load_dotenv\n>>>>>>> MAHRAZABDELRAHMEN\nfrom elasticsearch.exceptions import *\nfrom elasticsearch_dsl import Search, connections\n\nfrom .filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter\nfrom ..Exceptions import DataQueryInputIsNotList\nfrom ..constants import ARTICLE_KEYS\n<<<<<<< HEAD\nfrom Backend.util import ElasticSearchUtil\n=======\n>>>>>>> MAHRAZABDELRAHMEN\n\n\nclass FilterUtil:\n    @staticmethod\n    def apply_filter(filters_json):\n<<<<<<< HEAD\n        ElasticSearchUtil.get_elasticsearch_connection()\n\n        article_index = os.environ.get(\"ARTICLE_INDEX\")\n=======\n        load_dotenv()\n        url = os.environ.get('URL')\n        port = os.environ.get('PORT')\n        user_name = os.environ.get(\"USER_NAME\")\n        user_pass = os.environ.get(\"USER_PASSWORD\")\n        article_index = os.environ.get(\"ARTICLE_INDEX\")\n\n        try:\n            connections.create_connection(\n                hosts=[f'{url}:{port}'],\n                alias='default',\n                verify_certs=False,\n                http_auth=(user_name, user_pass)\n            )\n        except ConnectionError as ce:\n            print(f\"ConnectionError: {ce}\")\n        except AuthenticationException as ae:\n            print(f\"AuthenticationException: {ae}\")\n        except Exception as e:\n            print(f\"An unexpected error occurred: {e}\")\n\n>>>>>>> MAHRAZABDELRAHMEN\n        search = Search(index=article_index)\n\n        keywords_filter = KeywordsFilter()\n        authors_filter = AuthorsFilter()\n        institutions_filter = InstitutionsFilter()\n        date_range_filter = DateRangeFilter()\n        if filters_json.get(ARTICLE_KEYS[2], []):\n            search = keywords_filter.filter(search, filters_json.get(ARTICLE_KEYS[2], []))\n        if filters_json.get(ARTICLE_KEYS[1], []):\n            search = authors_filter.filter(search, filters_json.get(ARTICLE_KEYS[1], []))\n        if filters_json.get(ARTICLE_KEYS[3], []):\n            search = institutions_filter.filter(search, filters_json.get(ARTICLE_KEYS[3], []))\n        search = date_range_filter.filter(search, filters_json.get(ARTICLE_KEYS[4], []))\n\n        try:\n            response = search.execute()\n\n            return response\n        except ConnectionError as connection_error:\n            print(f\"ConnectionError: {connection_error}\")\n            return \"Error: Unable to establish a connection to the Elasticsearch server.\"\n        except SerializationError as serialization_error:\n            print(f\"SerializationError: {serialization_error}\")\n            return f\"Error: Error in serializing or deserializing data for the Elasticsearch request/response.\"\n        except NotFoundError as not_found_error:\n            print(f\"NotFoundError: {not_found_error}\")\n        except TransportError as transport_error:\n            print(f\"TransportError: {transport_error}\")\n            return f\"Error: The requested data was not found in the Elasticsearch index.\"\n        except Exception as e:\n            print(f\"An unexpected error occurred: {e}\")\n\n\nclass InputIntegrity:\n    @staticmethod\n    def check_data(should_be_list):\n        if not isinstance(should_be_list, list):\n            raise DataQueryInputIsNotList(f\"The Input Must Be A List; List : {should_be_list}\")\n        for element in should_be_list:\n            if not element.isalpha():\n                raise ValueError(f\"Data Elements should only contain letters. Concerned Element : {element}\")\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/filters/utils.py b/article/filters/utils.py
+--- a/article/filters/utils.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/filters/utils.py	(date 1706896653955)
+@@ -1,54 +1,19 @@
+ import os
+-<<<<<<< HEAD
+-=======
+-
+-from dotenv import load_dotenv
+->>>>>>> MAHRAZABDELRAHMEN
+ from elasticsearch.exceptions import *
+ from elasticsearch_dsl import Search, connections
+ 
+ from .filters import KeywordsFilter, AuthorsFilter, InstitutionsFilter, DateRangeFilter
+ from ..Exceptions import DataQueryInputIsNotList
+ from ..constants import ARTICLE_KEYS
+-<<<<<<< HEAD
+ from Backend.util import ElasticSearchUtil
+-=======
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ 
+ class FilterUtil:
+     @staticmethod
+     def apply_filter(filters_json):
+-<<<<<<< HEAD
+         ElasticSearchUtil.get_elasticsearch_connection()
+-
+-        article_index = os.environ.get("ARTICLE_INDEX")
+-=======
+         load_dotenv()
+         url = os.environ.get('URL')
+-        port = os.environ.get('PORT')
+-        user_name = os.environ.get("USER_NAME")
+-        user_pass = os.environ.get("USER_PASSWORD")
+-        article_index = os.environ.get("ARTICLE_INDEX")
+-
+-        try:
+-            connections.create_connection(
+-                hosts=[f'{url}:{port}'],
+-                alias='default',
+-                verify_certs=False,
+-                http_auth=(user_name, user_pass)
+-            )
+-        except ConnectionError as ce:
+-            print(f"ConnectionError: {ce}")
+-        except AuthenticationException as ae:
+-            print(f"AuthenticationException: {ae}")
+-        except Exception as e:
+-            print(f"An unexpected error occurred: {e}")
+-
+->>>>>>> MAHRAZABDELRAHMEN
+-        search = Search(index=article_index)
+-
+-        keywords_filter = KeywordsFilter()
+         authors_filter = AuthorsFilter()
+         institutions_filter = InstitutionsFilter()
+         date_range_filter = DateRangeFilter()
+Index: Backend/settings.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"\"\"\nDjango settings for Backend project.\n\nGenerated by 'django-admin startproject' using Django 5.0.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/5.0/topics/settings/\n\nFor the full list of settings and their values, see\nhttps://docs.djangoproject.com/en/5.0/ref/settings/\n\"\"\"\n\nfrom pathlib import Path\n\n<<<<<<< HEAD\n\n=======\n>>>>>>> MAHRAZABDELRAHMEN\n# Build paths inside the project like this: BASE_DIR / 'subdir'.\nBASE_DIR = Path(__file__).resolve().parent.parent\nprint(BASE_DIR)\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = 'django-insecure-h!&iw1231p8!%6=+jc%7z6wcyj_+jt0#nc_ytnif_hj4j4u2as'\n\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\n\nALLOWED_HOSTS = []\n\n# Application definition\n\nINSTALLED_APPS = [\n    'moderator',\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n    'django_elasticsearch_dsl',\n    'corsheaders',\n    'rest_framework',\n    'myApp',\n    'article',\n<<<<<<< HEAD\n    'email_provider'\n=======\n>>>>>>> MAHRAZABDELRAHMEN\n]\n\nMIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'corsheaders.middleware.CorsMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\n\nROOT_URLCONF = 'Backend.urls'\n\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',\n                'django.contrib.messages.context_processors.messages',\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = 'Backend.wsgi.application'\n<<<<<<< HEAD\nELASTICSEARCH_DSL = {\n    'default': {\n        'hosts': 'https://localhost:9200/',\n        'http_auth': ('elastic', 'IZf+4ZnWoa18MqqGl4XX'),\n=======\n\nELASTICSEARCH_DSL = {\n    'default': {\n        'hosts': 'https://localhost:9200/',\n        'http_auth': ('elastic', 'you code'),\n>>>>>>> MAHRAZABDELRAHMEN\n        'verify_certs': False,  # Disable certificate verification (not recommended for production)\n    }\n}\n\n# Database\n# https://docs.djangoproject.com/en/5.0/ref/settings/#databases\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / \"db.sqlite3\",\n    }\n}\n\n\n# DATABASES = {\n#     'default': {\n#         'ENGINE': 'django.db.backends.mysql',\n#         'NAME': 'TP',     # Replace with your MySQL database name\n#         'USER': 'root',        # Replace with your MySQL username\n#         'PASSWORD': 'mahraz',  # Replace with your MySQL password\n#         'HOST': '127.0.0.1',              # Replace with your MySQL host (usually 'localhost')\n#         'PORT': '3306',                   # Replace with your MySQL port (usually '3306')\n#     }\n# }\n\n\n# Password validation\n# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',\n    },\n]\n\n# Internationalization\n# https://docs.djangoproject.com/en/5.0/topics/i18n/\n\nLANGUAGE_CODE = 'en-us'\n\nTIME_ZONE = 'UTC'\n\nUSE_I18N = True\n\nUSE_TZ = True\n\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\n\nSTATIC_URL = 'static/'\n\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\n\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n\nCORS_ALLOWED_ORIGINS = [\n    \"http://localhost:3000\",  # Add your React app's origin\n]\n<<<<<<< HEAD\n\nEMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\n\n# SMTP server settings (example for Gmail)\nEMAIL_HOST = 'smtp.gmail.com'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\n\n# Your Gmail email and app password\nEMAIL_HOST_USER = 'kazmaho35@gmail.com'\nEMAIL_HOST_PASSWORD = 'jyhu wbmo orul vuqa '\n=======\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Backend/settings.py b/Backend/settings.py
+--- a/Backend/settings.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/Backend/settings.py	(date 1706898879692)
+@@ -12,10 +12,6 @@
+ 
+ from pathlib import Path
+ 
+-<<<<<<< HEAD
+-
+-=======
+->>>>>>> MAHRAZABDELRAHMEN
+ # Build paths inside the project like this: BASE_DIR / 'subdir'.
+ BASE_DIR = Path(__file__).resolve().parent.parent
+ print(BASE_DIR)
+@@ -45,10 +41,7 @@
+     'rest_framework',
+     'myApp',
+     'article',
+-<<<<<<< HEAD
+     'email_provider'
+-=======
+->>>>>>> MAHRAZABDELRAHMEN
+ ]
+ 
+ MIDDLEWARE = [
+@@ -81,18 +74,10 @@
+ ]
+ 
+ WSGI_APPLICATION = 'Backend.wsgi.application'
+-<<<<<<< HEAD
+ ELASTICSEARCH_DSL = {
+     'default': {
+         'hosts': 'https://localhost:9200/',
+         'http_auth': ('elastic', 'IZf+4ZnWoa18MqqGl4XX'),
+-=======
+-
+-ELASTICSEARCH_DSL = {
+-    'default': {
+-        'hosts': 'https://localhost:9200/',
+-        'http_auth': ('elastic', 'you code'),
+->>>>>>> MAHRAZABDELRAHMEN
+         'verify_certs': False,  # Disable certificate verification (not recommended for production)
+     }
+ }
+@@ -162,7 +147,6 @@
+ CORS_ALLOWED_ORIGINS = [
+     "http://localhost:3000",  # Add your React app's origin
+ ]
+-<<<<<<< HEAD
+ 
+ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+ 
+@@ -174,5 +158,3 @@
+ # Your Gmail email and app password
+ EMAIL_HOST_USER = 'kazmaho35@gmail.com'
+ EMAIL_HOST_PASSWORD = 'jyhu wbmo orul vuqa '
+-=======
+->>>>>>> MAHRAZABDELRAHMEN
+Index: .env
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>ARTICLE_INDEX = \"article\"\nUSER_NAME = \"elastic\"\n<<<<<<< HEAD\nUSER_PASSWORD = \"IZf+4ZnWoa18MqqGl4XX\"\nPORT = \"9200\"\nURL = \"https://localhost\"\nBASE_DIR = \"Backend/\"\nELASTICSEARCH_ARTICLE_INDEX = 'article'\nELASTICSEARCH_PORT = '9200'\nELASTICSEARCH_HOST = 'localhost'\n=======\nUSER_PASSWORD = \"DuF83ML=V2nOIp0hVDpj\"\nPORT = \"9200\"\nURL = \"https://localhost\"\nBASE_DIR = \"Backend/\"\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.env b/.env
+--- a/.env	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/.env	(date 1706897117760)
+@@ -1,6 +1,5 @@
+ ARTICLE_INDEX = "article"
+ USER_NAME = "elastic"
+-<<<<<<< HEAD
+ USER_PASSWORD = "IZf+4ZnWoa18MqqGl4XX"
+ PORT = "9200"
+ URL = "https://localhost"
+@@ -8,9 +7,7 @@
+ ELASTICSEARCH_ARTICLE_INDEX = 'article'
+ ELASTICSEARCH_PORT = '9200'
+ ELASTICSEARCH_HOST = 'localhost'
+-=======
+ USER_PASSWORD = "DuF83ML=V2nOIp0hVDpj"
+ PORT = "9200"
+ URL = "https://localhost"
+ BASE_DIR = "Backend/"
+->>>>>>> MAHRAZABDELRAHMEN
+Index: myApp/migrations/0002_alter_yourmodel_table.py
+===================================================================
+diff --git a/myApp/migrations/0002_alter_yourmodel_table.py b/myApp/migrations/0002_alter_yourmodel_table.py
+deleted file mode 100644
+--- a/myApp/migrations/0002_alter_yourmodel_table.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ /dev/null	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
+@@ -1,17 +0,0 @@
+-# Generated by Django 5.0 on 2023-12-26 11:20
+-
+-from django.db import migrations
+-
+-
+-class Migration(migrations.Migration):
+-
+-    dependencies = [
+-        ('myApp', '0001_initial'),
+-    ]
+-
+-    operations = [
+-        migrations.AlterModelTable(
+-            name='yourmodel',
+-            table='myapp_yourmodel',
+-        ),
+-    ]
+Index: moderator/migrations/0002_remove_moderator_mod_id.py
+===================================================================
+diff --git a/moderator/migrations/0002_remove_moderator_mod_id.py b/moderator/migrations/0002_remove_moderator_mod_id.py
+deleted file mode 100644
+--- a/moderator/migrations/0002_remove_moderator_mod_id.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ /dev/null	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
+@@ -1,16 +0,0 @@
+-# Generated by Django 5.0 on 2023-12-26 19:15
+-
+-from django.db import migrations
+-
+-
+-class Migration(migrations.Migration):
+-    dependencies = [
+-        ("moderator", "0001_initial"),
+-    ]
+-
+-    operations = [
+-        migrations.RemoveField(
+-            model_name="moderator",
+-            name="mod_id",
+-        ),
+-    ]
+Index: moderator/migrations/0003_moderator_mod_id.py
+===================================================================
+diff --git a/moderator/migrations/0003_moderator_mod_id.py b/moderator/migrations/0003_moderator_mod_id.py
+deleted file mode 100644
+--- a/moderator/migrations/0003_moderator_mod_id.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ /dev/null	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
+@@ -1,18 +0,0 @@
+-# Generated by Django 5.0 on 2023-12-26 19:31
+-
+-import uuid
+-from django.db import migrations, models
+-
+-
+-class Migration(migrations.Migration):
+-    dependencies = [
+-        ("moderator", "0002_remove_moderator_mod_id"),
+-    ]
+-
+-    operations = [
+-        migrations.AddField(
+-            model_name="moderator",
+-            name="mod_id",
+-            field=models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
+-        ),
+-    ]
+Index: article/migrations/0002_remove_article_blob_article_pdf_file_and_more.py
+===================================================================
+diff --git a/article/migrations/0002_remove_article_blob_article_pdf_file_and_more.py b/article/migrations/0002_remove_article_blob_article_pdf_file_and_more.py
+deleted file mode 100644
+--- a/article/migrations/0002_remove_article_blob_article_pdf_file_and_more.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ /dev/null	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
+@@ -1,27 +0,0 @@
+-# Generated by Django 5.0 on 2024-01-31 17:21
+-
+-from django.db import migrations, models
+-
+-
+-class Migration(migrations.Migration):
+-
+-    dependencies = [
+-        ('article', '0001_initial'),
+-    ]
+-
+-    operations = [
+-        migrations.RemoveField(
+-            model_name='article',
+-            name='blob',
+-        ),
+-        migrations.AddField(
+-            model_name='article',
+-            name='pdf_file',
+-            field=models.FileField(null=True, upload_to='pdfs/'),
+-        ),
+-        migrations.AlterField(
+-            model_name='unpublishedarticle',
+-            name='pdf_file',
+-            field=models.FileField(null=True, upload_to='pdfs/'),
+-        ),
+-    ]
+Index: myApp/migrations/0002_delete_article_delete_moderateur.py
+===================================================================
+diff --git a/myApp/migrations/0002_delete_article_delete_moderateur.py b/myApp/migrations/0002_delete_article_delete_moderateur.py
+deleted file mode 100644
+--- a/myApp/migrations/0002_delete_article_delete_moderateur.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ /dev/null	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
+@@ -1,19 +0,0 @@
+-# Generated by Django 5.0 on 2024-02-01 11:04
+-
+-from django.db import migrations
+-
+-
+-class Migration(migrations.Migration):
+-
+-    dependencies = [
+-        ('myApp', '0001_initial'),
+-    ]
+-
+-    operations = [
+-        migrations.DeleteModel(
+-            name='Article',
+-        ),
+-        migrations.DeleteModel(
+-            name='Moderateur',
+-        ),
+-    ]
+Index: moderator/migrations/0004_alter_moderator_mod_id.py
+===================================================================
+diff --git a/moderator/migrations/0004_alter_moderator_mod_id.py b/moderator/migrations/0004_alter_moderator_mod_id.py
+deleted file mode 100644
+--- a/moderator/migrations/0004_alter_moderator_mod_id.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ /dev/null	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
+@@ -1,22 +0,0 @@
+-# Generated by Django 5.0 on 2023-12-26 19:31
+-
+-import moderator.models
+-from django.db import migrations, models
+-
+-
+-class Migration(migrations.Migration):
+-    dependencies = [
+-        ("moderator", "0003_moderator_mod_id"),
+-    ]
+-
+-    operations = [
+-        migrations.AlterField(
+-            model_name="moderator",
+-            name="mod_id",
+-            field=models.UUIDField(
+-                default=moderator.models.ModAttributesUtil.generate_unique_mod_id,
+-                editable=False,
+-                unique=True,
+-            ),
+-        ),
+-    ]
+Index: myApp/migrations/0003_alter_yourmodel_table.py
+===================================================================
+diff --git a/myApp/migrations/0003_alter_yourmodel_table.py b/myApp/migrations/0003_alter_yourmodel_table.py
+deleted file mode 100644
+--- a/myApp/migrations/0003_alter_yourmodel_table.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ /dev/null	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
+@@ -1,17 +0,0 @@
+-# Generated by Django 5.0 on 2023-12-26 11:35
+-
+-from django.db import migrations
+-
+-
+-class Migration(migrations.Migration):
+-
+-    dependencies = [
+-        ('myApp', '0002_alter_yourmodel_table'),
+-    ]
+-
+-    operations = [
+-        migrations.AlterModelTable(
+-            name='yourmodel',
+-            table=None,
+-        ),
+-    ]
+Index: article/serializers.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># serializers.py\nfrom rest_framework import serializers\n<<<<<<< HEAD\nfrom .models import *\n=======\nfrom .models import Reference, Author, Institution, MetaData, Article\n>>>>>>> MAHRAZABDELRAHMEN\n\n\nclass ReferenceSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Reference\n        fields = '__all__'\n\n\nclass AuthorSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Author\n        fields = '__all__'\n\n\nclass InstitutionSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Institution\n        fields = '__all__'\n\n\nclass MetaDataSerializer(serializers.ModelSerializer):\n    authors = AuthorSerializer(many=True)\n    institutions = InstitutionSerializer(many=True)\n    references = ReferenceSerializer(many=True)\n\n    class Meta:\n        model = MetaData\n        fields = '__all__'\n\n\nclass ArticleSerializer(serializers.ModelSerializer):\n<<<<<<< HEAD\n    meta_data = MetaDataSerializer()\n\n    class Meta:\n        model = Article\n        fields = '__all__'\n\n\nclass UnPublishedArticleSerializer(serializers.ModelSerializer):\n    meta_data = MetaDataSerializer()\n\n    class Meta:\n        model = UnPublishedArticle\n        fields = '__all__'\n=======\n    content = MetaDataSerializer()\n\n    class Meta:\n        model = Article\n        fields = ['id', 'content']\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/serializers.py b/article/serializers.py
+--- a/article/serializers.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/serializers.py	(date 1706896465134)
+@@ -1,10 +1,6 @@
+ # serializers.py
+ from rest_framework import serializers
+-<<<<<<< HEAD
+ from .models import *
+-=======
+-from .models import Reference, Author, Institution, MetaData, Article
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ 
+ class ReferenceSerializer(serializers.ModelSerializer):
+@@ -36,7 +32,6 @@
+ 
+ 
+ class ArticleSerializer(serializers.ModelSerializer):
+-<<<<<<< HEAD
+     meta_data = MetaDataSerializer()
+ 
+     class Meta:
+@@ -50,10 +45,3 @@
+     class Meta:
+         model = UnPublishedArticle
+         fields = '__all__'
+-=======
+-    content = MetaDataSerializer()
+-
+-    class Meta:
+-        model = Article
+-        fields = ['id', 'content']
+->>>>>>> MAHRAZABDELRAHMEN
+Index: article/documents.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\nfrom django_elasticsearch_dsl import Document, fields\nfrom django_elasticsearch_dsl.registries import registry\nfrom .models import *\n=======\n# search_indexes.py\nfrom django_elasticsearch_dsl import Document, fields\nfrom django_elasticsearch_dsl.registries import registry\nfrom .models import Article\n>>>>>>> MAHRAZABDELRAHMEN\n\n\n@registry.register_document\nclass ArticleDocument(Document):\n    class Index:\n        name = 'article'\n        settings = {'number_of_shards': 1, 'number_of_replicas': 0}\n\n<<<<<<< HEAD\n    meta_data = fields.ObjectField(properties={\n        'doi': fields.TextField(),\n        'title': fields.TextField(),\n        'pub_date': fields.TextField(),\n        'authors': fields.ObjectField(properties={\n            'name': fields.TextField(),\n        }),\n        'references': fields.ObjectField(properties={\n            'raw_text': fields.TextField(),\n         }),\n        'institutions': fields.ObjectField(properties={\n            'name': fields.KeywordField(),\n        })\n\n    })\n\n    class Django:\n        model = UnPublishedArticle\n\n\n@registry.register_document\nclass PublishedArticleDocument(Document):\n    class Index:\n        name = 'published_article'\n        settings = {'number_of_shards': 1, 'number_of_replicas': 0}\n\n    meta_data = fields.ObjectField(properties={\n        'doi': fields.TextField(),\n        'title': fields.TextField(),\n        'pub_date': fields.TextField(),\n        'authors': fields.ObjectField(properties={\n            'name': fields.TextField(),\n        }),\n        'references': fields.ObjectField(properties={\n            'raw_text': fields.TextField(),\n         }),\n        'institutions': fields.ObjectField(properties={\n            'name': fields.KeywordField(),\n        })\n\n=======\n    content = fields.ObjectField(properties={\n        'title': fields.TextField(),\n        'abstract': fields.TextField(),\n        'publication_date': fields.DateField(),\n        'keywords': fields.NestedField(properties={'name': fields.TextField()}),\n        'authors': fields.NestedField(properties={'name': fields.TextField()}),\n>>>>>>> MAHRAZABDELRAHMEN\n    })\n\n    class Django:\n        model = Article\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/documents.py b/article/documents.py
+--- a/article/documents.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/documents.py	(date 1706896465126)
+@@ -1,13 +1,6 @@
+-<<<<<<< HEAD
+ from django_elasticsearch_dsl import Document, fields
+ from django_elasticsearch_dsl.registries import registry
+ from .models import *
+-=======
+-# search_indexes.py
+-from django_elasticsearch_dsl import Document, fields
+-from django_elasticsearch_dsl.registries import registry
+-from .models import Article
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ 
+ @registry.register_document
+@@ -16,7 +9,6 @@
+         name = 'article'
+         settings = {'number_of_shards': 1, 'number_of_replicas': 0}
+ 
+-<<<<<<< HEAD
+     meta_data = fields.ObjectField(properties={
+         'doi': fields.TextField(),
+         'title': fields.TextField(),
+@@ -57,14 +49,6 @@
+             'name': fields.KeywordField(),
+         })
+ 
+-=======
+-    content = fields.ObjectField(properties={
+-        'title': fields.TextField(),
+-        'abstract': fields.TextField(),
+-        'publication_date': fields.DateField(),
+-        'keywords': fields.NestedField(properties={'name': fields.TextField()}),
+-        'authors': fields.NestedField(properties={'name': fields.TextField()}),
+->>>>>>> MAHRAZABDELRAHMEN
+     })
+ 
+     class Django:
+Index: article/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.urls import path\n<<<<<<< HEAD\nfrom .views import *\n=======\nfrom .views import MetaDataListCreateView, ReferenceListCreateView, AuthorListCreateView, \\\n    InstitutionListCreateView, ArticleListCreateView, search_api\n>>>>>>> MAHRAZABDELRAHMEN\n\nurlpatterns = [\n    path('references/', ReferenceListCreateView.as_view(), name='reference-list-create'),\n    path('authors/', AuthorListCreateView.as_view(), name='author-list-create'),\n    path('institutions/', InstitutionListCreateView.as_view(), name='institution-list-create'),\n    path('metadata/', MetaDataListCreateView.as_view(), name='metadata-list-create'),\n    path('articles/', ArticleListCreateView.as_view(), name='article-list-create'),\n<<<<<<< HEAD\n    path('up_articles/', UnPublishedArticleListCreateView.as_view(), name='up_article-list-create'),\n    path('search_api/', search_api, name='filter'),\n    path('up_article/<int:pk>/', UnPublishedArticleDetailView.as_view({'get': 'retrieve'}), name='article-detail'),\n    path('up_article/delete/<int:pk>/', UnPublishedArticleDetailView.as_view({'delete': 'destroy'}),\n         name='article_delete'),\n    path('up_article/update/<int:pk>/', UnPublishedArticleDetailView.as_view({'put': 'update'}),\n         name='article_update'),\n    path('unpublished_article/validate_article/<int:pk>/',\n         UnPublishedArticleDetailView.as_view({'delete': 'validate'}),\n         name='article_validate'),\n    path('up_article/serve-unpublished-article-pdf/<int:pk>/',\n         UnPublishedArticleDetailView.as_view({'get': 'serve_unpublished_article_pdf'})\n         , name='serve_unpublished_article_pdf'),\n=======\n    path('search_api/', search_api, name='filter'),\n>>>>>>> MAHRAZABDELRAHMEN\n]\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/urls.py b/article/urls.py
+--- a/article/urls.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/urls.py	(date 1706896465138)
+@@ -1,10 +1,5 @@
+ from django.urls import path
+-<<<<<<< HEAD
+ from .views import *
+-=======
+-from .views import MetaDataListCreateView, ReferenceListCreateView, AuthorListCreateView, \
+-    InstitutionListCreateView, ArticleListCreateView, search_api
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ urlpatterns = [
+     path('references/', ReferenceListCreateView.as_view(), name='reference-list-create'),
+@@ -12,7 +7,6 @@
+     path('institutions/', InstitutionListCreateView.as_view(), name='institution-list-create'),
+     path('metadata/', MetaDataListCreateView.as_view(), name='metadata-list-create'),
+     path('articles/', ArticleListCreateView.as_view(), name='article-list-create'),
+-<<<<<<< HEAD
+     path('up_articles/', UnPublishedArticleListCreateView.as_view(), name='up_article-list-create'),
+     path('search_api/', search_api, name='filter'),
+     path('up_article/<int:pk>/', UnPublishedArticleDetailView.as_view({'get': 'retrieve'}), name='article-detail'),
+@@ -26,7 +20,4 @@
+     path('up_article/serve-unpublished-article-pdf/<int:pk>/',
+          UnPublishedArticleDetailView.as_view({'get': 'serve_unpublished_article_pdf'})
+          , name='serve_unpublished_article_pdf'),
+-=======
+-    path('search_api/', search_api, name='filter'),
+->>>>>>> MAHRAZABDELRAHMEN
+ ]
+Index: article/filters/filters.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from elasticsearch_dsl import Q\n\n\nclass ArticleFilter:\n    def filter(self, search, value):\n        raise NotImplementedError(\"Subclasses must implement the apply method.\")\n\n\nclass KeywordsFilter(ArticleFilter):\n    def filter(self, search, keywords):\n        should_queries = [\n            Q('match', keywords={'query': keyword, 'fuzziness': 'AUTO'}) for keyword in keywords\n        ]\n        return search.query('bool', should=should_queries)\n\n\nclass AuthorsFilter(ArticleFilter):\n    def filter(self, search, authors):\n        should_queries = [\n<<<<<<< HEAD\n            Q('match', meta_data__authors__name={'query': keyword, 'fuzziness': 'AUTO'}) for keyword in authors\n=======\n            Q('match', authors={'query': keyword, 'fuzziness': 'AUTO'}) for keyword in authors\n>>>>>>> MAHRAZABDELRAHMEN\n        ]\n        return search.query('bool', should=should_queries)\n\n\nclass InstitutionsFilter(ArticleFilter):\n    def filter(self, search, institutions):\n<<<<<<< HEAD\n        return search.query('match', meta_data__institutions__name=institutions)\n=======\n        return search.query('match', institutions=institutions)\n>>>>>>> MAHRAZABDELRAHMEN\n\n\nclass DateRangeFilter(ArticleFilter):\n    def filter(self, search, period):\n<<<<<<< HEAD\n        return search.filter('range', meta_data__pub_date={'gte': period[0], 'lte': period[1]})\n=======\n        return search.filter('range', publication_date={'gte': period[0], 'lte': period[1]})\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/filters/filters.py b/article/filters/filters.py
+--- a/article/filters/filters.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/filters/filters.py	(date 1706896465138)
+@@ -17,28 +17,16 @@
+ class AuthorsFilter(ArticleFilter):
+     def filter(self, search, authors):
+         should_queries = [
+-<<<<<<< HEAD
+             Q('match', meta_data__authors__name={'query': keyword, 'fuzziness': 'AUTO'}) for keyword in authors
+-=======
+-            Q('match', authors={'query': keyword, 'fuzziness': 'AUTO'}) for keyword in authors
+->>>>>>> MAHRAZABDELRAHMEN
+         ]
+         return search.query('bool', should=should_queries)
+ 
+ 
+ class InstitutionsFilter(ArticleFilter):
+     def filter(self, search, institutions):
+-<<<<<<< HEAD
+         return search.query('match', meta_data__institutions__name=institutions)
+-=======
+-        return search.query('match', institutions=institutions)
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ 
+ class DateRangeFilter(ArticleFilter):
+     def filter(self, search, period):
+-<<<<<<< HEAD
+         return search.filter('range', meta_data__pub_date={'gte': period[0], 'lte': period[1]})
+-=======
+-        return search.filter('range', publication_date={'gte': period[0], 'lte': period[1]})
+->>>>>>> MAHRAZABDELRAHMEN
+Index: myApp/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># myApp/urls.py\n<<<<<<< HEAD\n\nfrom django.urls import path\nfrom .views import *\n\nurlpatterns = [\n    path('upload/', UploadArticlesView.as_view(), name='upload_articles'),\n]\n=======\nfrom django.urls import path , include\nfrom .views import YourModelListCreateView\n\nurlpatterns = [\n    path('yourmodel/', YourModelListCreateView.as_view(), name='yourmodel-list-create'),\n\n]\n\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/myApp/urls.py b/myApp/urls.py
+--- a/myApp/urls.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/myApp/urls.py	(date 1706896465122)
+@@ -1,5 +1,4 @@
+ # myApp/urls.py
+-<<<<<<< HEAD
+ 
+ from django.urls import path
+ from .views import *
+@@ -7,13 +6,3 @@
+ urlpatterns = [
+     path('upload/', UploadArticlesView.as_view(), name='upload_articles'),
+ ]
+-=======
+-from django.urls import path , include
+-from .views import YourModelListCreateView
+-
+-urlpatterns = [
+-    path('yourmodel/', YourModelListCreateView.as_view(), name='yourmodel-list-create'),
+-
+-]
+-
+->>>>>>> MAHRAZABDELRAHMEN
+Index: article/tests.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\n\n=======\nfrom elasticsearch_dsl import Search\nfrom datetime import datetime\nfrom elasticsearch.exceptions import *\nfrom filters.filters import *\nfrom elasticsearch_dsl import connections\nimport os\nfrom dotenv import load_dotenv\n\nload_dotenv()\nurl = os.environ.get('URL')\nport = os.environ.get('PORT')\nuser_name = os.environ.get(\"USER_NAME\")\nuser_pass = os.environ.get(\"USER_PASSWORD\")\narticle_index = os.environ.get(\"ARTICLE_INDEX\")\nconnections.create_connection(\n                hosts=[f'{url}:{port}'],\n                alias='default',\n                verify_certs=False,\n                http_auth=(user_name, user_pass)\n)\nsearch = Search(index=article_index)\n\nkeywords_filter = KeywordsFilter()\nauthors_filter = AuthorsFilter()\ninstitutions_filter = InstitutionsFilter()\ndate_range_filter = DateRangeFilter()\n\n\nauthors = ['Chetanya Puri']\n\nperiod = [datetime(2022, 1, 1), datetime(2023, 12, 31)]\n\nsearch = authors_filter.filter(search, authors)\nsearch = date_range_filter.filter(search, period)\n\n# Execute the search\ntry:\n    response = search.execute()\n    for hit in response:\n        print(50 * '---')\n        print(hit.id)\n        print(hit.institutions)\n        print(hit.publication_date)\n        print(hit.keywords)\n        print(hit.authors)\n        print(50 * '---')\n\nexcept ConnectionError as connection_error:\n    print(f\"ConnectionError: {connection_error}\")\nexcept SerializationError as serialization_error:\n    print(f\"SerializationError: {serialization_error}\")\nexcept NotFoundError as not_found_error:\n    print(f\"NotFoundError: {not_found_error}\")\nexcept TransportError as transport_error:\n    print(f\"TransportError: {transport_error}\")\nexcept Exception as e:\n    print(f\"An unexpected error occurred: {e}\")\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/tests.py b/article/tests.py
+--- a/article/tests.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/tests.py	(date 1706896465134)
+@@ -1,61 +1,0 @@
+-<<<<<<< HEAD
+-
+-=======
+-from elasticsearch_dsl import Search
+-from datetime import datetime
+-from elasticsearch.exceptions import *
+-from filters.filters import *
+-from elasticsearch_dsl import connections
+-import os
+-from dotenv import load_dotenv
+-
+-load_dotenv()
+-url = os.environ.get('URL')
+-port = os.environ.get('PORT')
+-user_name = os.environ.get("USER_NAME")
+-user_pass = os.environ.get("USER_PASSWORD")
+-article_index = os.environ.get("ARTICLE_INDEX")
+-connections.create_connection(
+-                hosts=[f'{url}:{port}'],
+-                alias='default',
+-                verify_certs=False,
+-                http_auth=(user_name, user_pass)
+-)
+-search = Search(index=article_index)
+-
+-keywords_filter = KeywordsFilter()
+-authors_filter = AuthorsFilter()
+-institutions_filter = InstitutionsFilter()
+-date_range_filter = DateRangeFilter()
+-
+-
+-authors = ['Chetanya Puri']
+-
+-period = [datetime(2022, 1, 1), datetime(2023, 12, 31)]
+-
+-search = authors_filter.filter(search, authors)
+-search = date_range_filter.filter(search, period)
+-
+-# Execute the search
+-try:
+-    response = search.execute()
+-    for hit in response:
+-        print(50 * '---')
+-        print(hit.id)
+-        print(hit.institutions)
+-        print(hit.publication_date)
+-        print(hit.keywords)
+-        print(hit.authors)
+-        print(50 * '---')
+-
+-except ConnectionError as connection_error:
+-    print(f"ConnectionError: {connection_error}")
+-except SerializationError as serialization_error:
+-    print(f"SerializationError: {serialization_error}")
+-except NotFoundError as not_found_error:
+-    print(f"NotFoundError: {not_found_error}")
+-except TransportError as transport_error:
+-    print(f"TransportError: {transport_error}")
+-except Exception as e:
+-    print(f"An unexpected error occurred: {e}")
+->>>>>>> MAHRAZABDELRAHMEN
+Index: article/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.db import models\n\n<<<<<<< HEAD\n=======\nfrom Backend.article.extraction.test.cermine_xml_sample import EXPECTED_OUTPUT\n\n>>>>>>> MAHRAZABDELRAHMEN\n\nclass Author(models.Model):\n    \"\"\"\n    Represents an Author of a reearch article.\n\n    Attributes:\n        name (CharField): The name of the author.\n<<<<<<< HEAD\n    \"\"\"\n    name = models.CharField(max_length=255, default=\"None\")\n    objects = models.Manager()\n=======\n        affiliations (TextField): The affiliations of the author.\n    \"\"\"\n    objects = models.Manager()\n    name = models.CharField(max_length=255, default=\"None\")\n    affiliations = models.TextField(default=\"None\")\n>>>>>>> MAHRAZABDELRAHMEN\n\n    class Meta:\n        app_label = 'article'\n\n    def __str__(self):\n        return self.name\n\n\nclass Institution(models.Model):\n    \"\"\"\n    Represents an institution mentioned in a scholarly article.\n\n    Attributes:\n<<<<<<< HEAD\n        department (CharField): The department of the institution.\n=======\n        label (CharField): The label of the institution.\n>>>>>>> MAHRAZABDELRAHMEN\n        name (CharField): The name of the institution.\n        address (TextField): The address of the institution.\n        country (CharField): The country of the institution.\n    \"\"\"\n\n<<<<<<< HEAD\n    department = models.CharField(max_length=255, default=\"None\")\n    name = models.CharField(max_length=255, default=\"None\")\n    address = models.TextField(default=\"None\")\n    post_code = models.CharField(max_length=10, default=\"None\")\n=======\n    label = models.CharField(max_length=255, default=\"None\")\n    name = models.CharField(max_length=255, default=\"None\")\n    address = models.TextField(default=\"None\")\n>>>>>>> MAHRAZABDELRAHMEN\n    country = models.CharField(max_length=255, default=\"None\")\n    objects = models.Manager()\n\n    def __str__(self):\n        return self.name\n\n    class Meta:\n        app_label = 'article'\n\n\nclass Reference(models.Model):\n    \"\"\"\n    Represents a reference in a scholarly article.\n\n    Attributes:\n        publication_year (CharField): The publication year of the reference.\n        article_title (TextField): The title of the referenced article.\n<<<<<<< HEAD\n        reference_id (TextField): The ID(DOI, PMID, PMC...) of the reference.\n=======\n        source (TextField): The source of the reference.\n>>>>>>> MAHRAZABDELRAHMEN\n        volume (CharField): The volume of the reference.\n        authors (ManyToManyField): Many-to-many relationship with Author model.\n    \"\"\"\n\n    publication_year = models.CharField(max_length=12, default=\"None\")\n    article_title = models.TextField(default=\"None\")\n<<<<<<< HEAD\n    reference_id = models.TextField(default=\"None\")\n    volume = models.CharField(max_length=10, default=\"None\")\n    authors = models.ManyToManyField(Author, related_name=\"references\")\n    raw_text = models.CharField(max_length=256, default=\"NONE\")\n=======\n    source = models.TextField(default=\"None\")\n    volume = models.CharField(max_length=20, default=\"None\")\n    authors = models.ManyToManyField(Author, related_name=\"references\")\n>>>>>>> MAHRAZABDELRAHMEN\n    objects = models.Manager()\n\n    def __str__(self):\n        return f\"Reference Title: {self.article_title}\"\n\n    class Meta:\n        app_label = 'article'\n\n\nclass MetaData(models.Model):\n    \"\"\"\n    Represents metadata for a scholarly article.\n\n    Attributes:\n        doi (CharField): The DOI (Digital Object Identifier) of the article.\n        title (TextField): The title of the article.\n        pub_date (CharField): The publication year of the article.\n        references (ManyToManyField): Many-to-many relationship with Reference model.\n    \"\"\"\n\n    doi = models.CharField(max_length=255, default=\"None\")\n    title = models.TextField(default=\"None\")\n<<<<<<< HEAD\n    pub_date = models.CharField(max_length=10, default=\"None\")\n    references = models.ManyToManyField(Reference, related_name=\"citations\")\n    keywords = models.TextField(default='[]')\n    abstract = models.TextField(default='None')\n    authors = models.ManyToManyField(Author)\n    institutions = models.ManyToManyField(Institution)\n=======\n    pub_date = models.CharField(max_length=4, default=\"None\")\n    references = models.ManyToManyField(Reference, related_name=\"citations\")\n    keywords = models.TextField(default='[]')\n>>>>>>> MAHRAZABDELRAHMEN\n    objects = models.Manager()\n\n    def __str__(self):\n        return f\"DOI: {self.doi}, Title: {self.title}\"\n\n    class Meta:\n        app_label = 'article'\n\n\n<<<<<<< HEAD\nclass BaseArticle(models.Model):\n    \"\"\"\n    Base class for common attributes of research articles.\n\n    Attributes:\n        meta_data (OneToOneField): One-to-one relationship with MetaData model.\n        pdf_file (FileField): The File of the article.\n    \"\"\"\n    objects = models.Manager()\n    meta_data = models.OneToOneField(MetaData, on_delete=models.CASCADE, default={})\n    pdf_file = models.FileField(upload_to='pdfs/', null=True)\n\n    class Meta:\n        abstract = True\n\n    def get_meta_data(self):\n        return self.meta_data\n\n    def set_meta_data(self, new_meta_data):\n        self.meta_data = new_meta_data\n\n    def get_pdf_file(self):\n        return self.pdf_file\n\n    def set_pdf_file(self, new_pdf_file):\n        self.pdf_file = new_pdf_file\n\n\nclass Article(BaseArticle):\n    \"\"\"\n    Represents a research article.\n    \"\"\"\n\n    class Meta:\n        app_label = 'article'\n\n\nclass UnPublishedArticle(BaseArticle):\n    \"\"\"\n    Represents a research article that is still not unpublished to the users.\n    \"\"\"\n=======\nclass Article(models.Model):\n    \"\"\"\n    Represents a research article.\n\n    Attributes:\n        meta_data (OneToOneField): One-to-one relationship with MetaData model.\n        blob (TextField): The blob data for the article.\n    \"\"\"\n    objects = models.Manager()\n    meta_data = models.OneToOneField(MetaData, on_delete=models.CASCADE, default=EXPECTED_OUTPUT)\n    blob = models.TextField(default=\"None\")\n>>>>>>> MAHRAZABDELRAHMEN\n\n    class Meta:\n        app_label = 'article'\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/models.py b/article/models.py
+--- a/article/models.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/models.py	(date 1706896465134)
+@@ -1,10 +1,5 @@
+ from django.db import models
+ 
+-<<<<<<< HEAD
+-=======
+-from Backend.article.extraction.test.cermine_xml_sample import EXPECTED_OUTPUT
+-
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ class Author(models.Model):
+     """
+@@ -12,17 +7,9 @@
+ 
+     Attributes:
+         name (CharField): The name of the author.
+-<<<<<<< HEAD
+     """
+     name = models.CharField(max_length=255, default="None")
+     objects = models.Manager()
+-=======
+-        affiliations (TextField): The affiliations of the author.
+-    """
+-    objects = models.Manager()
+-    name = models.CharField(max_length=255, default="None")
+-    affiliations = models.TextField(default="None")
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+     class Meta:
+         app_label = 'article'
+@@ -36,26 +23,16 @@
+     Represents an institution mentioned in a scholarly article.
+ 
+     Attributes:
+-<<<<<<< HEAD
+         department (CharField): The department of the institution.
+-=======
+-        label (CharField): The label of the institution.
+->>>>>>> MAHRAZABDELRAHMEN
+         name (CharField): The name of the institution.
+         address (TextField): The address of the institution.
+         country (CharField): The country of the institution.
+     """
+ 
+-<<<<<<< HEAD
+     department = models.CharField(max_length=255, default="None")
+     name = models.CharField(max_length=255, default="None")
+     address = models.TextField(default="None")
+     post_code = models.CharField(max_length=10, default="None")
+-=======
+-    label = models.CharField(max_length=255, default="None")
+-    name = models.CharField(max_length=255, default="None")
+-    address = models.TextField(default="None")
+->>>>>>> MAHRAZABDELRAHMEN
+     country = models.CharField(max_length=255, default="None")
+     objects = models.Manager()
+ 
+@@ -73,27 +50,17 @@
+     Attributes:
+         publication_year (CharField): The publication year of the reference.
+         article_title (TextField): The title of the referenced article.
+-<<<<<<< HEAD
+         reference_id (TextField): The ID(DOI, PMID, PMC...) of the reference.
+-=======
+-        source (TextField): The source of the reference.
+->>>>>>> MAHRAZABDELRAHMEN
+         volume (CharField): The volume of the reference.
+         authors (ManyToManyField): Many-to-many relationship with Author model.
+     """
+ 
+     publication_year = models.CharField(max_length=12, default="None")
+     article_title = models.TextField(default="None")
+-<<<<<<< HEAD
+     reference_id = models.TextField(default="None")
+     volume = models.CharField(max_length=10, default="None")
+     authors = models.ManyToManyField(Author, related_name="references")
+     raw_text = models.CharField(max_length=256, default="NONE")
+-=======
+-    source = models.TextField(default="None")
+-    volume = models.CharField(max_length=20, default="None")
+-    authors = models.ManyToManyField(Author, related_name="references")
+->>>>>>> MAHRAZABDELRAHMEN
+     objects = models.Manager()
+ 
+     def __str__(self):
+@@ -116,18 +83,12 @@
+ 
+     doi = models.CharField(max_length=255, default="None")
+     title = models.TextField(default="None")
+-<<<<<<< HEAD
+     pub_date = models.CharField(max_length=10, default="None")
+     references = models.ManyToManyField(Reference, related_name="citations")
+     keywords = models.TextField(default='[]')
+     abstract = models.TextField(default='None')
+     authors = models.ManyToManyField(Author)
+     institutions = models.ManyToManyField(Institution)
+-=======
+-    pub_date = models.CharField(max_length=4, default="None")
+-    references = models.ManyToManyField(Reference, related_name="citations")
+-    keywords = models.TextField(default='[]')
+->>>>>>> MAHRAZABDELRAHMEN
+     objects = models.Manager()
+ 
+     def __str__(self):
+@@ -137,7 +98,6 @@
+         app_label = 'article'
+ 
+ 
+-<<<<<<< HEAD
+ class BaseArticle(models.Model):
+     """
+     Base class for common attributes of research articles.
+@@ -179,19 +139,6 @@
+     """
+     Represents a research article that is still not unpublished to the users.
+     """
+-=======
+-class Article(models.Model):
+-    """
+-    Represents a research article.
+-
+-    Attributes:
+-        meta_data (OneToOneField): One-to-one relationship with MetaData model.
+-        blob (TextField): The blob data for the article.
+-    """
+-    objects = models.Manager()
+-    meta_data = models.OneToOneField(MetaData, on_delete=models.CASCADE, default=EXPECTED_OUTPUT)
+-    blob = models.TextField(default="None")
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+     class Meta:
+         app_label = 'article'
+Index: myApp/apps.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.apps import AppConfig\n\n\nclass MyappConfig(AppConfig):\n<<<<<<< HEAD\n  \n    name = 'myApp'\n\n=======\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'myApp'\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/myApp/apps.py b/myApp/apps.py
+--- a/myApp/apps.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/myApp/apps.py	(date 1706896465122)
+@@ -2,11 +2,6 @@
+ 
+ 
+ class MyappConfig(AppConfig):
+-<<<<<<< HEAD
+   
+     name = 'myApp'
+ 
+-=======
+-    default_auto_field = 'django.db.models.BigAutoField'
+-    name = 'myApp'
+->>>>>>> MAHRAZABDELRAHMEN
+Index: article/migrations/0001_initial.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\n# Generated by Django 5.0 on 2024-02-01 11:06\n=======\n# Generated by Django 5.0 on 2023-12-29 19:59\n>>>>>>> MAHRAZABDELRAHMEN\n\nimport django.db.models.deletion\nfrom django.db import migrations, models\n\n\nclass Migration(migrations.Migration):\n\n    initial = True\n\n    dependencies = [\n    ]\n\n    operations = [\n        migrations.CreateModel(\n            name='Author',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n<<<<<<< HEAD\n                ('name', models.CharField(default='None', max_length=255)),\n=======\n                ('name', models.CharField(blank=True, max_length=80, null=True)),\n>>>>>>> MAHRAZABDELRAHMEN\n            ],\n        ),\n        migrations.CreateModel(\n            name='Institution',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n<<<<<<< HEAD\n                ('department', models.CharField(default='None', max_length=255)),\n                ('name', models.CharField(default='None', max_length=255)),\n                ('address', models.TextField(default='None')),\n                ('post_code', models.CharField(default='None', max_length=10)),\n                ('country', models.CharField(default='None', max_length=255)),\n            ],\n        ),\n        migrations.CreateModel(\n            name='MetaData',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('doi', models.CharField(default='None', max_length=255)),\n                ('title', models.TextField(default='None')),\n                ('pub_date', models.CharField(default='None', max_length=10)),\n                ('keywords', models.TextField(default='[]')),\n                ('abstract', models.TextField(default='None')),\n                ('authors', models.ManyToManyField(to='article.author')),\n                ('institutions', models.ManyToManyField(to='article.institution')),\n            ],\n        ),\n        migrations.CreateModel(\n            name='Article',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('pdf_file', models.FileField(null=True, upload_to='pdfs/')),\n                ('meta_data', models.OneToOneField(default={}, on_delete=django.db.models.deletion.CASCADE, to='article.metadata')),\n=======\n                ('name', models.CharField(max_length=50)),\n            ],\n        ),\n        migrations.CreateModel(\n            name='Keyword',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('name', models.CharField(max_length=255)),\n>>>>>>> MAHRAZABDELRAHMEN\n            ],\n        ),\n        migrations.CreateModel(\n            name='Reference',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n<<<<<<< HEAD\n                ('publication_year', models.CharField(default='None', max_length=12)),\n                ('article_title', models.TextField(default='None')),\n                ('reference_id', models.TextField(default='None')),\n                ('volume', models.CharField(default='None', max_length=10)),\n                ('raw_text', models.CharField(default='NONE', max_length=256)),\n                ('authors', models.ManyToManyField(related_name='references', to='article.author')),\n            ],\n        ),\n        migrations.AddField(\n            model_name='metadata',\n            name='references',\n            field=models.ManyToManyField(related_name='citations', to='article.reference'),\n        ),\n        migrations.CreateModel(\n            name='UnPublishedArticle',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('pdf_file', models.FileField(null=True, upload_to='pdfs/')),\n                ('meta_data', models.OneToOneField(default={}, on_delete=django.db.models.deletion.CASCADE, to='article.metadata')),\n=======\n                ('publicationDate', models.DateField()),\n                ('title', models.TextField(max_length=255)),\n            ],\n        ),\n        migrations.CreateModel(\n            name='MetaData',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('title', models.CharField(max_length=255)),\n                ('fullText', models.TextField()),\n                ('abstract', models.TextField()),\n                ('authors', models.ManyToManyField(to='article.author')),\n                ('institutions', models.ManyToManyField(to='article.institution')),\n                ('keywords', models.ManyToManyField(to='article.keyword')),\n                ('references', models.ManyToManyField(to='article.reference')),\n            ],\n        ),\n        migrations.CreateModel(\n            name='Article',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('content', models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, to='article.metadata')),\n>>>>>>> MAHRAZABDELRAHMEN\n            ],\n        ),\n    ]\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/migrations/0001_initial.py b/article/migrations/0001_initial.py
+--- a/article/migrations/0001_initial.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/migrations/0001_initial.py	(date 1706896845407)
+@@ -1,8 +1,4 @@
+-<<<<<<< HEAD
+-# Generated by Django 5.0 on 2024-02-01 11:06
+-=======
+-# Generated by Django 5.0 on 2023-12-29 19:59
+->>>>>>> MAHRAZABDELRAHMEN
++# Generated by Django 5.0 on 2024-02-02 18:00
+ 
+ import django.db.models.deletion
+ from django.db import migrations, models
+@@ -20,18 +16,13 @@
+             name='Author',
+             fields=[
+                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-<<<<<<< HEAD
+                 ('name', models.CharField(default='None', max_length=255)),
+-=======
+-                ('name', models.CharField(blank=True, max_length=80, null=True)),
+->>>>>>> MAHRAZABDELRAHMEN
+             ],
+         ),
+         migrations.CreateModel(
+             name='Institution',
+             fields=[
+                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-<<<<<<< HEAD
+                 ('department', models.CharField(default='None', max_length=255)),
+                 ('name', models.CharField(default='None', max_length=255)),
+                 ('address', models.TextField(default='None')),
+@@ -58,23 +49,12 @@
+                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                 ('pdf_file', models.FileField(null=True, upload_to='pdfs/')),
+                 ('meta_data', models.OneToOneField(default={}, on_delete=django.db.models.deletion.CASCADE, to='article.metadata')),
+-=======
+-                ('name', models.CharField(max_length=50)),
+-            ],
+-        ),
+-        migrations.CreateModel(
+-            name='Keyword',
+-            fields=[
+-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-                ('name', models.CharField(max_length=255)),
+->>>>>>> MAHRAZABDELRAHMEN
+             ],
+         ),
+         migrations.CreateModel(
+             name='Reference',
+             fields=[
+                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-<<<<<<< HEAD
+                 ('publication_year', models.CharField(default='None', max_length=12)),
+                 ('article_title', models.TextField(default='None')),
+                 ('reference_id', models.TextField(default='None')),
+@@ -94,30 +74,6 @@
+                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                 ('pdf_file', models.FileField(null=True, upload_to='pdfs/')),
+                 ('meta_data', models.OneToOneField(default={}, on_delete=django.db.models.deletion.CASCADE, to='article.metadata')),
+-=======
+-                ('publicationDate', models.DateField()),
+-                ('title', models.TextField(max_length=255)),
+-            ],
+-        ),
+-        migrations.CreateModel(
+-            name='MetaData',
+-            fields=[
+-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-                ('title', models.CharField(max_length=255)),
+-                ('fullText', models.TextField()),
+-                ('abstract', models.TextField()),
+-                ('authors', models.ManyToManyField(to='article.author')),
+-                ('institutions', models.ManyToManyField(to='article.institution')),
+-                ('keywords', models.ManyToManyField(to='article.keyword')),
+-                ('references', models.ManyToManyField(to='article.reference')),
+-            ],
+-        ),
+-        migrations.CreateModel(
+-            name='Article',
+-            fields=[
+-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-                ('content', models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, to='article.metadata')),
+->>>>>>> MAHRAZABDELRAHMEN
+             ],
+         ),
+     ]
+Index: Backend/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('moderator/', include('moderator.urls')),\n    path('article/', include('article.urls')),\n<<<<<<< HEAD\n    path('myapp/', include('myApp.urls')),\n    path('email/', include('email_provider.urls')),\n=======\n>>>>>>> MAHRAZABDELRAHMEN\n]\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Backend/urls.py b/Backend/urls.py
+--- a/Backend/urls.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/Backend/urls.py	(date 1706896465126)
+@@ -5,9 +5,6 @@
+     path('admin/', admin.site.urls),
+     path('moderator/', include('moderator.urls')),
+     path('article/', include('article.urls')),
+-<<<<<<< HEAD
+     path('myapp/', include('myApp.urls')),
+     path('email/', include('email_provider.urls')),
+-=======
+->>>>>>> MAHRAZABDELRAHMEN
+ ]
+Index: article/extraction/extraction.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\n\nimport json\nimport requests\nfrom bs4 import BeautifulSoup\nfrom abc import ABC, abstractmethod\n\n\ndef return_valid_text_from_data(data):\n    return data.text if data else \"NONE\"\n\n\nclass IExtractData(ABC):\n    @abstractmethod\n    def process_document(self, file_path):\n        pass\n\n\nclass GrobidClient:\n    def __init__(self, base_url):\n        self.base_url = base_url\n\n    def _make_request(self, endpoint, files, params=None, data=None):\n        url = f\"{self.base_url}/{endpoint}\"\n\n        try:\n            response = requests.post(url, files=files, params=params, data=data)\n            response.raise_for_status()\n            return response\n        except requests.exceptions.RequestException as e:\n            print(f\"Request to GROBID server FAILED!: {e}\")\n            return {'success': False, 'Message': e}\n\n\nclass ReferencesExtractor(GrobidClient, IExtractData):\n\n    def process_document(self, file_path, include_raw_citations=True, ):\n        endpoint = \"api/processReferences\"\n        with open(file_path, \"rb\") as pdf_file:\n            files = {'input': (file_path, pdf_file, 'application/pdf')}\n            payload = {'includeRawCitations': 'true' if include_raw_citations else 'false'}\n            response = self._make_request(endpoint, files, data=payload)\n            if isinstance(response, dict):\n                return response\n\n        if response.status_code == 200:\n            soup = BeautifulSoup(response.text, 'xml')\n            references = []\n            for ref in soup.find_all('biblStruct'):\n                authors = ref.find_all('persName')\n                authors_full_names = [(f\"{return_valid_text_from_data(author.forename)} \"\n                                       f\"{return_valid_text_from_data(author.surname)}\")\n                                      for author in authors]\n                reference_data = {\n                    'raw_text':  return_valid_text_from_data(ref.find('note')),\n                    'authors': authors_full_names,\n                    'article_title': return_valid_text_from_data(ref.find('title')),\n                    'reference_id': return_valid_text_from_data(ref.find('idno')),\n                    'volume': return_valid_text_from_data(ref.find('biblScope', {'unit': 'volume'})),\n                    'published_date': return_valid_text_from_data(ref.find('date', {'type': 'published'})),\n                }\n                references.append(reference_data)\n\n            return {'references': references}\n        else:\n            print(f\"Grobid request failed with status code {response.status_code}\")\n            return None\n\n\nclass HeaderExtractor(GrobidClient, IExtractData):\n    def __init__(self, base_url):\n        super().__init__(base_url)\n\n    def process_document(self, file_path, consolidate_header=True):\n        endpoint = \"api/processHeaderDocument\"\n        with open(file_path, \"rb\") as pdf_file:\n            payload = {'consolidateHeader': \"1\" if consolidate_header else \"0\"}\n            files = {'input': (file_path, pdf_file, 'application/pdf')}\n            response = self._make_request(endpoint, files, params=payload)\n            if isinstance(response, dict):\n                return response\n\n        if response.status_code == 200:\n            soup = BeautifulSoup(response.text, 'xml')\n            article_title = return_valid_text_from_data(soup.find('title', type='main'))\n            authors = soup.find_all('persName')\n            authors_full_names = [(f\"{return_valid_text_from_data(author.forename)}\"\n                                   f\" {return_valid_text_from_data(author.surname)}\") for author in authors]\n            abstract = return_valid_text_from_data(soup.find('abstract'))\n            institutions_list = []\n            for affiliation in soup.find_all('affiliation'):\n                department = return_valid_text_from_data(affiliation.find('orgName', {'type': 'department'}))\n                institution = return_valid_text_from_data(affiliation.find('orgName', {'type': 'institution'}))\n                post_code = return_valid_text_from_data(affiliation.find('postCode'))\n                settlement = return_valid_text_from_data(affiliation.find('settlement'))\n                country = return_valid_text_from_data(affiliation.find('country'))\n\n                college_json = {\n                    \"college\": {\n                        \"department\": department,\n                        \"name\": institution,\n                        \"post_code\": post_code,\n                        \"settlement\": settlement,\n                        \"country\": country\n                    }\n                }\n                institutions_list.append(college_json)\n            unique_affiliations = list({json.dumps(obj, sort_keys=True) for obj in institutions_list})\n            keywords = soup.find_all('keywords')\n            keywords_list = [return_valid_text_from_data(keyword) for keyword in keywords]\n\n            return {\n                'title': article_title,\n                'authors': authors_full_names,\n                'abstract': abstract,\n                'institutions': unique_affiliations,\n                'keywords_list': keywords_list,\n                'doi': return_valid_text_from_data(soup.find('idno'))\n            }\n        else:\n            print(f\"Grobid request failed with status code {response.status_code}\")\n            return None\n\n\nclass PdfExtractionUtil:\n    def __init__(self, pdf_path, document_extractor):\n        \"\"\"\n        Initializes PdfExtractionUtil with the given PDF path and Grobid document extractor.\n\n        Args:\n            pdf_path (str): The path to the PDF file.\n            document_extractor (DocumentExtractor): An instance of DocumentExtractor (ReferencesExtractor or\n            HeaderExtractor).\n        \"\"\"\n        self.pdf_path = pdf_path\n        self.json_output = {}\n        self.document_extractor = document_extractor\n\n    def run(self, grobid_base_url):\n        \"\"\"\n        Runs the PDF extraction process using Grobid.\n\n        This method calls the process_document method of the DocumentExtractor, and then\n        extracts relevant information from the processed document.\n\n        Note: The extracted information is stored in self.json_output.\n        \"\"\"\n        extractor = self.document_extractor(grobid_base_url)\n        self.json_output = extractor.process_document(self.pdf_path)\n=======\nimport os\nimport xml.etree.ElementTree as ET\nimport tempfile\nimport requests\nfrom Backend.article.contrller import CreateArticleUtil\nfrom grobid_client.grobid_client import GrobidClient\n\n\nclass PdfExtractionUtil:\n    \"\"\"\n    PdfExtractionUtil class for extracting content from PDFs.\n\n    Attributes:\n        pdf_path (str): The path to the PDF file.\n        temp_dir (str): The Temporary Folder Containing the file.\n        json_output (json): The json output of the xml file got from cermine\n    \"\"\"\n\n    def __init__(self, pdf_path):\n        \"\"\"\n        Initializes PdfExtractionUtil with the given PDF path.\n\n        Args:\n            pdf_path (str): The path to the PDF file.\n        \"\"\"\n        self.pdf_path = pdf_path\n        self.temp_dir = tempfile.mkdtemp()\n        self.json_output = {}\n\n    def extract_pdf_to_temp_path(self):\n        \"\"\"\n        Extracts content from the PDF using Cermine and stores it in a temporary XML file.\n        \"\"\"\n        url = \"http://cermine.ceon.pl/extract.do\"\n        headers = {\"Content-Type\": \"application/binary\"}\n        with open(self.pdf_path, \"rb\") as pdf_file:  # Open PDF in binary mode\n            response = requests.post(url, headers=headers, data=pdf_file)\n        if response.status_code == 200:\n            print(response.text)\n            extracted_metadata = response.text\n            temp_cermine_xml_path = os.path.join(self.temp_dir, \"cermine_output.xml\")\n            with open(temp_cermine_xml_path, \"w\", encoding=\"utf-8\") as xml_file:\n                xml_file.write(extracted_metadata)\n\n            print(\"XML file created successfully at:\", temp_cermine_xml_path)\n\n        else:\n            print(\"Error:\", response.status_code, response.text)\n\n    def parse_cermine_xml(self, xml_path):\n        \"\"\"\n        Parses the Cermine XML file and extracts specific information.\n\n        Args:\n            xml_path (str): Path to the Cermine XML file.\n        \"\"\"\n        tree = ET.parse(xml_path)\n        root = tree.getroot()\n\n        article_meta = root.find('.//front/article-meta')\n\n        self.json_output['doi'] = article_meta.find('.//article-id[@pub-id-type=\"doi\"]').text if article_meta.find(\n            './/article-id[@pub-id-type=\"doi\"]') is not None else \"None\"\n        self.json_output['title'] = article_meta.find('.//title-group/article-title').text if article_meta.find(\n            './/title-group/article-title') is not None else \"None\"\n        self.json_output['abstract'] = article_meta.find('.//abstract/p').text if article_meta.find(\n            './/abstract/p') is not None else \"None\"\n        self.json_output['authors'] = [\n            {\n                'name': author.find('string-name').text if author.find('string-name') is not None else \"None\",\n                'affiliations': [xref.text for xref in author.findall('xref[@ref-type=\"aff\"]')] if author.findall(\n                    'xref[@ref-type=\"aff\"]') is not None else \"None\"\n            }\n            for author in article_meta.findall('.//contrib-group/contrib[@contrib-type=\"author\"]')\n        ]\n        self.json_output['institutions'] = [\n            {\n                'label': affiliation.find('label').text if affiliation.find('label') is not None else \"None\",\n                'name': affiliation.find('institution').text if affiliation.find('institution') is not None else \"None\",\n                'address': affiliation.find('addr-line').text if affiliation.find('addr-line') is not None else \"None\",\n                'country': affiliation.find('country').get('country') if affiliation.find(\n                    'country') is not None else \"None\"\n            }\n            for affiliation in article_meta.findall('.//aff')\n        ]\n        self.json_output['pub_date'] = article_meta.find('.//pub-date/year').text if article_meta.find(\n            './/pub-date/year') is not None else \"None\"\n        self.json_output['references'] = [\n            {\n                'authors': [\n                    {\n                        'surname': name.find('surname').text if name.find('surname') is not None else \"None\",\n                        'given_names': name.find('given-names').text if name.find('given-names') is not None else \"None\"\n                    }\n                    for name in ref.findall('.//string-name')\n                ] if ref.findall('.//string-name') is not None else \"None\",\n                'year': ref.find('.//year').text if ref.find('.//year') is not None else \"None\",\n                'article_title': ref.find('.//article-title').text if ref.find(\n                    './/article-title') is not None else \"None\",\n                'source': ref.find('.//source').text if ref.find('.//source') is not None else \"None\",\n                'volume': ref.find('.//volume').text if ref.find('.//volume') is not None else \"None\",\n                'pages': ref.find('.//pages').text if ref.find('.//pages') is not None else \"None\"\n            }\n            for ref in root.findall('.//ref')\n        ]\n\n    def run(self):\n        \"\"\"\n        Runs the PDF extraction process.\n\n        This method calls the extract_pdf_to_temp_path, parse_cermine_xml, and\n        return_json_from_extraction_xml methods in sequence.\n        \"\"\"\n        self.extract_pdf_to_temp_path()\n        temp_cermine_xml = os.path.join(self.temp_dir, \"cermine_output.xml\")\n        self.parse_cermine_xml(temp_cermine_xml)\n        print(self.json_output)\n>>>>>>> MAHRAZABDELRAHMEN\n\n\nclass PdfController:\n    @staticmethod\n    def process_and_store_pdf(pdf_path, blob):\n<<<<<<< HEAD\n        server = \"http://localhost:8070\"\n        extraction_classes = [HeaderExtractor, ReferencesExtractor]\n        final_json = {}\n        for data in extraction_classes:\n            pdf_util = PdfExtractionUtil(pdf_path, document_extractor=data)\n            pdf_util.run(server)\n            extracted_data = pdf_util.json_output\n            final_json = final_json.copy()\n            final_json.update(extracted_data)\n        from article.controller import CreateArticleUtil\n        CreateArticleUtil.create_article_from_json(final_json, blob)\n        return final_json\n=======\n\n        pdf_util = PdfExtractionUtil(pdf_path)\n        print(\"hello\")\n        pdf_util.run()\n\n        extracted_data = pdf_util.json_output\n        print(\"mannnnnnnnnnnnnnnnnnnn\")\n        print(extracted_data)\n        CreateArticleUtil.create_article_from_json(extracted_data, blob)\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/article/extraction/extraction.py b/article/extraction/extraction.py
+--- a/article/extraction/extraction.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/article/extraction/extraction.py	(date 1706896465126)
+@@ -1,4 +1,3 @@
+-<<<<<<< HEAD
+ 
+ import json
+ import requests
+@@ -147,131 +146,11 @@
+         """
+         extractor = self.document_extractor(grobid_base_url)
+         self.json_output = extractor.process_document(self.pdf_path)
+-=======
+-import os
+-import xml.etree.ElementTree as ET
+-import tempfile
+-import requests
+-from Backend.article.contrller import CreateArticleUtil
+-from grobid_client.grobid_client import GrobidClient
+-
+-
+-class PdfExtractionUtil:
+-    """
+-    PdfExtractionUtil class for extracting content from PDFs.
+-
+-    Attributes:
+-        pdf_path (str): The path to the PDF file.
+-        temp_dir (str): The Temporary Folder Containing the file.
+-        json_output (json): The json output of the xml file got from cermine
+-    """
+-
+-    def __init__(self, pdf_path):
+-        """
+-        Initializes PdfExtractionUtil with the given PDF path.
+-
+-        Args:
+-            pdf_path (str): The path to the PDF file.
+-        """
+-        self.pdf_path = pdf_path
+-        self.temp_dir = tempfile.mkdtemp()
+-        self.json_output = {}
+-
+-    def extract_pdf_to_temp_path(self):
+-        """
+-        Extracts content from the PDF using Cermine and stores it in a temporary XML file.
+-        """
+-        url = "http://cermine.ceon.pl/extract.do"
+-        headers = {"Content-Type": "application/binary"}
+-        with open(self.pdf_path, "rb") as pdf_file:  # Open PDF in binary mode
+-            response = requests.post(url, headers=headers, data=pdf_file)
+-        if response.status_code == 200:
+-            print(response.text)
+-            extracted_metadata = response.text
+-            temp_cermine_xml_path = os.path.join(self.temp_dir, "cermine_output.xml")
+-            with open(temp_cermine_xml_path, "w", encoding="utf-8") as xml_file:
+-                xml_file.write(extracted_metadata)
+-
+-            print("XML file created successfully at:", temp_cermine_xml_path)
+-
+-        else:
+-            print("Error:", response.status_code, response.text)
+-
+-    def parse_cermine_xml(self, xml_path):
+-        """
+-        Parses the Cermine XML file and extracts specific information.
+-
+-        Args:
+-            xml_path (str): Path to the Cermine XML file.
+-        """
+-        tree = ET.parse(xml_path)
+-        root = tree.getroot()
+-
+-        article_meta = root.find('.//front/article-meta')
+-
+-        self.json_output['doi'] = article_meta.find('.//article-id[@pub-id-type="doi"]').text if article_meta.find(
+-            './/article-id[@pub-id-type="doi"]') is not None else "None"
+-        self.json_output['title'] = article_meta.find('.//title-group/article-title').text if article_meta.find(
+-            './/title-group/article-title') is not None else "None"
+-        self.json_output['abstract'] = article_meta.find('.//abstract/p').text if article_meta.find(
+-            './/abstract/p') is not None else "None"
+-        self.json_output['authors'] = [
+-            {
+-                'name': author.find('string-name').text if author.find('string-name') is not None else "None",
+-                'affiliations': [xref.text for xref in author.findall('xref[@ref-type="aff"]')] if author.findall(
+-                    'xref[@ref-type="aff"]') is not None else "None"
+-            }
+-            for author in article_meta.findall('.//contrib-group/contrib[@contrib-type="author"]')
+-        ]
+-        self.json_output['institutions'] = [
+-            {
+-                'label': affiliation.find('label').text if affiliation.find('label') is not None else "None",
+-                'name': affiliation.find('institution').text if affiliation.find('institution') is not None else "None",
+-                'address': affiliation.find('addr-line').text if affiliation.find('addr-line') is not None else "None",
+-                'country': affiliation.find('country').get('country') if affiliation.find(
+-                    'country') is not None else "None"
+-            }
+-            for affiliation in article_meta.findall('.//aff')
+-        ]
+-        self.json_output['pub_date'] = article_meta.find('.//pub-date/year').text if article_meta.find(
+-            './/pub-date/year') is not None else "None"
+-        self.json_output['references'] = [
+-            {
+-                'authors': [
+-                    {
+-                        'surname': name.find('surname').text if name.find('surname') is not None else "None",
+-                        'given_names': name.find('given-names').text if name.find('given-names') is not None else "None"
+-                    }
+-                    for name in ref.findall('.//string-name')
+-                ] if ref.findall('.//string-name') is not None else "None",
+-                'year': ref.find('.//year').text if ref.find('.//year') is not None else "None",
+-                'article_title': ref.find('.//article-title').text if ref.find(
+-                    './/article-title') is not None else "None",
+-                'source': ref.find('.//source').text if ref.find('.//source') is not None else "None",
+-                'volume': ref.find('.//volume').text if ref.find('.//volume') is not None else "None",
+-                'pages': ref.find('.//pages').text if ref.find('.//pages') is not None else "None"
+-            }
+-            for ref in root.findall('.//ref')
+-        ]
+-
+-    def run(self):
+-        """
+-        Runs the PDF extraction process.
+-
+-        This method calls the extract_pdf_to_temp_path, parse_cermine_xml, and
+-        return_json_from_extraction_xml methods in sequence.
+-        """
+-        self.extract_pdf_to_temp_path()
+-        temp_cermine_xml = os.path.join(self.temp_dir, "cermine_output.xml")
+-        self.parse_cermine_xml(temp_cermine_xml)
+-        print(self.json_output)
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ 
+ class PdfController:
+     @staticmethod
+     def process_and_store_pdf(pdf_path, blob):
+-<<<<<<< HEAD
+         server = "http://localhost:8070"
+         extraction_classes = [HeaderExtractor, ReferencesExtractor]
+         final_json = {}
+@@ -284,14 +163,3 @@
+         from article.controller import CreateArticleUtil
+         CreateArticleUtil.create_article_from_json(final_json, blob)
+         return final_json
+-=======
+-
+-        pdf_util = PdfExtractionUtil(pdf_path)
+-        print("hello")
+-        pdf_util.run()
+-
+-        extracted_data = pdf_util.json_output
+-        print("mannnnnnnnnnnnnnnnnnnn")
+-        print(extracted_data)
+-        CreateArticleUtil.create_article_from_json(extracted_data, blob)
+->>>>>>> MAHRAZABDELRAHMEN
+Index: moderator/migrations/0001_initial.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\n# Generated by Django 5.0 on 2024-02-01 11:07\n\nimport moderator.models\n=======\n# Generated by Django 5.0 on 2023-12-26 19:14\n\nimport moderator.models\nimport uuid\n>>>>>>> MAHRAZABDELRAHMEN\nfrom django.db import migrations, models\n\n\nclass Migration(migrations.Migration):\n<<<<<<< HEAD\n\n    initial = True\n\n    dependencies = [\n    ]\n\n    operations = [\n        migrations.CreateModel(\n            name='Moderator',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),\n                ('first_name', models.CharField(default='mod', max_length=255)),\n                ('last_name', models.CharField(default='mod', max_length=255)),\n                ('email', models.EmailField(default='abc@abc.com', max_length=254, unique=True)),\n                ('mod_id', models.UUIDField(default=moderator.models.ModAttributesUtil.generate_unique_mod_id, editable=False, unique=True)),\n                ('created_at', models.DateTimeField(auto_now_add=True)),\n                ('password', models.CharField(default=moderator.models.ModAttributesUtil.password, max_length=255)),\n            ],\n            options={\n                'permissions': [('Can access moderator pages', 'mod_only_perm'), ('Can access non user pages', 'mod_admin_only')],\n=======\n    initial = True\n\n    dependencies = []\n\n    operations = [\n        migrations.CreateModel(\n            name=\"Moderator\",\n            fields=[\n                (\n                    \"id\",\n                    models.BigAutoField(\n                        auto_created=True,\n                        primary_key=True,\n                        serialize=False,\n                        verbose_name=\"ID\",\n                    ),\n                ),\n                (\n                    \"last_login\",\n                    models.DateTimeField(\n                        blank=True, null=True, verbose_name=\"last login\"\n                    ),\n                ),\n                (\"first_name\", models.CharField(default=\"mod\", max_length=255)),\n                (\"last_name\", models.CharField(default=\"mod\", max_length=255)),\n                (\n                    \"email\",\n                    models.EmailField(\n                        default=\"abc@abc.com\", max_length=254, unique=True\n                    ),\n                ),\n                (\n                    \"mod_id\",\n                    models.UUIDField(default=uuid.uuid4, editable=False, unique=True),\n                ),\n                (\"created_at\", models.DateTimeField(auto_now_add=True)),\n                (\n                    \"password\",\n                    models.CharField(\n                        default=moderator.models.ModAttributesUtil.password,\n                        max_length=255,\n                    ),\n                ),\n            ],\n            options={\n                \"abstract\": False,\n>>>>>>> MAHRAZABDELRAHMEN\n            },\n        ),\n    ]\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moderator/migrations/0001_initial.py b/moderator/migrations/0001_initial.py
+--- a/moderator/migrations/0001_initial.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/moderator/migrations/0001_initial.py	(date 1706896852243)
+@@ -1,18 +1,10 @@
+-<<<<<<< HEAD
+-# Generated by Django 5.0 on 2024-02-01 11:07
+-
+-import moderator.models
+-=======
+-# Generated by Django 5.0 on 2023-12-26 19:14
++# Generated by Django 5.0 on 2024-02-02 18:00
+ 
+ import moderator.models
+-import uuid
+->>>>>>> MAHRAZABDELRAHMEN
+ from django.db import migrations, models
+ 
+ 
+ class Migration(migrations.Migration):
+-<<<<<<< HEAD
+ 
+     initial = True
+ 
+@@ -34,54 +26,6 @@
+             ],
+             options={
+                 'permissions': [('Can access moderator pages', 'mod_only_perm'), ('Can access non user pages', 'mod_admin_only')],
+-=======
+-    initial = True
+-
+-    dependencies = []
+-
+-    operations = [
+-        migrations.CreateModel(
+-            name="Moderator",
+-            fields=[
+-                (
+-                    "id",
+-                    models.BigAutoField(
+-                        auto_created=True,
+-                        primary_key=True,
+-                        serialize=False,
+-                        verbose_name="ID",
+-                    ),
+-                ),
+-                (
+-                    "last_login",
+-                    models.DateTimeField(
+-                        blank=True, null=True, verbose_name="last login"
+-                    ),
+-                ),
+-                ("first_name", models.CharField(default="mod", max_length=255)),
+-                ("last_name", models.CharField(default="mod", max_length=255)),
+-                (
+-                    "email",
+-                    models.EmailField(
+-                        default="abc@abc.com", max_length=254, unique=True
+-                    ),
+-                ),
+-                (
+-                    "mod_id",
+-                    models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
+-                ),
+-                ("created_at", models.DateTimeField(auto_now_add=True)),
+-                (
+-                    "password",
+-                    models.CharField(
+-                        default=moderator.models.ModAttributesUtil.password,
+-                        max_length=255,
+-                    ),
+-                ),
+-            ],
+-            options={
+-                "abstract": False,
+->>>>>>> MAHRAZABDELRAHMEN
+             },
+         ),
+     ]
+Index: myApp/migrations/0001_initial.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\n# Generated by Django 5.0 on 2024-01-04 11:53\n=======\n# Generated by Django 5.0 on 2023-12-26 10:01\n>>>>>>> MAHRAZABDELRAHMEN\n\nfrom django.db import migrations, models\n\n\nclass Migration(migrations.Migration):\n\n    initial = True\n\n    dependencies = [\n    ]\n\n    operations = [\n        migrations.CreateModel(\n<<<<<<< HEAD\n            name='Article',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('title', models.CharField(max_length=255)),\n                ('content', models.TextField()),\n                ('pdf_url', models.URLField()),\n            ],\n            options={\n                'db_table': 'articles',\n            },\n        ),\n        migrations.CreateModel(\n            name='Moderateur',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('username', models.CharField(max_length=50)),\n                ('email', models.EmailField(max_length=254)),\n                ('password', models.CharField(max_length=128)),\n            ],\n            options={\n                'db_table': 'moderators',\n            },\n=======\n            name='YourModel',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('field1', models.CharField(max_length=100)),\n                ('field2', models.TextField()),\n            ],\n>>>>>>> MAHRAZABDELRAHMEN\n        ),\n    ]\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/myApp/migrations/0001_initial.py b/myApp/migrations/0001_initial.py
+--- a/myApp/migrations/0001_initial.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/myApp/migrations/0001_initial.py	(date 1706896860259)
+@@ -1,8 +1,4 @@
+-<<<<<<< HEAD
+-# Generated by Django 5.0 on 2024-01-04 11:53
+-=======
+-# Generated by Django 5.0 on 2023-12-26 10:01
+->>>>>>> MAHRAZABDELRAHMEN
++# Generated by Django 5.0 on 2024-02-02 18:01
+ 
+ from django.db import migrations, models
+ 
+@@ -16,36 +12,11 @@
+ 
+     operations = [
+         migrations.CreateModel(
+-<<<<<<< HEAD
+-            name='Article',
+-            fields=[
+-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-                ('title', models.CharField(max_length=255)),
+-                ('content', models.TextField()),
+-                ('pdf_url', models.URLField()),
+-            ],
+-            options={
+-                'db_table': 'articles',
+-            },
+-        ),
+-        migrations.CreateModel(
+-            name='Moderateur',
+-            fields=[
+-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+-                ('username', models.CharField(max_length=50)),
+-                ('email', models.EmailField(max_length=254)),
+-                ('password', models.CharField(max_length=128)),
+-            ],
+-            options={
+-                'db_table': 'moderators',
+-            },
+-=======
+             name='YourModel',
+             fields=[
+                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                 ('field1', models.CharField(max_length=100)),
+                 ('field2', models.TextField()),
+             ],
+->>>>>>> MAHRAZABDELRAHMEN
+         ),
+     ]
+Index: moderator/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\nfrom django.urls import path, include\nfrom .views import *\nfrom rest_framework.routers import DefaultRouter\n\nrouter = DefaultRouter()\nrouter.register(r'create', ModeratorManager, basename='moderator')\n\nurlpatterns = [\n    path('ModerateurManager/', ModeratorManager.as_view({'get': 'get_mod_list'}), name='moderateurs-list'),\n    path('ModerateurManager/<int:pk>/', ModeratorManager.as_view({'delete': 'destroy'}), name='moderateur-detail'),\n    path('ModerateurManager/show-password/<int:pk>/', ModeratorManager.as_view({'get': 'show_passwords'}),\n         name='moderateur-show-password'),\n    path('ModerateurManager/update/<int:pk>/', ModeratorManager.as_view({'put': 'update'}), name='moderateur-update'),\n    path('', include(router.urls)),\n=======\nfrom django.urls import path\nfrom .views import ModeratorListCreateView, ModeratorUpdateView, ModeratorCreate\n\nurlpatterns = [\n    path('mods/', ModeratorListCreateView.as_view(), name=\"moderator_list_create_view\"),\n    path('<int:pk>/', ModeratorUpdateView.as_view(), name='moderator-update'),\n    path('create/', ModeratorCreate.as_view(), name=\"create\"),\n>>>>>>> MAHRAZABDELRAHMEN\n]\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moderator/urls.py b/moderator/urls.py
+--- a/moderator/urls.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/moderator/urls.py	(date 1706896465122)
+@@ -1,4 +1,3 @@
+-<<<<<<< HEAD
+ from django.urls import path, include
+ from .views import *
+ from rest_framework.routers import DefaultRouter
+@@ -13,13 +12,4 @@
+          name='moderateur-show-password'),
+     path('ModerateurManager/update/<int:pk>/', ModeratorManager.as_view({'put': 'update'}), name='moderateur-update'),
+     path('', include(router.urls)),
+-=======
+-from django.urls import path
+-from .views import ModeratorListCreateView, ModeratorUpdateView, ModeratorCreate
+-
+-urlpatterns = [
+-    path('mods/', ModeratorListCreateView.as_view(), name="moderator_list_create_view"),
+-    path('<int:pk>/', ModeratorUpdateView.as_view(), name='moderator-update'),
+-    path('create/', ModeratorCreate.as_view(), name="create"),
+->>>>>>> MAHRAZABDELRAHMEN
+ ]
+Index: .idea/Backend.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<module type=\"PYTHON_MODULE\" version=\"4\">\n  <component name=\"NewModuleRootManager\">\n    <content url=\"file://$MODULE_DIR$\" />\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.11 (Backend)\" jdkType=\"Python SDK\" />\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\n  </component>\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/Backend.iml b/.idea/Backend.iml
+--- a/.idea/Backend.iml	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/.idea/Backend.iml	(date 1706896506538)
+@@ -1,8 +1,10 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <module type="PYTHON_MODULE" version="4">
+   <component name="NewModuleRootManager">
+-    <content url="file://$MODULE_DIR$" />
+-    <orderEntry type="jdk" jdkName="Python 3.11 (Backend)" jdkType="Python SDK" />
++    <content url="file://$MODULE_DIR$">
++      <excludeFolder url="file://$MODULE_DIR$/venv" />
++    </content>
++    <orderEntry type="inheritedJdk" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"Black\">\n    <option name=\"sdkName\" value=\"Python 3.11\" />\n  </component>\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.11 (Backend)\" project-jdk-type=\"Python SDK\" />\n  <component name=\"PyCharmProfessionalAdvertiser\">\n    <option name=\"shown\" value=\"true\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/.idea/misc.xml	(date 1706896506566)
+@@ -3,7 +3,7 @@
+   <component name="Black">
+     <option name="sdkName" value="Python 3.11" />
+   </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (Backend)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (Backend)" project-jdk-type="Python SDK" />
+   <component name="PyCharmProfessionalAdvertiser">
+     <option name="shown" value="true" />
+   </component>
+Index: moderator/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import uuid\n<<<<<<< HEAD\nfrom django.contrib.auth.hashers import make_password, get_random_string\nfrom django.contrib.auth.models import AbstractBaseUser\nfrom django.db import models\nfrom Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION\n=======\nfrom sqlite3 import IntegrityError\nfrom django.contrib.auth.hashers import make_password, get_random_string\nfrom django.contrib.auth.models import AbstractBaseUser, BaseUserManager\nfrom django.db import models\n>>>>>>> MAHRAZABDELRAHMEN\n\n\"\"\"\nRepresents A Util for handling Moderator class attributes.\n\nClass Name: ModAttributesUtil\n\nMethods:\n    - static uuid4 generate_unique_mod_id(void): generates a uuid4 as mod_id\n    - static string password(void) : generates a hash random password\n\nInheritance:\n    - This class does not inherit.\n\nUsage Example: \n    - call ModAttributesUtil.generate_unique_mod_id() -> 83aad6d7-37eb-4c00-924d-ef7498d9528b\n    \nRelationships:\n- Moderator Uses This Class for handling some of its attributes operations.\n\"\"\"\n\n\nclass ModAttributesUtil:\n\n    @staticmethod\n    def generate_unique_mod_id():\n        unique_id = uuid.uuid4()\n        print(\"/\" * 100)\n        print(unique_id)\n        return unique_id\n\n    @staticmethod\n    def password(length=30):\n        return make_password(get_random_string(length))\n\n\n\"\"\"\n<<<<<<< HEAD\n=======\nRepresents a Moderator Manager Controller in the system.\n\nClass Name : ModeratorManager\n\nMethods:\n    -  create_moderator(self, email, psd=None, **extra_fields) : Creates a New Instance of a Moderator\n\nInheritance:\n    - This class inherits from Django's `BaseUserManager` class.\n\nUsage Example: \n    -Moderator.objects.create_moderator(email='abc@abc.com', psd='secure_password',\n                                        first_name='Issam', last_name='Man'):\nRelationships:\n- No direct relationships with other models.\n\"\"\"\n\n\nclass ModeratorManager(BaseUserManager):\n    def create_moderator(self, email, psd=None, **extra_fields):\n        try:\n            if not email:\n                raise ValueError('The Email field must be set')\n\n            email = self.normalize_email(email)\n            moderator = self.model(email=email, **extra_fields)\n            moderator.set_password(psd)\n            moderator.save(using=self._db)\n            return moderator\n        except IntegrityError as e:\n\n            raise ValueError('Email address must be unique') from e\n\n\n\"\"\"\n>>>>>>> MAHRAZABDELRAHMEN\nRepresents a Moderator  in the system.\n\nClass Name : Moderator\n\nMethods:\n    -  __str__(self) : returns the string value of an instance of a moderator\n\nInheritance:\n    - This class inherits from Django's `AbstractBaseUser` class.\n\n\nRelationships:\n- No direct relationships with other models.\n\"\"\"\n\n\nclass Moderator(AbstractBaseUser):\n    first_name = models.CharField(max_length=255, default=\"mod\")\n    last_name = models.CharField(max_length=255, default=\"mod\")\n    email = models.EmailField(unique=True, default=\"abc@abc.com\")\n    mod_id = models.UUIDField(default=ModAttributesUtil.generate_unique_mod_id, editable=False, unique=True)\n    created_at = models.DateTimeField(auto_now_add=True)\n    password = models.CharField(max_length=255, default=ModAttributesUtil.password)\n<<<<<<< HEAD\n    objects = models.Manager()\n    auth = \"MODERATOR\"\n    USERNAME_FIELD = 'email'\n    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password']\n\n    class Meta:\n        permissions = [\n            (MODS_PERMISSION, \"mod_only_perm\"),\n            (MODS_ADMIN_NO_USER_PERM, \"mod_admin_only\"),\n        ]\n\n=======\n\n    objects = ModeratorManager()\n\n    USERNAME_FIELD = 'email'\n    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password']\n\n>>>>>>> MAHRAZABDELRAHMEN\n    def __str__(self):\n        return self.email\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moderator/models.py b/moderator/models.py
+--- a/moderator/models.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/moderator/models.py	(date 1706896465122)
+@@ -1,15 +1,8 @@
+ import uuid
+-<<<<<<< HEAD
+ from django.contrib.auth.hashers import make_password, get_random_string
+ from django.contrib.auth.models import AbstractBaseUser
+ from django.db import models
+ from Backend.permissions import MODS_ADMIN_NO_USER_PERM, MODS_PERMISSION
+-=======
+-from sqlite3 import IntegrityError
+-from django.contrib.auth.hashers import make_password, get_random_string
+-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+-from django.db import models
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ """
+ Represents A Util for handling Moderator class attributes.
+@@ -46,44 +39,6 @@
+ 
+ 
+ """
+-<<<<<<< HEAD
+-=======
+-Represents a Moderator Manager Controller in the system.
+-
+-Class Name : ModeratorManager
+-
+-Methods:
+-    -  create_moderator(self, email, psd=None, **extra_fields) : Creates a New Instance of a Moderator
+-
+-Inheritance:
+-    - This class inherits from Django's `BaseUserManager` class.
+-
+-Usage Example: 
+-    -Moderator.objects.create_moderator(email='abc@abc.com', psd='secure_password',
+-                                        first_name='Issam', last_name='Man'):
+-Relationships:
+-- No direct relationships with other models.
+-"""
+-
+-
+-class ModeratorManager(BaseUserManager):
+-    def create_moderator(self, email, psd=None, **extra_fields):
+-        try:
+-            if not email:
+-                raise ValueError('The Email field must be set')
+-
+-            email = self.normalize_email(email)
+-            moderator = self.model(email=email, **extra_fields)
+-            moderator.set_password(psd)
+-            moderator.save(using=self._db)
+-            return moderator
+-        except IntegrityError as e:
+-
+-            raise ValueError('Email address must be unique') from e
+-
+-
+-"""
+->>>>>>> MAHRAZABDELRAHMEN
+ Represents a Moderator  in the system.
+ 
+ Class Name : Moderator
+@@ -107,7 +62,6 @@
+     mod_id = models.UUIDField(default=ModAttributesUtil.generate_unique_mod_id, editable=False, unique=True)
+     created_at = models.DateTimeField(auto_now_add=True)
+     password = models.CharField(max_length=255, default=ModAttributesUtil.password)
+-<<<<<<< HEAD
+     objects = models.Manager()
+     auth = "MODERATOR"
+     USERNAME_FIELD = 'email'
+@@ -119,13 +73,5 @@
+             (MODS_ADMIN_NO_USER_PERM, "mod_admin_only"),
+         ]
+ 
+-=======
+-
+-    objects = ModeratorManager()
+-
+-    USERNAME_FIELD = 'email'
+-    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'password']
+-
+->>>>>>> MAHRAZABDELRAHMEN
+     def __str__(self):
+         return self.email
+Index: moderator/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><<<<<<< HEAD\nfrom django.core.exceptions import ObjectDoesNotExist\nfrom Backend.util import *\nfrom .serializers import *\nimport secrets\nfrom rest_framework import viewsets, status\nfrom rest_framework.response import Response\nfrom rest_framework.decorators import action\n=======\nfrom rest_framework import generics\nfrom rest_framework.response import Response\nfrom .serializers import ModeratorSerializer\nfrom .models import Moderator\nfrom rest_framework import status\nfrom .util import *\n>>>>>>> MAHRAZABDELRAHMEN\n\nrequest_data_json = ['first_name', 'last_name', 'email', 'password']\n\n\n<<<<<<< HEAD\nclass ModeratorManager(viewsets.ModelViewSet):\n=======\nclass ModeratorListCreateView(generics.ListCreateAPIView):\n    queryset = Moderator.objects.all()\n    serializer_class = ModeratorSerializer\n\n\nclass ModeratorUpdateView(generics.RetrieveDestroyAPIView):\n    queryset = Moderator.objects.all()\n    serializer_class = ModeratorSerializer\n\n\nclass ModeratorCreate(generics.CreateAPIView):\n>>>>>>> MAHRAZABDELRAHMEN\n    queryset = Moderator.objects.all()\n    serializer_class = ModeratorSerializer\n\n    def create(self, request, *args, **kwargs):\n        empty_fields = []\n        for field in request_data_json:\n            if not request.data.get(field):\n                empty_fields.append(field)\n        if empty_fields:\n            return Response({'error': f'Missing required fields: {empty_fields}'}, status=status.HTTP_400_BAD_REQUEST)\n\n        first_name = request.data.get(request_data_json[0])\n        last_name = request.data.get(request_data_json[1])\n        email = request.data.get(request_data_json[2])\n        if not EmailValidator.is_valid_email(email):\n            return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)\n<<<<<<< HEAD\n        password = secrets.token_urlsafe(8)\n=======\n        password = request.data.get(request_data_json[3])\n>>>>>>> MAHRAZABDELRAHMEN\n        pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])\n        if pass_error:\n            return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)\n\n        new_moderator = Moderator.objects.create_moderator(email=email, psd=password,\n                                                           first_name=first_name, last_name=last_name)\n        serializer = self.get_serializer(new_moderator)\n        headers = self.get_success_headers(serializer.data)\n\n        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)\n<<<<<<< HEAD\n\n    @staticmethod\n    def get_mod_list(request):\n        moderators = Moderator.objects.all()\n        serializer = ModeratorSerializer(moderators, many=True)\n        return Response(serializer.data)\n\n    def destroy(self, request, pk=None, *args):\n        try:\n            moderator = Moderator.objects.get(pk=pk)\n            moderator.delete()\n            return Response(status=status.HTTP_204_NO_CONTENT)\n        except ObjectDoesNotExist:\n            return Response(status=status.HTTP_404_NOT_FOUND)\n\n    @action(detail=True, methods=['get'])\n    def show_passwords(self, pk=None):\n        try:\n            moderator = Moderator.objects.get(pk=pk)\n            serialized_data = ModeratorSerializer(moderator).data\n            serialized_data['real_password'] = moderator.password\n            return Response(serialized_data)\n        except ObjectDoesNotExist:\n            return Response(status=status.HTTP_404_NOT_FOUND)\n\n    def update(self, request, pk=None, *args):\n        try:\n            moderator = Moderator.objects.get(pk=pk)\n            serializer = ModeratorSerializer(moderator, data=request.data)\n            if serializer.is_valid():\n                serializer.save()\n                return Response(serializer.data)\n            else:\n                print(serializer.errors)  #\n                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)\n        except ObjectDoesNotExist:\n            return Response(status=status.HTTP_404_NOT_FOUND)\n=======\n>>>>>>> MAHRAZABDELRAHMEN\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moderator/views.py b/moderator/views.py
+--- a/moderator/views.py	(revision cc3b1bc22e83c53076107c42731b8e5034e08416)
++++ b/moderator/views.py	(date 1706896465122)
+@@ -1,4 +1,3 @@
+-<<<<<<< HEAD
+ from django.core.exceptions import ObjectDoesNotExist
+ from Backend.util import *
+ from .serializers import *
+@@ -6,33 +5,11 @@
+ from rest_framework import viewsets, status
+ from rest_framework.response import Response
+ from rest_framework.decorators import action
+-=======
+-from rest_framework import generics
+-from rest_framework.response import Response
+-from .serializers import ModeratorSerializer
+-from .models import Moderator
+-from rest_framework import status
+-from .util import *
+->>>>>>> MAHRAZABDELRAHMEN
+ 
+ request_data_json = ['first_name', 'last_name', 'email', 'password']
+ 
+ 
+-<<<<<<< HEAD
+ class ModeratorManager(viewsets.ModelViewSet):
+-=======
+-class ModeratorListCreateView(generics.ListCreateAPIView):
+-    queryset = Moderator.objects.all()
+-    serializer_class = ModeratorSerializer
+-
+-
+-class ModeratorUpdateView(generics.RetrieveDestroyAPIView):
+-    queryset = Moderator.objects.all()
+-    serializer_class = ModeratorSerializer
+-
+-
+-class ModeratorCreate(generics.CreateAPIView):
+->>>>>>> MAHRAZABDELRAHMEN
+     queryset = Moderator.objects.all()
+     serializer_class = ModeratorSerializer
+ 
+@@ -49,11 +26,7 @@
+         email = request.data.get(request_data_json[2])
+         if not EmailValidator.is_valid_email(email):
+             return Response({'error': 'Invalid email format'}, status=status.HTTP_400_BAD_REQUEST)
+-<<<<<<< HEAD
+         password = secrets.token_urlsafe(8)
+-=======
+-        password = request.data.get(request_data_json[3])
+->>>>>>> MAHRAZABDELRAHMEN
+         pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
+         if pass_error:
+             return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)
+@@ -64,7 +37,6 @@
+         headers = self.get_success_headers(serializer.data)
+ 
+         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+-<<<<<<< HEAD
+ 
+     @staticmethod
+     def get_mod_list(request):
+@@ -102,5 +74,3 @@
+                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+         except ObjectDoesNotExist:
+             return Response(status=status.HTTP_404_NOT_FOUND)
+-=======
+->>>>>>> MAHRAZABDELRAHMEN

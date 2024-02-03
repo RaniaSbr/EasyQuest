@@ -1,6 +1,7 @@
 import re
 from enum import Enum
-
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Moderator
 
 class EmailValidator:
     @staticmethod
@@ -20,6 +21,23 @@ class PasswordError(Enum):
     NAME_IN_PASSWORD = "Password cannot contain your first name, last name, or email name."
 
 
+class Token_moderator:
+  @staticmethod
+  def generate_token_for_moderator(moderator_email):
+    try:
+        moderator = Moderator.objects.get(email=moderator_email)
+        refresh = RefreshToken.for_user(moderator)
+        return str(refresh.access_token)
+        ''' 
+       return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+        '''
+    except Moderator.DoesNotExist:
+        return None  # Handling the case where the moderator doesn't exist
+    
+    
 class PasswordValidator:
     @staticmethod
     def validate_password(password, first_name, last_name, email_name):
