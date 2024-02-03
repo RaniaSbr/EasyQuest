@@ -19,6 +19,7 @@ import ModalEditJSON from "./Components/model_edit_json.js";
 import ArticleUploader from './pages/UploadArticle.js'
 import Moderators from './pages/moderators.js'
 import Landing from './pages/Landing.js'
+import SearchResult from "./pages/SearchResult.js";
 function App() {
   return (
 
@@ -38,8 +39,9 @@ function App() {
         <Route path="/Favorites" element={<Favorites />}></Route>
         <Route path="/Login" element={<Login_page />}></Route>
         <Route path="/Register" element={<Register_page />}></Route>
-        <Route path="/Search_result" element={<Search_result />}></Route>
+        <Route path="/Search_result" element={<SearchResult />}></Route>
         <Route path="/ModPage" element={<ModPage />}></Route>
+        <Route path="/Home" element={<ModPage />}></Route>
       </Routes>
     </Router>
 

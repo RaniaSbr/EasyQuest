@@ -57,7 +57,7 @@ def get_articles(request):
 
 @api_view(['GET'])
 def search_articles(request):
-    query = request.GET.get('q', '')
+    query = request.GET.get('q', ' ')
     elasticsearch_instance = ElasticSearchUtil()
     es = elasticsearch_instance.create_elasticsearch_instance()
     body = {
@@ -91,11 +91,52 @@ def search_articles(request):
 
     context = {'articles_count': articles_count, 'results': serializer.data, 'message': message}
     return Response(context, status=status.HTTP_200_OK)
+''''
 
+@api_view(['GET'])
+def search_articles(request): 
+    query = request.GET.get('q', '')
+    elasticsearch_instance = ElasticSearchUtil()
+    es = elasticsearch_instance.create_elasticsearch_instance()
+    body = {
+        "query": {
+            "multi_match": {
+                "query": query,
+                "fields": ["content.tilte", "content.fullText", "content.abstruct","content.autors","content.KeyWords", "content.institution"]
+            }
+        }
+    }   
+    
+    result = es.search(index='article', body=body) # type: ignore
+    article_ids = []
+    non_integer_ids = []
+    for hit in result['hits']['hits']:
+        try:
+            article_id = int(hit['_id'])
+            article_ids.append(article_id)
+        except ValueError:
+            print(f"Failed to convert _id {hit['_id']} to int. Skipping.")
+            non_integer_ids.append(hit['_id'])
+    articles = Article.objects.filter(pk__in=article_ids)
+    serializer = ArticleSerializer(articles, many=True)
+    articles_count = articles.count()
+    
+    if articles_count == 0:
+        message = 'Aucun article trouvé.'
+    else:
+        message = f'{articles_count} article(s) trouvé(s) pour la recherche "{query}".'
+        
+   
+    context ={
+              'articles_count':articles_count,
+              'results':serializer.data}
+    context['message'] = message
+    return Response(context, status=status.HTTP_200_OK)
+'''''
 
 @api_view(['GET'])
 def search_articles_author(request):
-    query = request.GET.get('author', 'q')
+    query = request.GET.get( 'q' ,' ')
     elasticsearch_instance = ElasticSearchUtil()
     es = elasticsearch_instance.create_elasticsearch_instance()
 
@@ -133,7 +174,7 @@ def search_articles_keywords(request):
     elasticsearch_instance = ElasticSearchUtil()
     es = elasticsearch_instance.create_elasticsearch_instance()
     elasticsearch_instance.get_elasticsearch_connection()
-    query = request.GET.get('keywords', '')
+    query = request.GET.get('q', ' ')
 
     body = {
         "query": {

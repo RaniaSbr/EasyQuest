@@ -31,7 +31,7 @@ class ModeratorManager(viewsets.ModelViewSet):
         #pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
         #if pass_error:
         #    return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)
-        print('ha<wlik lmpds')
+        print('Here s the passwrod')
         print(password)
         
         

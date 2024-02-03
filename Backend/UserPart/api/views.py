@@ -58,8 +58,8 @@ def login_user(request):
         user_profile = Moderator.objects.get(email=username)
        
         if(user_profile is not None):
-            print('loggggg in ')
-            print(make_password(password))
+         
+         
             user = authenticate(request, email= username, password=password)
             value = 2
         else:
@@ -81,9 +81,6 @@ def login_user(request):
             #moderateur
              token =  Token_moderator.generate_token_for_moderator(moderator_email=username)
             
-
-       
-      
         # You can include the token in the response if needed
         first_name = user.first_name
         last_name = user.last_name
