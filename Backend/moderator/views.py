@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ObjectDoesNotExist
 from Backend.util import *
 from .serializers import *
@@ -6,7 +7,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-request_data_json = ['first_name', 'last_name', 'email', 'password']
+request_data_json = ['first_name', 'last_name', 'email']
 
 
 class ModeratorManager(viewsets.ModelViewSet):
@@ -15,7 +16,9 @@ class ModeratorManager(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         empty_fields = []
+        data = request.data
         for field in request_data_json:
+            print(request_data_json)
             if not request.data.get(field):
                 empty_fields.append(field)
         if empty_fields:
@@ -30,8 +33,8 @@ class ModeratorManager(viewsets.ModelViewSet):
         pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
         if pass_error:
             return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)
-
-        new_moderator = Moderator.objects.create_moderator(email=email, psd=password,
+        hashed = make_password(password)
+        new_moderator = Moderator.objects.create(email=email, password=hashed,
                                                            first_name=first_name, last_name=last_name)
         serializer = self.get_serializer(new_moderator)
         headers = self.get_success_headers(serializer.data)

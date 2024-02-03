@@ -38,12 +38,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_elasticsearch_dsl',
+    'rest_framework.authtoken',
     'corsheaders',
     'rest_framework',
     'myApp',
     'article',
-    'email_provider'
+    'email_provider',
+    'UserPart',
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -146,9 +153,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Add your React app's origin
+    "http://localhost:3000",
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'moderator.backends.ModeratorBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # SMTP server settings (example for Gmail)
