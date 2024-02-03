@@ -12,10 +12,10 @@ function Landing(params) {
       </div>
       <div className="grid ">
         <section id="home_land" className="flex items-center justify-center">
-          <Home_landing id="home_land"></Home_landing>
+        <Home_landing id="home_land"></Home_landing>
         </section>
         <section id="team" className=" flex items-center justify-center">
-          <Team id="team"></Team>
+        <Team id="team"></Team>
         </section>
 
         <div className="flex items-center justify-center ">

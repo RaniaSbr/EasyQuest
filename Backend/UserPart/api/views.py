@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import  AllowAny
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from moderator.util import Token_moderator
 from UserPart.models import UserProfile
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import check_password, make_password
@@ -65,18 +66,29 @@ def login_user(request):
             value = 3
             return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED) ;
    
-    print(user)
+    token = ' '
     if user is not None:
         login(request, user)
 
         # Generate or retrieve the user's token
-        #token, created = Token.objects.get_or_create(user=user)
+        if(value == 1):
+            #user 
+           token, created = Token.objects.get_or_create(user=user)
+           token = str(token.key)
+        
+        else:
+            if(value == 2):
+            #moderateur
+             token =  Token_moderator.generate_token_for_moderator(moderator_email=username)
+            
+
+       
       
         # You can include the token in the response if needed
         first_name = user.first_name
         last_name = user.last_name
         message = "Login successful"
-        return Response({'message': message , 'type': value, 'token': 'token.key','first_name': first_name, 'last_name': last_name}, status=status.HTTP_200_OK)
+        return Response({'message': message , 'type': value, 'token': token,'first_name': first_name, 'last_name': last_name}, status=status.HTTP_200_OK)
 
     else:
         
