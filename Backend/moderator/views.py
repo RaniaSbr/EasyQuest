@@ -5,6 +5,7 @@ import secrets
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.contrib.auth.hashers import make_password
 
 request_data_json = ['first_name', 'last_name', 'email']
 
@@ -30,8 +31,11 @@ class ModeratorManager(viewsets.ModelViewSet):
         #pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
         #if pass_error:
         #    return Response({'error': pass_error}, status=status.HTTP_400_BAD_REQUEST)
-
-        new_moderator = Moderator.objects.create(email=email, password=password,
+        print('ha<wlik lmpds')
+        print(password)
+        
+        
+        new_moderator = Moderator.objects.create(email=email, password= make_password(password),
                                                            first_name=first_name, last_name=last_name)
         serializer = self.get_serializer(new_moderator)
         headers = self.get_success_headers(serializer.data)
@@ -74,3 +78,4 @@ class ModeratorManager(viewsets.ModelViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+

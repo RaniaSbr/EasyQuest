@@ -43,26 +43,43 @@ def login_user(request):
 
     if not username or not password:
         return Response({'error': 'Both username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
-
+    
+    
+    user = ' '
+    value = 0  
     try:
-        user_profile = UserProfile.objects.get(user__username=username)
+     user_profile = UserProfile.objects.get(user__username=username)
+     user = authenticate(request, username=username, password=password)
+     value = 1 
+    
     except UserProfile.DoesNotExist:
-        return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
-    user = authenticate(request, username=username, password=password)
-
+       
+        user_profile = Moderator.objects.get(email=username)
+       
+        if(user_profile is not None):
+            print('loggggg in ')
+            print(make_password(password))
+            user = authenticate(request, email= username, password=password)
+            value = 2
+        else:
+            value = 3
+            return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED) ;
+   
+    print(user)
     if user is not None:
         login(request, user)
 
         # Generate or retrieve the user's token
-        token, created = Token.objects.get_or_create(user=user)
-        print(token.key)
+        #token, created = Token.objects.get_or_create(user=user)
+      
         # You can include the token in the response if needed
         first_name = user.first_name
         last_name = user.last_name
         message = "Login successful"
+        return Response({'message': message , 'type': value, 'token': 'token.key','first_name': first_name, 'last_name': last_name}, status=status.HTTP_200_OK)
 
-        return Response({'message': message, 'token': token.key,'first_name': first_name, 'last_name': last_name}, status=status.HTTP_200_OK)
     else:
+        
         message = "Incorrect password"
         return Response({'error': message}, status=status.HTTP_401_UNAUTHORIZED)
  
@@ -74,6 +91,18 @@ def logout_user(request):
     return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def check_user_type(request):
+    user = request.user
+    user_profile = UserProfile.objects.get(user__email=user)
+    if user_profile:
+        return Response({'value': 1})
+    user_profile = Moderator.objects.get(email=user)
+    if user_profile:
+        return Response({'value': 2})
+    
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])

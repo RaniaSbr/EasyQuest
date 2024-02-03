@@ -26,8 +26,10 @@ const ModeratorForm = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>Full Name: </label>
-            <input type="text" name="username" onChange={handleChange} required />
+            <label>First Name: </label>
+            <input type="text" name="first_name" onChange={handleChange} required />
+            <label>Last Name: </label>
+            <input type="text" name="last_name" onChange={handleChange} required />
 
             <label>Email: </label>
             <input type="email" name="email" onChange={handleChange} required />
