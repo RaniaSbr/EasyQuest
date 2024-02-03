@@ -8,6 +8,7 @@ urlpatterns = [
     path('update-password/', views.update_password),
     path('sign-up/', views.sign_up),
     path('favorite-list/', views.user_favorites),
+    path('check/', views.check_user_type),
     path('remove-favorite/<int:article_id>/', views.remove_favorite),
     path('add-favorite/<int:article_id>/', views.add_to_favorites),
 

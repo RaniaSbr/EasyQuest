@@ -20,6 +20,48 @@ const cleanUpData = (originalData) => {
   return cleanedData;
 };
 
+function getCookie(name) {
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + '=')) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return null;
+}
+
+async function checkUserType() {
+  const tokenValue = getCookie('token');
+
+  if (!tokenValue) {
+    console.error('Token not found.');
+    return;
+  }
+
+  const apiUrl = 'http://127.0.0.1:8000/api/check';
+  const response = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Token ${tokenValue}`,
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    const { value } = data;
+    if ( value == 1 ){
+      console.log("ejfedvgfvkdvsdkvkhgdvhhkgdvhdhgvd");
+      return;
+    }
+
+    console.log('Received value:', value);
+  } else {
+    console.log('Error:', response.status);
+  }
+}
+
 
 const ModPage = () => {
 
@@ -27,6 +69,7 @@ const ModPage = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    checkUserType();
     const getData = async () => {
       try {
         const data = await ArticleAPI.fetchArticles();
@@ -40,7 +83,7 @@ const ModPage = () => {
 
     getData();
   }, []);
- 
+
 
 
   if (loading) {
@@ -50,7 +93,7 @@ const ModPage = () => {
     return (
       <div className="min-h-screen w-full m-0 bg-[#06141D] text-white text-center">
         <Navbar_mod></Navbar_mod>
-        
+
         <div className=" text-lightgrey text-2xl">CONNECTION TO SERVER FAILED</div>
       </div>
     );

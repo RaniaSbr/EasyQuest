@@ -1,15 +1,14 @@
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.permissions import  AllowAny
+from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from UserPart.models import UserProfile
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from rest_framework.authtoken.models import Token
-from Backend.util import EmailValidator, PasswordValidator
 from article.serializers import *
 from elasticsearch_dsl.connections import connections
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -25,13 +24,14 @@ connections.create_connection(alias='default', hosts=['http://elastic:ar*==+FV5X
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def check_user_type(request, user_type):
-    if user_type.upper() == "USER":
+def check_user_type(request):
+    user = request.user
+    user_profile = UserProfile.objects.get(user__email=user)
+    if user_profile:
         return Response({'value': 1})
-    elif user_type.upper() == "MODERATOR":
+    user_profile = Moderator.objects.get(email=user)
+    if user_profile:
         return Response({'value': 2})
-    else:
-        return Response({'error': 'Invalid user type'}, status=400)
 
 
 @api_view(['POST'])
@@ -45,13 +45,10 @@ def login_user(request):
         return Response({'error': 'Both username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        print("hi")
-        user_profile = Moderator.objects.get(email=username)
-        print(user_profile.password)
+        user_profile = UserProfile.objects.get(user__username=username)
     except ObjectDoesNotExist:
-        print("hi")
         return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
-    user = authenticate(request, email=username, password=password)
+    user = authenticate(request, username=username, password=password)
 
     if user is not None:
         login(request, user)
@@ -59,6 +56,7 @@ def login_user(request):
         # Generate or retrieve the user's token
         token, created = Token.objects.get_or_create(user=user)
         print(token.key)
+        # You can include the token in the response if needed
         first_name = user.first_name
         last_name = user.last_name
         message = "Login successful"
@@ -126,22 +124,16 @@ def sign_up(request):
     last_name = request.data.get('last_name')
     email = request.data.get('email')
     password = request.data.get('password')
-    print(email)
-    if not EmailValidator.is_valid_email(email):
-        return Response({'error': 'Verify EMAIL format.'}, status=400)
-    pass_error = PasswordValidator.validate_password(password, first_name, last_name, str(email).split('@')[0])
-    if pass_error:
-        return Response({'error': str(pass_error)}, status=status.HTTP_400_BAD_REQUEST)
 
     if not first_name or not last_name or not email or not password:
         return Response({'error': 'All fields are required'}, status=400)
 
-    if User.objects.filter(email=email).exists() or Moderator.objects.filter(email=email).exists():
+    if User.objects.filter(email=email).exists():
         return Response({'error': 'User with this email already exists'}, status=400)
-    password = make_password(password)
-    user = Moderator.objects.create(email=email, password=password, first_name=first_name,
-                                    last_name=last_name)
 
+    user = User.objects.create_user(username=email, email=email, password=password, first_name=first_name,
+                                    last_name=last_name)
+    user_profile = UserProfile.objects.create(user=user)
 
     return Response({'message': 'User registered successfully'}, status=201)
 
