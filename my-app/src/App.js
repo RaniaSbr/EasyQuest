@@ -16,6 +16,7 @@ import ModEditPage from "./pages/mod_edit_page.js";
 import YourForm from "./pages/Editor.js";
 import ModeratorForm from "./Components/InserModerateur.js";
 import ModalEditJSON from "./Components/model_edit_json.js";
+import ArticleUploader from './pages/UploadArticle.js'
 function App() {
   return (
 
@@ -26,7 +27,7 @@ function App() {
       <Routes>
         <Route path="/edit-article/:articleId" element={<ModEditPage></ModEditPage>} />
         <Route path="/edit-article-form/:articleId" element={<ModalEditJSON />} />
-        <Route path="/" element={<ModeratorForm />}></Route>
+        <Route path="/" element={< ArticleUploader/>}></Route>
         <Route path="/Profile" element={<Profile />}></Route>
         <Route path="/Settings" element={<Settings />}></Route>
         <Route path="/Favorites" element={<Favorites />}></Route>

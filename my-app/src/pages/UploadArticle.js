@@ -9,19 +9,19 @@ const ArticleUploader = () => {
   const handleUrlChange = (e) => {
     setUrl(e.target.value);
   };
-
-  useEffect(() => {
-    const getData = async () =>{
-      try {
-        await ArticleAPI.handleUpload(url);
-        notify();
-        toast.error(">--UPLOAD SUCCESS!");
-      } catch (error) {
-        notify();
-        toast.error(">--ERROR HAPPENED  : " + error);
-      }
-
+  const handleUpload = async () =>{
+    try {
+      await ArticleAPI.handleUpload(url);
+      notify();
+      toast.error(">--UPLOAD SUCCESS!");
+    } catch (error) {
+      notify();
+      toast.error(">--ERROR HAPPENED  : " + error);
     }
+
+  }
+  useEffect(() => {
+ 
   },)
 
   return (

@@ -15,7 +15,11 @@ class CreateArticleUtil:
 
         try:
             if not data.get("success", True):
+                print('dakhel if')
+                print(data)
                 return data
+            print('taht if')
+            print(data)
             meta_data_instance = CreateArticleUtil._create_meta_data(data)
             CreateArticleUtil._create_related_objects(data, CreateArticleUtil.AUTHOR_KEY,
                                                       CreateArticleUtil._create_author, meta_data_instance.authors.add)
@@ -29,7 +33,9 @@ class CreateArticleUtil:
                 meta_data=meta_data_instance,
                 pdf_file=article_file
             )
-
+            
+            print(50*'hello')
+            
             article_instance.save()
             return {'success': True, 'message': 'Article created successfully'}
 

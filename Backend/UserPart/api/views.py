@@ -45,13 +45,10 @@ def login_user(request):
         return Response({'error': 'Both username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        print("hi")
-        user_profile = Moderator.objects.get(email=username)
-        print(user_profile.password)
-    except ObjectDoesNotExist:
-        print("hi")
+        user_profile = UserProfile.objects.get(user__username=username)
+    except UserProfile.DoesNotExist:
         return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
-    user = authenticate(request, email=username, password=password)
+    user = authenticate(request, username=username, password=password)
 
     if user is not None:
         login(request, user)
@@ -59,17 +56,16 @@ def login_user(request):
         # Generate or retrieve the user's token
         token, created = Token.objects.get_or_create(user=user)
         print(token.key)
+        # You can include the token in the response if needed
         first_name = user.first_name
         last_name = user.last_name
         message = "Login successful"
 
-        return Response({'message': message, 'token': token.key, 'first_name': first_name, 'last_name': last_name},
-                        status=status.HTTP_200_OK)
+        return Response({'message': message, 'token': token.key,'first_name': first_name, 'last_name': last_name}, status=status.HTTP_200_OK)
     else:
         message = "Incorrect password"
         return Response({'error': message}, status=status.HTTP_401_UNAUTHORIZED)
-
-
+ 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -138,10 +134,9 @@ def sign_up(request):
 
     if User.objects.filter(email=email).exists() or Moderator.objects.filter(email=email).exists():
         return Response({'error': 'User with this email already exists'}, status=400)
-    password = make_password(password)
-    user = Moderator.objects.create(email=email, password=password, first_name=first_name,
-                                    last_name=last_name)
-
+  #  password = make_password(password)
+    user = User.objects.create_user(username=email, email=email, password=password,first_name=first_name, last_name=last_name)
+    user_profile = UserProfile.objects.create(user = user)
 
     return Response({'message': 'User registered successfully'}, status=201)
 

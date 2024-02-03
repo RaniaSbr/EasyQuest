@@ -24,7 +24,7 @@ class ArticleAPI {
     static async handleUpload(url){
         try {
           // Envoyer l'URL au backend Django pour le traitement en utilisant une requête GET
-          const response = await axios.get(`${apiConfig.baseUrl}${apiConfig.articleUploadEndPoint}`, {
+          const response = await axios.get(`${apiConfig.baseUrl}${apiConfig.uploadDrive}`, {
             params: { url },
           });
     
