@@ -16,7 +16,7 @@ function Filter() {
   var Institutions = null;
   }
   
-  
+
   
   const [date, setDate] = useState(new Date());
   const [filterVisible, setFilterVisible] = useState();
@@ -128,7 +128,7 @@ function Filter() {
             </div>
           </div>
           <div className="search-filter flex items-center justify-center mt-10">
-            <button onClick= { SearchResult() }
+            <button onClick= { SearchResult(KeyWords,Authors,Institutions) }
             className="bg-blue w-[80%] md:w-[50%] lg:w-[30%]  py-2 rounded-2xl">
               {" "}
               <p className="text-xl">Search</p>
