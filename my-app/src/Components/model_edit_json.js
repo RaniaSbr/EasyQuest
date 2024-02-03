@@ -19,7 +19,7 @@ const ModalEditJSON = ({ }) => {
     const [loading, setLoading] = useState(true);
     const id_key = useParams();
     const articleID = parseInt(id_key["articleId"], 10)
-
+    
 
 
     useEffect(() => {
