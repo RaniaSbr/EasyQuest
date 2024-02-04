@@ -7,7 +7,7 @@ function Favorites() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const tokenValue = getCookie('token');
-
+    console.log(tokenValue)
     fetch('http://127.0.0.1:8000/api/favorite-list/', {
       method: 'GET',
       headers: {
@@ -23,13 +23,15 @@ function Favorites() {
       return response.json();
     })
     .then(data => {
+
       console.log("data ",data.favorites)
+    
       if (data.favorites.length > 0) {
-        var articles = data.favorites.map((favorite,index) => ({
+        var articles = data.favorites.map((favorite, index) => ({
           date: "12/12/2023",
-          title: favorite.content.tilte,
-          authors: favorite.content.autors.map((author) => author.name),
-          institutions: favorite.content.institution.map((author) => author.name),
+          title: favorite.meta_data.title,
+          authors: favorite.meta_data.authors[0].name ? favorite.meta_data.authors.map((author) => author.name).join(", ") : "",
+          institutions: favorite.meta_data.institutions[0].name ? favorite.meta_data.institutions.map((institution) => institution.name).join(", ") : "",
           url: "http://ictinnovations.org/2010",
           fav: "0",
         }));
@@ -39,7 +41,7 @@ function Favorites() {
 
       } else {
       
-        
+        alert("aucune favorie trouver")
       }
     })
     .catch(error => {

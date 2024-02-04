@@ -16,7 +16,7 @@ function Moderators(params) {
   useEffect(() => {
     const fetchModerators = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/ModerateurManager/');
+        const response = await axios.get('http://localhost:8000/moderator/ModerateurManager/');
         setModerators(response.data);
       } catch (error) {
         console.error('Error fetching moderators:', error);
@@ -28,14 +28,14 @@ function Moderators(params) {
 
   const users = moderators.map((moderateur) => ({
     id: moderateur.id,
-    name: moderateur.username,
+    name: moderateur.first_name +'_'+ moderateur.last_name,
     title: moderateur.email,
   }));
 
   useEffect(() => {
     const updatedUsers = moderators.map((moderateur) => ({
       id: moderateur.id,
-      name: moderateur.username,
+      name: moderateur.first_name +'_'+ moderateur.last_name,
       title: moderateur.email,
     }));
 
@@ -44,7 +44,7 @@ function Moderators(params) {
 
   const handleAddClick = () => {
     console.log("Add button clicked");
-    // Implement logic to open a form for adding a new user
+    
   };
 
   const handleFilterClick = (title) => {
@@ -55,7 +55,7 @@ function Moderators(params) {
 
   const handleDeleteClick = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/ModerateurManager/${id}/`);
+      await axios.delete(`http://localhost:8000/moderator/ModerateurManager/${id}/`);
       const updatedUsers = displayedUsers.filter((user) => user.id !== id);
       setDisplayedUsers(updatedUsers);
     } catch (error) {
@@ -65,7 +65,7 @@ function Moderators(params) {
 
   const handleShowPasswordClick = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8000/ModerateurManager/show-password/${id}/`);
+      const response = await axios.get(`http://localhost:8000/moderator/ModerateurManager/show-password/${id}/`);
       const { real_password, password } = response.data;
       alert(`Real Password: ${real_password}\nHashed Password: ${password}`);
     } catch (error) {
@@ -94,7 +94,7 @@ function Moderators(params) {
       // Log the data before making the request
       console.log('Updated User Data:', requestData);
   
-      await axios.put(`http://localhost:8000/ModerateurManager/update/${id}/`, requestData);
+      await axios.put(`http://localhost:8000/moderator/ModerateurManager/update/${id}/`, requestData);
       setEditUserId(null);
       // You may want to fetch the updated list of users here
     } catch (error) {

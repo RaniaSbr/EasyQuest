@@ -4,8 +4,9 @@ import React, { useState } from "react";
 const SearchResults = () => {
   const [results, setResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // State to store the search term
+
   const handleSearch = async () => {
-    const apiUrl = `http://localhost:8000/api/search-articles/?q=${encodeURIComponent(searchTerm)}`;
+    const apiUrl = `http://localhost:8000/api/search/?q=${encodeURIComponent(searchTerm)}`;
     axios.get(apiUrl)
       .then(response => {
         console.log(response.data);

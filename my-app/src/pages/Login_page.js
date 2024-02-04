@@ -1,10 +1,10 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
+import GenericNavBar from "../Components/generic_nav_bar";
 import Login from "../Components/Login";
 function login_page(params) {
   return (
     <div className="login_Page">
-      <Navbar></Navbar>
+      <GenericNavBar></GenericNavBar>
       <Login></Login>
     </div>
   );

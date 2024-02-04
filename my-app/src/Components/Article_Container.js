@@ -1,75 +1,111 @@
-import React from "react";
-import "../Styles/Article_Container.css";
-import Hyphenated from "react-hyphen";
+
+import React  from 'react'
+import '../Styles/Article_Container.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-
+import { useNavigate } from 'react-router-dom';
 const ArticleContainer = ({ articleData }) => {
-  const { date, title, authors, institutions, url } = articleData;
+  const { title, authors,  url, institutions, date, id } = articleData ;
+  const navigate = useNavigate();
+  const handleEditClick = (articleId) => {
+    navigate(`/edit-article/${articleId}`);
+    const tokenValue = getCookie('token');
+    fetch('http://127.0.0.1:8000/api/add-favorite/' + articleId +'/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + tokenValue  // Remplacez par votre jeton d'authentification JWT
+      }
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Failed to add article to favorites');
+      }
+  })
+  .then(data => {
+      alert(data.message);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while adding article to favorites');
+  });
+
+  
+  function getCookie(name) {
+    const cookieName = name + '=';
+    const cookieArray = document.cookie.split(';');
+  
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i].trim();
+      if (cookie.indexOf(cookieName) === 0) {
+        return cookie.substring(cookieName.length, cookie.length);
+      }
+    }
+    return null;
+  } 
+  };
   return (
-    <Hyphenated>
-      <div className="overflow-wrap break-word mx-4 md:mx-8 lg:mx-16 xl:mx-24 mt-32 p-5 rounded-lg border-2 border-lightStartD bg-grey">
-        <div className="mod-article-row">
-          <time className="font-Montserrat">{date}</time>
-          <div className="mod-article-dropdown">
-            <span>
-              <FontAwesomeIcon icon={faEllipsis} size="2xl" className="z-0" />
-            </span>
-            <div className="mod-article-dropdown-content">
-              <div className="mod_article_text">
-                <a href="#">EDIT</a>
-              </div>
-              <div className="mod_article_text">
-                <a href="#" className="text-red-500">
-                  Delete
-                </a>
-              </div>
+    <div className='overflow-wrap break-word mx-4 md:mx-8 lg:mx-16 xl:mx-24 mt-32 p-5 rounded-lg border-2 border-lightStartD bg-grey'>
+      <div className='mod-article-row'>
+        <time className='font-Montserrat'>{date}</time>
+        <div className='mod-article-dropdown'>
+          <span>
+          <FontAwesomeIcon icon={faEllipsis} size='2xl' className='z-0' />
+          </span>
+          <div className='mod-article-dropdown-content'>
+            <div className='mod_article_text cursor-pointer'>
+              <a onClick={() => handleEditClick(id)}>EDIT</a>
+            </div>
+            <div className='mod_article_text'>
+              <a href='#' className='text-red-500'>
+                Delete
+              </a>
             </div>
           </div>
         </div>
-        <p className=" hyphens-auto mt-5 ml-5 font-Montserrat text-green font-bold text-2xl ">
+      </div>
+        <p className=' hyphens-auto mt-5 ml-5 font-Montserrat text-green font-bold text-2xl '>
           {title}
         </p>
-        <div className="mt-5 ml-5 font-Montserrat font-bold text-xl">
-          {/* Authors */}
-          {authors.map((author, index) => (
-            <React.Fragment key={index}>
-              <a
-                href="#"
-                className="underline decoration-sky-500 font-Montserrat"
-              >
-                {author}
-              </a>
-
-              {index < authors.length - 1 && " | "}
-            </React.Fragment>
-          ))}
-        </div>
-
-        <div className="mt-5 ml-5 font-Montserrat font-bold text-xl">
-          {/* Institutions */}
-          {institutions.map((institution, index) => (
-            <div
-              className="font-Montserrat underline decoration-green"
-              key={index}
+      <div className='mt-5 ml-5 font-Montserrat font-bold text-xl'>
+        {/* Authors */}
+        {authors.map((author, index) => (
+          <React.Fragment key={index}>
+            <a
+              href='#'
+              className='underline decoration-sky-500 font-Montserrat'
             >
-              {institution}
-            </div>
-          ))}
-        </div>
+              {author}
+            </a>
 
-        <div className="hyphens-auto mt-5 ml-5 font-Montserrat font-bold text-xl">
-          URL :
-          <a
-            href={url}
-            className="mt-5 ml-5 font-Montserrat font-bold italic text-xl text-green underline decoration-lightStartD"
-          >
-            {url}
-          </a>
-        </div>
+            {index < authors.length - 1 && ' | '}
+          </React.Fragment>
+        ))}
       </div>
-    </Hyphenated>
-  );
-};
 
-export default ArticleContainer;
+
+      <div className='mt-5 ml-5 font-Montserrat font-bold text-xl'>
+        {/* Institutions */}
+        {institutions.map((institution, index) => (
+          <div className='font-Montserrat underline decoration-green' key={index}>
+            {institution}
+          </div>
+        ))}
+      </div>
+
+      <div className='hyphens-auto mt-5 ml-5 font-Montserrat font-bold text-xl'>
+        URL :
+        <a
+          href={url}
+          className='mt-5 ml-5 font-Montserrat font-bold italic text-xl text-green underline decoration-lightStartD'
+        >
+          {url}
+        </a>
+      </div>
+    </div>
+  )
+}
+
+export default ArticleContainer

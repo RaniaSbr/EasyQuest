@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 
 const YourFormComponent = () => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
+    field1: '',
+    field2: '',
   });
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -18,7 +19,7 @@ const YourFormComponent = () => {
     e.preventDefault();
 
     // Make an HTTP request to your Django backend API
-    const response = await fetch('http://127.0.0.1:8000/user/', {
+    const response = await fetch('http://localhost:8000/api/yourmodel/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,13 +39,13 @@ const YourFormComponent = () => {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        username:
-        <input type="text" name="username" value={formData.username} onChange={handleChange} />
+        Field 1:
+        <input type="text" name="field1" value={formData.field1} onChange={handleChange} />
       </label>
       <br />
       <label>
-        email:
-        <textarea name="email" value={formData.email} onChange={handleChange} />
+        Field 2:
+        <textarea name="field2" value={formData.field2} onChange={handleChange} />
       </label>
       <br />
       <button type="submit">Submit</button>

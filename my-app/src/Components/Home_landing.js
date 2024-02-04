@@ -1,5 +1,5 @@
 import React from "react";
-import RandomizeText from "../Components/test";
+import RandomizeText from './test.js';
 
 function Home_landing(params) {
   return (
@@ -7,7 +7,7 @@ function Home_landing(params) {
       <div className="landing-home-left grid content-center gap-8  justify-items-center m-5 lg:w-[50vw] ">
         <div className="">
           {" "}
-          <RandomizeText></RandomizeText>
+          <RandomizeText initialText="Knowledge Unleashed." delay={80} resetDelay={800} />
         </div>
         <p className="w-[80vw] lg:w-[40vw] ">
           Discover the latest in science with our efficient scientific article

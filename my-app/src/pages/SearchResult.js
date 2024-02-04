@@ -1,93 +1,121 @@
 import Navbar from "../Components/Navbar";
-import Search_bar from "../Components/Search_bar";
-import Article from "../Components/Article";
 import Filter from "../Components/Filter";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import ArticleContainer from "../Components/Article_Container";
+import SearchField from "../Components/SearchField";
+
+const cleanUpData = (originalData) => {
+  console.log("data jey : ", originalData.meta_data.keyword);
+  const cleanedData = {
+    title: originalData.meta_data.title,
+    keywords: originalData.meta_data.keywords,
+    references: originalData.meta_data.references.map((ref) => ref.raw_text),
+    abstract: originalData.meta_data.abstract,
+    authors: originalData.meta_data.authors.map((author) => author.name),
+    institutions: originalData.meta_data.institutions.map(
+      (institution) => institution.name
+    ),
+    date: originalData.meta_data.pub_date,
+    url: "go.com",
+    id: originalData.id,
+  };
+
+  return cleanedData;
+};
+
+
 
 function SearchResult(props) {
-  const { query, keywords, authors, institutions } = props;
-  const [Articles, setArticles] = useState([]);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log(query)
-  useEffect(() => {
-    const fetchData = async () => {
+  const [query, setQuery] = useState('')
+  var API;
+
+  const updateQuery = async (newQuery) => {
+    
+    const keyWords = newQuery.keywords || '';
+    const author = newQuery.authos_names || '';
+    const institutions = newQuery.institutions_names || '';
+    
     let API;
-
-if (keywords&& !authors && !institutions) {
-  API ='http://127.0.0.1:8000/api/search-articles-keywords/?q=';
-} else{
-
-  if (!keywords && authors && !institutions) {
-    API ='http://127.0.0.1:8000/api/search-articles-autors/?q=';
-  } else {
-
-    if (!keywords && !authors && institutions) {
-      API ='http://127.0.0.1:8000/api/search-articles-institution/?q=';
-    }else{
-      API ='http://127.0.0.1:8000/api/search-articles/?q=';
+    
+    if (keyWords !== '' && author === '' && institutions === '') {
+      API = `http://127.0.0.1:8000/article/search-articles-keywords/?q=${keyWords}`;
+    } else if (keyWords === '' && author !== '' && institutions === '') {
+      API = `http://127.0.0.1:8000/article/search-articles-authors/?q=${author}`;
+    } else if (keyWords === '' && author === '' && institutions !== '') {
+      API = `http://127.0.0.1:8000/article/search-articles-institution/?q=${institutions}`;
+    } else {
+      API = `http://127.0.0.1:8000/article/search-articles/?q=${keyWords}${author}${institutions}`;
     }
-  }
-}
-   fetch(API + query)
-    .then(response => response.json())
-    .then(data => {
-    var articlesCount = data.articles_count;
-    var results = data.results;
-    var message = data.message;
-      if (articlesCount === 0) {
-          document.getElementById('message').innerText = message;
-      } else {
-        var articles = results.map((results,index) => ({
-          date: "12/12/2023",
-          title: results.content.tilte,
-          authors: results.content.autors.map((author) => author.name),
-          institutions: results.content.institution.map((author) => author.name),
-          url: "http://ictinnovations.org/2010",
-          fav: "0",
-        }));
-        setArticles(articles);
-        setLoading(false);
-      }
-    })
-    .catch(error => {
-      console.error('Erreur lors de la récupération des articles:', error);
-    });
+    
+    try {
+      const response = await axios.get(
+        API
+      );
+      console.log(response)
+      const array = response.data["results"].map((element) => cleanUpData(element))
+       
+      setData(array);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  fetchData();
-  }, [query, keywords, authors, institutions]);
-  // const articleData = {
-  //   date: "12/12/2023",
-  //   title:
-  //     "Pharmacogenetic Risk Scores for Perindopril Clinical and Cost Effectiveness in Stable Coronary Artery Disease: When Are We Ready to Do?",
-  //   authors: ["Author 1", "Author 2", "Author 3", "Author 4"],
 
-  //   institutions: [
-  //     "BIG UNIVERSITY OF SOMETHING SOMETHING VERY BIG",
-  //     "Institution 2",
-  //     "Institution 3",
-  //     "Institution 4",
-  //   ],
+  useEffect(() => {
+    if (data != null) {
+      setLoading(false);
+    }
+  }, [data, loading]);
 
-  //   url: "http://ictinnovations.org/2010",
-  //   fav: "1",
-  // };
+  const search_article = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/article/search-articles/?q=`+ query
+      );
+      const array = response.data["results"].map((element) => cleanUpData(element))
+
+      setData(array);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleSearchChange = (e) => {
+    const newValue = e.target.value;
+    setQuery(newValue);
+    
+  };
 
   return (
     <div className="SeearchResult_Page grid content-center gap-10 justify-items-center ">
       <Navbar></Navbar>
       <div className="w-[90vw] flex items-center justify-start ">
-        <Search_bar backgroundColor="white"></Search_bar>
-        <button >Click Here</button>
+        <SearchField
+          placeholder={'Search'}
+          value={query}
+          onChange={handleSearchChange}
+        />
+        <button onClick={async () => { await search_article() }}>Search</button>
       </div>
       <div className="w-[90vw] flex items-center justify-start ">
-        <Filter></Filter>
+        <Filter setQuery={updateQuery}></Filter>
       </div>
-
-      {Articles.map((article,index)=>(
-        <Article key={index} articleData={article}/>
-      ))}
-      
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        data &&
+        data.map((article) => (
+          <ArticleContainer
+            key={article.id}
+            articleData={article}
+          ></ArticleContainer>
+        ))
+      )}
     </div>
   );
 }
+
 export default SearchResult;

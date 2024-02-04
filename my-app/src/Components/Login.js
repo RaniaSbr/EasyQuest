@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate } from "react-router-dom";
 import "../Styles/Login.css";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -9,64 +9,98 @@ import { toast, ToastContainer } from "react-toastify";
 function Login() {
   const [emailval, setemailval] = useState("");
   const [passval, setpassval] = useState();
-  const notify = () => toast.error();
 
-  const login_requet=async()=> {
-    var username = document.getElementById('emil1').value;
-    var password = document.getElementById('pwd1').value;
+  const notify = () => toast.error();
+  const navigate = useNavigate();
+  const login_requet = async () => {
+    try {
+      var username = document.getElementById('emil1').value;
+      var password = document.getElementById('pwd1').value;
+     
+      if (document.getElementById('emil1').value == null) {
+        throw Error("UserName Is NULL");
+      }
+      if (password == null) {
+        throw Error("password Is NULL");
+      }
+    } catch (error) {
+      notify(); toast.error("ERROR>", error);
+    }
 
     await fetch('http://127.0.0.1:8000/api/login/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-              
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+       
+      })
     })
-    .then(response => {
+      .then(response => {
         return response.json();
-    })
-    .then(data => {
-          // Afficher le message de succès
-      
-        
-        if(data.error){
+      })
+      .then(data => {
+        // Afficher le message de succès
+
+
+        if (data.error) {
           notify(); toast.error(data.error);
-        }else{
+        } else {
 
           notify(); toast.error(data.messafe);
-            document.cookie = `token=${data.token}; path=/; SameSite=None; Secure`;
-            console.log(data);
-            var tokenValue = getCookie('token');
-            console.log(tokenValue);  
-        // Éventuellement, rediriger vers une autre page ou effectuer d'autres actions
+          document.cookie = `token=${data.token}; path=/; SameSite=None; Secure`;
+          
+          var tokenValue = getCookie('token');
+         
+          // Éventuellement, rediriger vers une autre page ou effectuer d'autres actions
+         
+          console.log(data)
+            // redirection
+          
+        
+          if (Number(data.type) == 1) {
+            // utilisateur normale
+            navigate('/User')
+          }
+          else{
+            if (data.type == 2) {
+              // moderateur
+            
+              navigate('/Moderateur')
             }
-    })
-    .catch(error => {
+            else{
+              //  admin
+              navigate('/Admin')
+            }
+          }
+         
+        }
+      })
+      .catch(error => {
         console.log('Erreur:', error);
-        document.getElementById('error-message').innerText = error; // Afficher le message d'erreur
-    }); 
+        
+      });
 
-    
-}
 
-// Function to get CSRF token from cookies (Django)
-function getCookie(name) {
+  }
+
+  // Function to get CSRF token from cookies (Django)
+  function getCookie(name) {
     const cookieName = name + '=';
     const cookieArray = document.cookie.split(';');
-    
+
     for (let i = 0; i < cookieArray.length; i++) {
-        let cookie = cookieArray[i].trim();
-        if (cookie.indexOf(cookieName) === 0) {
-            return cookie.substring(cookieName.length, cookie.length);
-        }
+      let cookie = cookieArray[i].trim();
+      if (cookie.indexOf(cookieName) === 0) {
+        return cookie.substring(cookieName.length, cookie.length);
+      }
     }
     return null;
-}
-  
+  }
+
 
 
   const handleSubmit = (event) => {
@@ -113,14 +147,14 @@ function getCookie(name) {
             />
 
             {/* Login Button */}
-           
-              <button onClick={() => { try{  login_requet(); }catch (error) {notify(); toast.error("ERROR HAPPENED  : " + error);}}}
-                type="submit"
-                id="sub_button"
-                className="login-button w-full bg-grey px-[1rem] py-[0.5rem] cursor-pointer"
-              >
-                Login
-              </button>
+
+            <button onClick={() => { try { login_requet(); } catch (error) { notify(); toast.error("ERROR HAPPENED  : " + error); } }}
+              type="submit"
+              id="sub_button"
+              className="login-button w-full bg-grey px-[1rem] py-[0.5rem] cursor-pointer"
+            >
+              Login
+            </button>
           </form>
 
           {/* Login Footer */}
