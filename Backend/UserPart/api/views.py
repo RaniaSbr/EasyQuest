@@ -47,25 +47,39 @@ def login_user(request):
         return Response({'error': 'Both username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        user_profile = UserProfile.objects.get(user__username=username)
-        user = authenticate(request, username=username, password=password)
-        user_type = 'user'
-    except ObjectDoesNotExist:
-        try:
-            user_profile = Moderator.objects.get(email=username)
-            user = authenticate(request, email=username, password=password)
-            user_type = 'moderator'
-        except ObjectDoesNotExist:
-            return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
-
+     user_profile = UserProfile.objects.get(user__username=username)
+     user = authenticate(request, username=username, password=password)
+     value = 1 
+    
+    except UserProfile.DoesNotExist:
+       
+        user_profile = Moderator.objects.get(email=username)
+       
+        if(user_profile is not None):
+         
+         
+            user = authenticate(request, email= username, password=password)
+            value = 2
+        else:
+            value = 3
+            return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED) ;
+   
+    token = ' '
     if user is not None:
         login(request, user)
 
-        if user_type == 'user':
-            token, created = Token.objects.get_or_create(user=user)
-        elif user_type == 'moderator':
-            token = Token_moderator.generate_token_for_moderator(moderator_email=username)
-
+        # Generate or retrieve the user's token
+        if(value == 1):
+            #user 
+           token, created = Token.objects.get_or_create(user=user)
+           token = str(token.key)
+        
+        else:
+            if(value == 2):
+            #moderateur
+             token =  Token_moderator.generate_token_for_moderator(moderator_email=username)
+            
+        # You can include the token in the response if needed
         first_name = user.first_name
         last_name = user.last_name
         message = "Login successful"

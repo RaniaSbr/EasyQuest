@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats de recherche d'articles</title>
+    <!-- Inclure des styles CSS si nécessaire -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .article {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+        .article h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .article p {
+            margin-bottom: 5px;
+        }
+        .message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Résultats de recherche d'articles</h1>
+    
+    <!-- Formulaire de recherche -->
+    <form id="searchForm">
+        <label for="query">Recherche :</label>
+        <input type="text" id="query" name="query">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <div class="message" id="message"></div>
+    <div class="articles" id="articles"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchForm = document.getElementById('searchForm');
+            const messageDiv = document.getElementById('message');
+            const articlesDiv = document.getElementById('articles');
+
+            searchForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const query = document.getElementById('query').value;
+
+                fetch(`http://127.0.0.1:8000/api/search-articles/?q=${encodeURIComponent(query)}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Ajoutez des en-têtes supplémentaires si nécessaire
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('data = ')
+                    console.log(data)
+                    articlesDiv.innerHTML = '';
+
+                    if (data.articles_count === 0) {
+                        messageDiv.innerHTML = '<p>Aucun article trouvé.</p>';
+                    } else {
+                        messageDiv.innerHTML = `<p>${data.articles_count} article(s) trouvé(s) pour la recherche "${query}".</p>`;
+                    }
+
+                    const articles = data.results;
+                    console.log(articles)
+                    articles.forEach(article => {
+                        const articleElement = document.createElement('div');
+                        articleElement.classList.add('article');
+                        articleElement.innerHTML = `
+                            <h2>${article.content.tilte}</h2>
+                            <p>${article.content.abstruct}</p>
+                            <p>Auteurs: ${article.content.autors.map((author) => author.name)}</p>
+                            <!-- Ajoutez d'autres champs d'article si nécessaire -->
+                        `;
+                        articlesDiv.appendChild(articleElement);
+                    });
+                })
+                .catch(error => {
+                    console.error('Une erreur s\'est produite lors de la récupération des données:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
