@@ -16,7 +16,7 @@ import ModEditPage from "./pages/mod_edit_page.js";
 import YourForm from "./pages/Editor.js";
 import ModeratorForm from "./Components/InserModerateur.js";
 import ModalEditJSON from "./Components/model_edit_json.js";
-import ArticleUploader from './pages/UploadArticle.js'
+import SearchResult from "./pages/SearchResult.js";
 import Moderators from './pages/moderators.js'
 import Landing from './pages/Landing.js'
 function App() {
@@ -38,7 +38,7 @@ function App() {
         <Route path="/Favorites" element={<Favorites />}></Route>
         <Route path="/Login" element={<Login_page />}></Route>
         <Route path="/Register" element={<Register_page />}></Route>
-        <Route path="/Search_result" element={<Search_result />}></Route>
+        <Route path="/Search_result" element={<SearchResult />}></Route>
         <Route path="/ModPage" element={<ModPage />}></Route>
       </Routes>
     </Router>

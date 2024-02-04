@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from moderator.util import Token_moderator
 from UserPart.models import UserProfile
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -39,62 +39,44 @@ def check_user_type(request):
 @csrf_protect
 @csrf_exempt
 def login_user(request):
+    token = ' '
     username = request.data.get('username')
     password = request.data.get('password')
 
     if not username or not password:
         return Response({'error': 'Both username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-    user = ' '
-    value = 0  
+
     try:
-     user_profile = UserProfile.objects.get(user__username=username)
-     user = authenticate(request, username=username, password=password)
-     value = 1 
-    
-    except UserProfile.DoesNotExist:
-       
-        user_profile = Moderator.objects.get(email=username)
-       
-        if(user_profile is not None):
-            print('loggggg in ')
-            print(make_password(password))
-            user = authenticate(request, email= username, password=password)
-            value = 2
-        else:
-            value = 3
-            return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED) ;
-   
-    token = ' '
+        user_profile = UserProfile.objects.get(user__username=username)
+        user = authenticate(request, username=username, password=password)
+        user_type = 'user'
+    except ObjectDoesNotExist:
+        try:
+            user_profile = Moderator.objects.get(email=username)
+            user = authenticate(request, email=username, password=password)
+            user_type = 'moderator'
+        except ObjectDoesNotExist:
+            return Response({'error': 'Incorrect username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+
     if user is not None:
         login(request, user)
 
-        # Generate or retrieve the user's token
-        if(value == 1):
-            #user 
-           token, created = Token.objects.get_or_create(user=user)
-           token = str(token.key)
-        
-        else:
-            if(value == 2):
-            #moderateur
-             token =  Token_moderator.generate_token_for_moderator(moderator_email=username)
-            
+        if user_type == 'user':
+            token, created = Token.objects.get_or_create(user=user)
+        elif user_type == 'moderator':
+            token = Token_moderator.generate_token_for_moderator(moderator_email=username)
 
-       
-      
-        # You can include the token in the response if needed
         first_name = user.first_name
         last_name = user.last_name
         message = "Login successful"
-        return Response({'message': message , 'type': value, 'token': token,'first_name': first_name, 'last_name': last_name}, status=status.HTTP_200_OK)
-
+        return Response({'message': message, 'type': user_type,
+                         'token': str(token.key), 'first_name': first_name,
+                         'last_name': last_name}, status=status.HTTP_200_OK)
     else:
-        
         message = "Incorrect password"
         return Response({'error': message}, status=status.HTTP_401_UNAUTHORIZED)
- 
+
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -114,7 +96,8 @@ def check_user_type(request):
     user_profile = Moderator.objects.get(email=user)
     if user_profile:
         return Response({'value': 2})
-    
+
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -169,9 +152,10 @@ def sign_up(request):
 
     if User.objects.filter(email=email).exists():
         return Response({'error': 'User with this email already exists'}, status=400)
-  #  password = make_password(password)
-    user = User.objects.create_user(username=email, email=email, password=password,first_name=first_name, last_name=last_name)
-    user_profile = UserProfile.objects.create(user = user)
+    #  password = make_password(password)
+    user = User.objects.create_user(username=email, email=email, password=password, first_name=first_name,
+                                    last_name=last_name)
+    user_profile = UserProfile.objects.create(user=user)
 
     return Response({'message': 'User registered successfully'}, status=201)
 
@@ -228,4 +212,3 @@ def remove_favorite(request, article_id):
 
     return Response({'favorites': serializer.data, 'message': f'Article with ID {article_id} removed from favorites'},
                     status=200)
-

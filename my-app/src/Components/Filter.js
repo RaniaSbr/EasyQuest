@@ -3,12 +3,35 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { IoFilterOutline } from "react-icons/io5";
 import "../Styles/Article.css";
+import SearchResult from "../pages/SearchResult";
 
-function Filter() {
+function Filter({setQuery}) {
   const [date, setDate] = useState(new Date());
   const [filterVisible, setFilterVisible] = useState();
   const [showCalendar, setShowCalendar] = useState(false);
   const [showCalendar2, setShowCalendar2] = useState(false);
+  const [keywords, setKeywords] = useState("");
+  const [authors, setAuthors] = useState("");
+  const [institutions, setInstitutions] = useState("");
+ 
+  const handleSearch = () => {
+    const newValues = {
+      keywords: keywords,
+      authos_names: authors,
+      institutions_names: institutions,
+    };
+    setQuery(newValues);
+  };
+  const handleKeywordsChange = (event) => {
+    setKeywords(event.target.value);
+  };
+  
+  const handleAuthorsChange = (event) => {
+    setAuthors(event.target.value);
+  };
+  const handleInstitutionsChange = (event) => {
+    setInstitutions(event.target.value);
+  };
   const toggleFiltervisible = (event) => {
     setFilterVisible(!filterVisible);
   };
@@ -48,6 +71,7 @@ function Filter() {
               type="text"
               id="keywords"
               className="border-b border-grey bg-transparent w-4/5 focus:outline-none text-grey"
+              onChange={handleKeywordsChange}
             />
           </div>
 
@@ -59,6 +83,7 @@ function Filter() {
               type="text"
               id="authors"
               className="border-b border-grey bg-transparent w-4/5 focus:outline-none text-grey"
+              onChange={handleAuthorsChange}
             />
           </div>
 
@@ -70,6 +95,7 @@ function Filter() {
               type="text"
               id="institutions"
               className="border-b border-grey bg-transparent w-4/5 focus:outline-none text-grey"
+              onChange={handleInstitutionsChange}
             />
           </div>
 
@@ -115,7 +141,8 @@ function Filter() {
             </div>
           </div>
           <div className="search-filter flex items-center justify-center mt-10">
-            <button className="bg-blue w-[80%] md:w-[50%] lg:w-[30%]  py-2 rounded-2xl">
+            <button onClick= { handleSearch }
+            className="bg-blue w-[80%] md:w-[50%] lg:w-[30%]  py-2 rounded-2xl">
               {" "}
               <p className="text-xl">Search</p>
             </button>
