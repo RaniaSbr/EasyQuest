@@ -16,7 +16,6 @@ import ModEditPage from "./pages/mod_edit_page.js";
 import YourForm from "./pages/Editor.js";
 import ModeratorForm from "./Components/InserModerateur.js";
 import ModalEditJSON from "./Components/model_edit_json.js";
-import SearchResult from "./pages/SearchResult.js";
 import Moderators from './pages/moderators.js'
 import Landing from './pages/Landing.js'
 import SearchResult from "./pages/SearchResult.js";
