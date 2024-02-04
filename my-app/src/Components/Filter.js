@@ -3,7 +3,6 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { IoFilterOutline } from "react-icons/io5";
 import "../Styles/Article.css";
-import SearchResult from "../pages/SearchResult";
 
 function Filter({setQuery}) {
   const [date, setDate] = useState(new Date());
