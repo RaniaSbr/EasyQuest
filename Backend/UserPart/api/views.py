@@ -83,7 +83,7 @@ def login_user(request):
         first_name = user.first_name
         last_name = user.last_name
         message = "Login successful"
-        return Response({'message': message, 'type': "user_type",
+        return Response({'message': message, 'type': value,
                          'token': token.key, 'first_name': first_name,
                          'last_name': last_name}, status=status.HTTP_200_OK)
     else:
@@ -183,7 +183,7 @@ def user_favorites(request):
         return Response({'message': 'UserProfile not found'}, status=404)
 
     favorites_list = user_profile.favorites.all()
-    print(favorites_list)
+
     serializer = ArticleSerializer(favorites_list, many=True)
 
     return Response({'favorites': serializer.data})

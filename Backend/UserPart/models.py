@@ -4,6 +4,7 @@ from article.models import Article
 from Backend.permissions import USER_PERMISSION
 
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     favorites = models.ManyToManyField(Article, related_name='favorited_by', blank=True)
