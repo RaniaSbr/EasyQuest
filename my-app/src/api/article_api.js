@@ -1,5 +1,6 @@
 import axios from "axios";
 import apiConfig from "./apiConfig";
+import TokenAPI from "./token";
 const cleanUpData = (originalData) => {
     const cleanedData = {
         title: originalData.meta_data.title,
@@ -134,6 +135,84 @@ class ArticleAPI {
             console.error("Error fetching PDF:", error);
             throw error;
         }
+    }
+
+
+    static async fetchAddFavorite(article_Id) {
+        const tokenValue1 = getCookie('token');
+        
+        fetch('http://127.0.0.1:8000/api/add-favorite/' + article_Id +'/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + tokenValue1  // Remplacez par votre jeton d'authentification JWT
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to add article to favorites');
+            }
+        })
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding article to favorites');
+        });
+
+        function getCookie(name) {
+            const cookieName = name + '=';
+            const cookieArray = document.cookie.split(';');
+            
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i].trim();
+                if (cookie.indexOf(cookieName) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return null;
+        }
+    }
+
+    static async fetchRemovFavorite(article_Id) {
+        const tokenValue = getCookie('token');
+            
+            fetch('http://127.0.0.1:8000/api/remove-favorite/' + article_Id + '/', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + tokenValue  // Remplacez par votre jeton d'authentification JWT
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to remove article from favorites');
+                }
+            })
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while removing article from favorites');
+            });
+            function getCookie(name) {
+                const cookieName = name + '=';
+                const cookieArray = document.cookie.split(';');
+                
+                for (let i = 0; i < cookieArray.length; i++) {
+                    let cookie = cookieArray[i].trim();
+                    if (cookie.indexOf(cookieName) === 0) {
+                        return cookie.substring(cookieName.length, cookie.length);
+                    }
+                }
+                return null;
+            }
     }
 }
 

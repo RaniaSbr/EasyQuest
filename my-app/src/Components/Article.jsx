@@ -6,9 +6,10 @@ import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis ,faCircle,faHeart} from "@fortawesome/free-solid-svg-icons";
 import { BsCloudDownload } from "react-icons/bs";
+import ArticleAPI from '../api/article_api';
 
 const Article = ({ articleData }) => {
-  const { date, title, authors, institutions, url,fav} = articleData;
+  const { pub_date, title, authors, institutions, url,fav,id} = articleData;
   const [dropdownVisible,setDropdownVisible]=useState();
   //favorite est un booleen qui prend la veulr false:si article non ajoute aux favorites et true:si article ajoute aux favorites
 const [favorite, setFavorite] = useState(articleData.fav);
@@ -22,36 +23,32 @@ setDropdownVisible(false);
     setDropdownVisible(!dropdownVisible); 
   };
   const toggleFavorite=()=>{
-        articleData.fav = !favorite ? '1' : '0';
-
+    articleData.fav = !favorite ? '1' : '0'; 
     setFavorite(!favorite);
-     console.log("Liked:", favorite);
+    console.log("Liked:", favorite);
   }
+
   return (
-    <Hyphenated>
+    
     <div className='overflow-wrap break-word mx-4 md:mx-8 lg:mx-16 xl:mx-24  p-5 rounded-lg border-2 border-lightStartD bg-grey'>
       <div className='mod-article-row'>
         <div className="article-row-left flex gap-5 items-center ">
-          <time className='font-Montserrat'>{date}</time>
+          <time className='font-Montserrat'>{pub_date}</time>
                       <NavLink to='/See_more' >
-
           <div className="see-more flex  items-center gap-2 ">
             <FontAwesomeIcon icon={faCircle} />
-            
              <p className='hover:text-blue hover:underline cursor-pointer'>See more</p>
             </div>
                          </NavLink>
-
-
           </div>
-        <div className='mod-article-dropdown gap-5 flex items-center'>
+        <div className='mod-article-dropdown gap-5 flex-row items-center'>
           <button><BsCloudDownload size='25px'/></button>
 
-        {favorite ? (
-                        <img src="./Assets/white-heart.png" className='h-6 cursor-pointer' alt="" onClick={toggleFavorite} />
+        {!favorite ?  (
+                        <img src="./assets/white-heart.png" className='h-6 cursor-pointer' alt="" onClick={()=>{toggleFavorite(); ArticleAPI.fetchAddFavorite(id)}} />
 
             ) : (
-              <img src="./Assets/heart.png" className='h-6 cursor-pointer' alt="" onClick={toggleFavorite} />
+              <img src="./assets/heart.png" className='h-6 cursor-pointer' alt="" onClick={()=>{toggleFavorite(); ArticleAPI.fetchRemovFavorite(id)}} />
             )}
 
            <button onClick={toggleDropdown} className='cursor-pointer'>
@@ -80,7 +77,7 @@ setDropdownVisible(false);
         <a
           href='#'
           className='underline decoration-sky-500 font-Montserrat'>
-          {author.name}
+          {author}
         </a>
         {index < authors.length - 1 && ' | '}
       </React.Fragment>
@@ -120,7 +117,7 @@ setDropdownVisible(false);
         </a>
       </div>
     </div>
-    </Hyphenated>
+ 
   )
 }
 

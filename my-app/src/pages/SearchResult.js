@@ -2,7 +2,7 @@ import Navbar from "../Components/Navbar";
 import Filter from "../Components/Filter";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ArticleContainer from "../Components/Article_Container";
+import Article from "../Components/Article";
 import SearchField from "../Components/SearchField";
 
 const cleanUpData = (originalData) => {
@@ -108,10 +108,10 @@ function SearchResult(props) {
       ) : (
         data &&
         data.map((article) => (
-          <ArticleContainer
+          <Article
             key={article.id}
             articleData={article}
-          ></ArticleContainer>
+          ></Article>
         ))
       )}
     </div>

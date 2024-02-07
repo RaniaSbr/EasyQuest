@@ -28,6 +28,7 @@ function Favorites() {
     
       if (data.favorites.length > 0) {
         var articles = data.favorites.map((favorite, index) => ({
+          id:favorite.id,
           date: "12/12/2023",
           title: favorite.meta_data.title,
           authors: favorite.meta_data.authors[0].name ? favorite.meta_data.authors.map((author) => author.name).join(", ") : "",
@@ -38,7 +39,7 @@ function Favorites() {
         setFavoriteArticles(articles);
         setLoading(false);
 
-
+      
       } else {
       
         alert("aucune favorie trouver")
